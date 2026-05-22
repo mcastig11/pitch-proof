@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pitch Proof</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c27;
+      --border: #2a2a3a;
+      --accent: #7c6fff;
+      --accent2: #ff6f91;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --green: #4fffb0;
+      --red: #ff4f6f;
+      --yellow: #ffdf4f;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      font-weight: 300;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Pitch display */
+    .pitch-display {
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    .note-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--accent);
+      transition: color 0.2s;
+    }
+
+    .note-name.in-tune { color: var(--green); }
+    .note-name.off-tune { color: var(--yellow); }
+
+    .frequency {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Cents meter */
+    .cents-bar-container {
+      margin: 1.5rem 0 0.5rem;
+      position: relative;
+    }
+
+    .cents-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .cents-track {
+      height: 10px;
+      background: var(--surface2);
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .cents-fill {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--accent);
+      border-radius: 99px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: left 0.1s ease, background 0.2s;
+    }
+
+    .cents-fill.in-tune { background: var(--green); }
+    .cents-fill.sharp { background: var(--red); }
+    .cents-fill.flat { background: var(--yellow); }
+
+    .cents-center-line {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 100%;
+      background: var(--border);
+      transform: translateX(-50%);
+    }
+
+    .cents-value {
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Waveform */
+    canvas#waveform {
+      width: 100%;
+      height: 80px;
+      border-radius: 12px;
+      background: var(--surface2);
+      display: block;
+    }
+
+    /* Record button */
+    .record-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 560px;
+      padding: 1.1rem;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: var(--accent);
+      color: #fff;
+      transition: transform 0.15s, opacity 0.15s, background 0.2s;
+      margin-bottom: 1.5rem;
+    }
+
+    .record-btn:hover { opacity: 0.88; transform: scale(0.99); }
+    .record-btn.recording { background: var(--accent2); }
+
+    .record-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .record-btn.recording .record-dot {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* AI Feedback */
+    .feedback-box {
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 1.25rem;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text);
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+
+    .feedback-box.loading {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .get-feedback-btn {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.15s;
+    }
+
+    .get-feedback-btn:hover { background: var(--surface2); }
+
+    .status {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>pitch proof</h1>
+    <p>sing a note — get real-time pitch feedback</p>
+  </header>
+
+  <button class="record-btn" id="recordBtn">
+    <span class="record-dot"></span>
+    <span id="recordLabel">START SINGING</span>
+  </button>
+
+  <p class="status" id="status">tap to start</p>
+
+  <div class="card">
+    <div class="card-label">Live Pitch</div>
+    <div class="pitch-display">
+      <div class="note-name" id="noteName">—</div>
+      <div class="frequency" id="frequency">— Hz</div>
+    </div>
+    <div class="cents-bar-container">
+      <div class="cents-labels">
+        <span>flat ♭</span>
+        <span>in tune</span>
+        <span>sharp ♯</span>
+      </div>
+      <div class="cents-track">
+        <div class="cents-center-line"></div>
+        <div class="cents-fill" id="centsFill"></div>
+      </div>
+      <div class="cents-value" id="centsValue">0 cents</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Waveform</div>
+    <canvas id="waveform"></canvas>
+  </div>
+
+  <div class="card">
+    <div class="card-label">AI Coach Feedback</div>
+    <div class="feedback-box" id="feedbackBox">Your feedback will appear here after you sing and click the button below.</div>
+    <button class="get-feedback-btn" id="feedbackBtn">✦ Get AI Feedback</button>
+    <button class="get-feedback-btn" id="playbackBtn" style="display:none;">▶ Play Back Your Recording</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
