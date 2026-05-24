@@ -92,16 +92,19 @@ recordBtn.addEventListener('click', async () => {
   }
 });
 
+// asynchronous to keep other operations running
 async function startRecording() {
     const startTime = Date.now();
 
   try {
+    // pops up for allow media
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioContext = new AudioContext();
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
     source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
+    // builds pipeline into analyser
 
     isRecording = true;
     pitchLog = [];
@@ -131,7 +134,7 @@ async function startRecording() {
     };
     mediaRecorder.start();
   } catch (err) {
-    statusEl.textContent = 'mic access denied — check browser permissions';
+    statusEl.textContent = 'mic access denied — please check browser permissions';
     console.error(err);
   }
 }
