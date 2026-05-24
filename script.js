@@ -5,6 +5,7 @@ let recordedChunks = [];
 
 const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
+// converts raw frequency into MIIDI number (musical note system)
 function freqToNote(freq) {
   if (freq <= 0) return null;
   // A4 = 440 Hz, MIDI note 69
@@ -16,7 +17,11 @@ function freqToNote(freq) {
   return { note: `${noteName}${octave}`, cents, midi: rounded };
 }
 
-// Autocorrelation pitch detection (no external library needed!)
+// Autocorrelation pitch detection
+/*
+ * takes snapshot of audio wave, compared against shifted copy
+ * offset shows wavelength, converts wavelength into frequency
+ */
 function detectPitch(buffer, sampleRate) {
   const SIZE = buffer.length;
   const MAX_SAMPLES = Math.floor(SIZE / 2);
