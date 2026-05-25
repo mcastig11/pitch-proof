@@ -2,6 +2,14 @@
 
 let mediaRecorder = null;
 let recordedChunks = [];
+let startTime = null;
+const statSamples   = document.getElementById('statSamples');
+const statInTune    = document.getElementById('statInTune');
+const statInTuneSub = document.getElementById('statInTuneSub');
+const statDrift     = document.getElementById('statDrift');
+const statDriftSub  = document.getElementById('statDriftSub');
+const tuningBadge   = document.getElementById('tuningBadge');
+const waveformBadge = document.getElementById('waveformBadge');
 
 const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
@@ -94,7 +102,7 @@ recordBtn.addEventListener('click', async () => {
 
 // asynchronous to keep other operations running
 async function startRecording() {
-    const startTime = Date.now();
+    startTime = Date.now();
 
   try {
     // pops up for allow media
@@ -191,6 +199,16 @@ function drawLoop() {
         freq: Math.round(freq),
         time: ((Date.now() - startTime) / 1000).toFixed(1) // seconds since start
         });
+
+        const inTune = pitchLog.filter(p => Math.abs(p.cents) <= 15).length;
+        const pct = pitchLog.length ? Math.round((inTune / pitchLog.length) * 100) : 0;
+        const avg = pitchLog.length ? Math.round(pitchLog.reduce((s,p) => s + p.cents, 0) / pitchLog.length) : 0;
+
+        statSamples.textContent = pitchLog.length;
+        statInTune.textContent = pct + '%';
+        statInTuneSub.textContent = 'this session';
+        statDrift.textContent = (avg > 0 ? '+' : '') + avg + '¢';
+        statDriftSub.textContent = avg > 5 ? 'slightly sharp' : avg < -5 ? 'slightly flat' : 'on target';
     }
   } else {
     noteNameEl.textContent = '—';

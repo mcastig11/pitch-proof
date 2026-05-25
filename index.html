@@ -5,201 +5,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pitch Proof</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #0a0a0f;
-      --surface: #13131a;
-      --surface2: #1c1c27;
-      --border: #2a2a3a;
-      --accent: #7c6fff;
-      --accent2: #ff6f91;
-      --text: #e8e8f0;
-      --muted: #6b6b80;
-      --green: #4fffb0;
-      --red: #ff4f6f;
-      --yellow: #ffdf4f;
-    }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      background: #f9f9f8;
+      color: #111;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
+    }
+
+    /* Nav */
+    nav {
+      background: #fff;
+      border-bottom: 0.5px solid #e0e0e0;
+      padding: 0 32px;
+      height: 52px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    header h1 {
-      font-family: 'Space Mono', monospace;
-      font-size: 2.8rem;
-      font-weight: 700;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header p {
-      color: var(--muted);
-      font-size: 1rem;
-      margin-top: 0.5rem;
-      font-weight: 300;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 560px;
-      margin-bottom: 1.5rem;
-    }
-
-    .card-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.25rem;
-    }
-
-    /* Pitch display */
-    .pitch-display {
-      text-align: center;
-      padding: 1.5rem 0;
-    }
-
-    .note-name {
-      font-family: 'Space Mono', monospace;
-      font-size: 5rem;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--accent);
-      transition: color 0.2s;
-    }
-
-    .note-name.in-tune { color: var(--green); }
-    .note-name.off-tune { color: var(--yellow); }
-
-    .frequency {
-      font-family: 'Space Mono', monospace;
-      font-size: 1rem;
-      color: var(--muted);
-      margin-top: 0.5rem;
-    }
-
-    /* Cents meter */
-    .cents-bar-container {
-      margin: 1.5rem 0 0.5rem;
-      position: relative;
-    }
-
-    .cents-labels {
-      display: flex;
       justify-content: space-between;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-bottom: 6px;
     }
 
-    .cents-track {
-      height: 10px;
-      background: var(--surface2);
-      border-radius: 99px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
+    .nav-brand {
+      font-size: 15px;
+      font-weight: 500;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .cents-fill {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 4px;
-      background: var(--accent);
-      border-radius: 99px;
-      left: 50%;
-      transform: translateX(-50%);
-      transition: left 0.1s ease, background 0.2s;
+    .nav-brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #111;
     }
 
-    .cents-fill.in-tune { background: var(--green); }
-    .cents-fill.sharp { background: var(--red); }
-    .cents-fill.flat { background: var(--yellow); }
-
-    .cents-center-line {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 1px;
-      height: 100%;
-      background: var(--border);
-      transform: translateX(-50%);
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
     }
 
-    .cents-value {
+    .nav-link {
+      font-size: 13px;
+      color: #444;
+    }
+
+    .nav-btn {
+      font-size: 13px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Main layout */
+    .main {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Hero */
+    .hero {
       text-align: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 6px;
+      margin-bottom: 32px;
     }
 
-    /* Waveform */
-    canvas#waveform {
-      width: 100%;
-      height: 80px;
-      border-radius: 12px;
-      background: var(--surface2);
-      display: block;
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
 
-    /* Record button */
-    .record-btn {
+    .hero p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* Record row */
+    .record-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-record {
+      flex: 1;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
-      width: 100%;
-      max-width: 560px;
-      padding: 1.1rem;
-      border-radius: 16px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Space Mono', monospace;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      background: var(--accent);
-      color: #fff;
-      transition: transform 0.15s, opacity 0.15s, background 0.2s;
-      margin-bottom: 1.5rem;
+      gap: 8px;
+      transition: opacity 0.15s;
+      font-family: 'Inter', sans-serif;
     }
 
-    .record-btn:hover { opacity: 0.88; transform: scale(0.99); }
-    .record-btn.recording { background: var(--accent2); }
+    .btn-record:hover { opacity: 0.85; }
+    .btn-record.recording { background: #c0392b; }
 
     .record-dot {
-      width: 12px;
-      height: 12px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #fff;
     }
 
-    .record-btn.recording .record-dot {
+    .btn-record.recording .record-dot {
       animation: blink 1s infinite;
     }
 
@@ -208,93 +136,298 @@
       50% { opacity: 0.2; }
     }
 
-    /* AI Feedback */
-    .feedback-box {
-      background: var(--surface2);
+    .btn-playback {
+      background: #fff;
+      color: #111;
+      border: 0.5px solid #bbb;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-playback:hover { background: #f4f4f3; }
+
+    /* Status */
+    .status {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 20px;
+      margin-top: -8px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
       border-radius: 12px;
-      padding: 1.25rem;
-      font-size: 0.92rem;
+      padding: 14px 16px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 500;
+      color: #111;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #111;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-weight: 500;
+    }
+
+    .badge-green  { background: #eaf3de; color: #27500a; }
+    .badge-amber  { background: #faeeda; color: #633806; }
+    .badge-gray   { background: #e8e8e8; color: #333; }
+    .badge-red    { background: #fcebeb; color: #791f1f; }
+
+    /* Pitch display */
+    .pitch-display {
+      text-align: center;
+      padding: 8px 0 16px;
+    }
+
+    .note-name {
+      font-size: 56px;
+      font-weight: 500;
+      color: #111;
+      line-height: 1;
+      letter-spacing: -2px;
+      transition: color 0.2s;
+    }
+
+    .note-name.in-tune  { color: #3b6d11; }
+    .note-name.off-tune { color: #854f0b; }
+
+    .frequency {
+      font-size: 13px;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    /* Cents meter */
+    .cents-bar-container {
+      margin: 4px 0 0;
+    }
+
+    .cents-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
+    .cents-track {
+      height: 6px;
+      background: #ebebeb;
+      border-radius: 99px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cents-fill {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: #111;
+      border-radius: 99px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: left 0.1s ease, background 0.2s;
+    }
+
+    .cents-fill.in-tune { background: #3b6d11; }
+    .cents-fill.sharp   { background: #c0392b; }
+    .cents-fill.flat    { background: #854f0b; }
+
+    .cents-value {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      margin-top: 5px;
+    }
+
+    /* Waveform */
+    canvas#waveform {
+      width: 100%;
+      height: 64px;
+      border-radius: 8px;
+      background: #f4f4f3;
+      display: block;
+    }
+
+    /* Feedback */
+    .feedback-box {
+      font-size: 13px;
+      color: #333;
       line-height: 1.7;
-      color: var(--text);
+      padding: 14px;
+      background: #f4f4f3;
+      border-radius: 8px;
+      border: 0.5px solid #e0e0e0;
       min-height: 60px;
       white-space: pre-wrap;
     }
 
     .feedback-box.loading {
-      color: var(--muted);
+      color: #777;
       font-style: italic;
     }
 
-    .get-feedback-btn {
+    .btn-action {
       width: 100%;
-      padding: 0.85rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
+      padding: 10px;
+      border-radius: 8px;
+      border: 0.5px solid #bbb;
+      background: #fff;
+      font-size: 13px;
+      color: #111;
       cursor: pointer;
-      margin-top: 1rem;
+      margin-top: 10px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
       transition: background 0.15s;
     }
 
-    .get-feedback-btn:hover { background: var(--surface2); }
-
-    .status {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
-    }
+    .btn-action:hover { background: #f4f4f3; }
+    .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>pitch proof</h1>
-    <p>sing a note — get real-time pitch feedback</p>
-  </header>
-
-  <button class="record-btn" id="recordBtn">
-    <span class="record-dot"></span>
-    <span id="recordLabel">START SINGING</span>
-  </button>
-
-  <p class="status" id="status">tap to start</p>
-
-  <div class="card">
-    <div class="card-label">Live Pitch</div>
-    <div class="pitch-display">
-      <div class="note-name" id="noteName">—</div>
-      <div class="frequency" id="frequency">— Hz</div>
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-brand-dot"></div>
+      pitch proof
     </div>
-    <div class="cents-bar-container">
-      <div class="cents-labels">
-        <span>flat ♭</span>
-        <span>in tune</span>
-        <span>sharp ♯</span>
-      </div>
-      <div class="cents-track">
-        <div class="cents-center-line"></div>
-        <div class="cents-fill" id="centsFill"></div>
-      </div>
-      <div class="cents-value" id="centsValue">0 cents</div>
+    <div class="nav-links">
+      <span class="nav-link">history</span>
+      <span class="nav-link">settings</span>
+      <button class="nav-btn">new session</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="card">
-    <div class="card-label">Waveform</div>
-    <canvas id="waveform"></canvas>
-  </div>
+  <div class="main">
 
-  <div class="card">
-    <div class="card-label">AI Coach Feedback</div>
-    <div class="feedback-box" id="feedbackBox">Your feedback will appear here after you sing and click the button below.</div>
-    <button class="get-feedback-btn" id="feedbackBtn">✦ Get AI Feedback</button>
-    <button class="get-feedback-btn" id="playbackBtn" style="display:none;">▶ Play Back Your Recording</button>
+    <div class="hero">
+      <h1>pitch accuracy coach</h1>
+      <p>sing a note — get real-time pitch feedback and ai coaching</p>
+    </div>
+
+    <div class="record-row">
+      <button class="btn-record" id="recordBtn">
+        <span class="record-dot"></span>
+        <span id="recordLabel">start singing</span>
+      </button>
+      <button class="btn-playback" id="playbackBtn" style="display:none;">▶ play back</button>
+    </div>
+
+    <p class="status" id="status">tap to start</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">samples</div>
+        <div class="stat-value" id="statSamples">—</div>
+        <div class="stat-sub">this session</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">in tune</div>
+        <div class="stat-value" id="statInTune">—</div>
+        <div class="stat-sub" id="statInTuneSub">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">avg drift</div>
+        <div class="stat-value" id="statDrift">—</div>
+        <div class="stat-sub" id="statDriftSub">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">live pitch</span>
+        <span class="badge badge-gray" id="tuningBadge">waiting</span>
+      </div>
+      <div class="pitch-display">
+        <div class="note-name" id="noteName">—</div>
+        <div class="frequency" id="frequency">— Hz</div>
+      </div>
+      <div class="cents-bar-container">
+        <div class="cents-labels">
+          <span>flat ♭</span>
+          <span>in tune</span>
+          <span>sharp ♯</span>
+        </div>
+        <div class="cents-track">
+          <div class="cents-fill" id="centsFill"></div>
+        </div>
+        <div class="cents-value" id="centsValue">0 cents</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">waveform</span>
+        <span class="badge badge-gray" id="waveformBadge">idle</span>
+      </div>
+      <canvas id="waveform"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">ai coach feedback</span>
+      </div>
+      <div class="feedback-box" id="feedbackBox">your feedback will appear here after you sing and click the button below.</div>
+      <button class="btn-action" id="feedbackBtn">get ai feedback</button>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
