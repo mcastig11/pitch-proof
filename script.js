@@ -3,13 +3,8 @@
 let mediaRecorder = null;
 let recordedChunks = [];
 let startTime = null;
-const statSamples   = document.getElementById('statSamples');
-const statInTune    = document.getElementById('statInTune');
-const statInTuneSub = document.getElementById('statInTuneSub');
-const statDrift     = document.getElementById('statDrift');
-const statDriftSub  = document.getElementById('statDriftSub');
-const tuningBadge   = document.getElementById('tuningBadge');
-const waveformBadge = document.getElementById('waveformBadge');
+let currentAudio = null;
+let progressInterval = null;
 
 const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
@@ -88,12 +83,46 @@ const centsValueEl = document.getElementById('centsValue');
 const waveformCanvas = document.getElementById('waveform');
 const waveCtx      = waveformCanvas.getContext('2d');
 const feedbackBox  = document.getElementById('feedbackBox');
+
+const statSamples   = document.getElementById('statSamples');
+const statInTune    = document.getElementById('statInTune');
+const statInTuneSub = document.getElementById('statInTuneSub');
+const statDrift     = document.getElementById('statDrift');
+const statDriftSub  = document.getElementById('statDriftSub');
+const tuningBadge   = document.getElementById('tuningBadge');
+const waveformBadge = document.getElementById('waveformBadge');
+
 const feedbackBtn  = document.getElementById('feedbackBtn');
+const playbackCard     = document.getElementById('playbackCard');
+const playbackTime     = document.getElementById('playbackTime');
+const playbackProgress = document.getElementById('playbackProgress');
+const pauseBtn         = document.getElementById('pauseBtn');
+const restartBtn       = document.getElementById('restartBtn');
+const endBtn           = document.getElementById('endBtn');
 
 // ─── Recording ─────────────────────────────────────────────────────────────
 
 recordBtn.addEventListener('click', async () => {
   if (!isRecording) {
+    // if a recording already exists, warn before discarding
+    if (lastRecordingURL) {
+      const confirmed = window.confirm('Starting a new recording will discard your current one. Continue?');
+      if (!confirmed) return;
+
+      // stop and hide the old playback if it's running
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+        clearInterval(progressInterval);
+      }
+      playbackCard.style.display = 'none';
+      playbackProgress.style.width = '0%';
+      playbackTime.textContent = '0:00';
+      playbackBtn.style.display = 'none';
+      lastRecordingURL = null;
+      recordedChunks = [];
+    }
+
     await startRecording();
   } else {
     stopRecording();
@@ -139,6 +168,9 @@ async function startRecording() {
 
         // Also save the URL so you can play it back in the app
         lastRecordingURL = url;
+
+        // Show it after recording stops (inside mediaRecorder.onstop)
+        playbackBtn.style.display = 'block';
     };
     mediaRecorder.start();
   } catch (err) {
@@ -342,12 +374,85 @@ ${offMoments || 'None detected — great tuning!'}
 const playbackBtn = document.getElementById('playbackBtn');
 let lastRecordingURL = null;
 
-// Show it after recording stops (inside mediaRecorder.onstop)
-playbackBtn.style.display = 'block';
 
 playbackBtn.addEventListener('click', () => {
   if (lastRecordingURL) {
-    const audio = new Audio(lastRecordingURL);
-    audio.play();
+    startPlayback(lastRecordingURL);
   }
+});
+
+function startPlayback(url) {
+  // stop anything already playing
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+    clearInterval(progressInterval);
+  }
+
+  // reset progress bar before starting
+  playbackProgress.style.width = '0%';
+  playbackTime.textContent = '0:00';
+
+  currentAudio = new Audio(url);
+
+  // show the playback card
+  playbackCard.style.display = 'block';
+  pauseBtn.textContent = '⏸ pause';
+
+  currentAudio.play();
+
+  // update progress bar and timestamp every 250ms
+  progressInterval = setInterval(() => {
+    if (!currentAudio || currentAudio.paused) return;
+    const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+    playbackProgress.style.width = pct + '%';
+    playbackTime.textContent = formatTime(currentAudio.currentTime);
+  }, 250);
+
+  // when it finishes naturally
+  currentAudio.onended = () => {
+    clearInterval(progressInterval);
+    playbackProgress.style.width = '100%';
+    pauseBtn.textContent = '▶ play';
+  };
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+pauseBtn.addEventListener('click', () => {
+  if (!currentAudio) return;
+
+  if (currentAudio.ended || currentAudio.currentTime >= currentAudio.duration) {
+    // audio finished — restart from beginning
+    currentAudio.currentTime = 0;
+    playbackProgress.style.width = '0%';
+    playbackTime.textContent = '0:00';
+    currentAudio.play();
+    pauseBtn.textContent = '⏸ pause';
+
+    // start a fresh interval
+    progressInterval = setInterval(() => {
+      if (!currentAudio || currentAudio.paused) return;
+      const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+      playbackProgress.style.width = pct + '%';
+      playbackTime.textContent = formatTime(currentAudio.currentTime);
+    }, 250);
+  } else if(currentAudio.paused) {
+    currentAudio.play();
+    pauseBtn.textContent = '⏸ pause';
+  } else {
+    currentAudio.pause();
+    pauseBtn.textContent = '▶ play';
+  }
+});
+
+restartBtn.addEventListener('click', () => {
+  if (!currentAudio) return;
+  currentAudio.currentTime = 0;
+  currentAudio.play();
+  pauseBtn.textContent = '⏸ pause';
 });

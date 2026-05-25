@@ -372,6 +372,20 @@
 
     <p class="status" id="status">tap to start</p>
 
+    <div class="card" id="playbackCard" style="display:none;">
+      <div class="card-header">
+        <span class="card-title">now playing</span>
+        <span class="badge badge-gray" id="playbackTime">0:00</span>
+      </div>
+      <div style="height: 6px; background: #ebebeb; border-radius: 99px; margin-bottom: 14px;">
+        <div id="playbackProgress" style="height: 100%; width: 0%; background: #111; border-radius: 99px; transition: width 0.25s linear;"></div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-action" id="pauseBtn">⏸ pause</button>
+        <button class="btn-action" id="restartBtn">↩ restart</button>
+      </div>
+    </div>
+
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">samples</div>
