@@ -84,7 +84,6 @@ const waveformCanvas = document.getElementById('waveform');
 const waveCtx      = waveformCanvas.getContext('2d');
 const feedbackBox  = document.getElementById('feedbackBox');
 
-const statSamples   = document.getElementById('statSamples');
 const statInTune    = document.getElementById('statInTune');
 const statInTuneSub = document.getElementById('statInTuneSub');
 const statDrift     = document.getElementById('statDrift');
@@ -98,7 +97,6 @@ const playbackTime     = document.getElementById('playbackTime');
 const playbackProgress = document.getElementById('playbackProgress');
 const pauseBtn         = document.getElementById('pauseBtn');
 const restartBtn       = document.getElementById('restartBtn');
-const endBtn           = document.getElementById('endBtn');
 
 // ─── Recording ─────────────────────────────────────────────────────────────
 
@@ -116,7 +114,7 @@ recordBtn.addEventListener('click', async () => {
         clearInterval(progressInterval);
       }
       playbackCard.style.display = 'none';
-      playbackProgress.style.width = '0%';
+      playbackProgress.value = 0;
       playbackTime.textContent = '0:00';
       playbackBtn.style.display = 'none';
       lastRecordingURL = null;
@@ -159,12 +157,6 @@ async function startRecording() {
     mediaRecorder.onstop = () => {
         const blob = new Blob(recordedChunks, { type: 'audio/webm' });
         const url = URL.createObjectURL(blob);
-
-        // Create a download link and auto-click it
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pitch-recording-${Date.now()}.webm`;
-        a.click();
 
         // Also save the URL so you can play it back in the app
         lastRecordingURL = url;
@@ -223,7 +215,7 @@ function drawLoop() {
 
       // Classify tuning
       const absC = Math.abs(result.cents);
-      noteNameEl.className = 'note-name ' + (absC < 10 ? 'in-tune' : 'off-tune');
+      noteNameEl.className = 'note-name ' + (absC < 25 ? 'in-tune' : 'off-tune');
 
       pitchLog.push({
         note: result.note,
@@ -236,7 +228,6 @@ function drawLoop() {
         const pct = pitchLog.length ? Math.round((inTune / pitchLog.length) * 100) : 0;
         const avg = pitchLog.length ? Math.round(pitchLog.reduce((s,p) => s + p.cents, 0) / pitchLog.length) : 0;
 
-        statSamples.textContent = pitchLog.length;
         statInTune.textContent = pct + '%';
         statInTuneSub.textContent = 'this session';
         statDrift.textContent = (avg > 0 ? '+' : '') + avg + '¢';
@@ -276,7 +267,7 @@ function updateCentsMeter(cents) {
   centsFillEl.style.left = `${percent}%`;
 
   const absC = Math.abs(clamped);
-  centsFillEl.className = 'cents-fill ' + (absC < 10 ? 'in-tune' : clamped > 0 ? 'sharp' : 'flat');
+  centsFillEl.className = 'cents-fill ' + (absC < 25 ? 'in-tune' : clamped > 0 ? 'sharp' : 'flat');
   centsValueEl.textContent = `${cents > 0 ? '+' : ''}${cents} cents`;
 }
 
@@ -390,7 +381,7 @@ function startPlayback(url) {
   }
 
   // reset progress bar before starting
-  playbackProgress.style.width = '0%';
+  playbackProgress.value = 0;
   playbackTime.textContent = '0:00';
 
   currentAudio = new Audio(url);
@@ -402,17 +393,12 @@ function startPlayback(url) {
   currentAudio.play();
 
   // update progress bar and timestamp every 250ms
-  progressInterval = setInterval(() => {
-    if (!currentAudio || currentAudio.paused) return;
-    const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
-    playbackProgress.style.width = pct + '%';
-    playbackTime.textContent = formatTime(currentAudio.currentTime);
-  }, 250);
+  startProgressInterval();
 
   // when it finishes naturally
   currentAudio.onended = () => {
     clearInterval(progressInterval);
-    playbackProgress.style.width = '100%';
+    playbackProgress.value = 100;
     pauseBtn.textContent = '▶ play';
   };
 }
@@ -428,19 +414,15 @@ pauseBtn.addEventListener('click', () => {
 
   if (currentAudio.ended || currentAudio.currentTime >= currentAudio.duration) {
     // audio finished — restart from beginning
+    clearInterval(progressInterval);
     currentAudio.currentTime = 0;
-    playbackProgress.style.width = '0%';
+    playbackProgress.value = 0;
     playbackTime.textContent = '0:00';
     currentAudio.play();
     pauseBtn.textContent = '⏸ pause';
 
     // start a fresh interval
-    progressInterval = setInterval(() => {
-      if (!currentAudio || currentAudio.paused) return;
-      const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
-      playbackProgress.style.width = pct + '%';
-      playbackTime.textContent = formatTime(currentAudio.currentTime);
-    }, 250);
+    startProgressInterval();
   } else if(currentAudio.paused) {
     currentAudio.play();
     pauseBtn.textContent = '⏸ pause';
@@ -450,9 +432,62 @@ pauseBtn.addEventListener('click', () => {
   }
 });
 
+function startProgressInterval() {
+  clearInterval(progressInterval); // always clear first
+  progressInterval = setInterval(() => {
+    if (!currentAudio || currentAudio.paused) return;
+    const t = currentAudio.currentTime;
+    const pct = (t / currentAudio.duration) * 100;
+    playbackProgress.value = pct;
+    playbackTime.textContent = formatTime(t);
+
+    const stats = getStatsAtTime(t);
+    if (stats) {
+      noteNameEl.textContent = stats.note;
+      statInTune.textContent = stats.pct + '%';
+      statDrift.textContent = (stats.avg > 0 ? '+' : '') + stats.avg + '¢';
+      statDriftSub.textContent = stats.avg > 5 ? 'slightly sharp' : stats.avg < -5 ? 'slightly flat' : 'on target';
+      tuningBadge.textContent = Math.abs(stats.avg) < 10 ? 'in tune' : stats.avg > 0 ? 'sharp' : 'flat';
+      tuningBadge.className = 'badge ' + (Math.abs(stats.avg) < 10 ? 'badge-green' : 'badge-amber');
+      updateCentsMeter(stats.avg);
+    }
+  }, 100);
+}
+
+playbackProgress.addEventListener('input', () => {
+  if (!currentAudio) return;
+  const seekTo = (playbackProgress.value / 100) * currentAudio.duration;
+  currentAudio.currentTime = seekTo;
+  playbackTime.textContent = formatTime(seekTo);
+});
+
+function getStatsAtTime(t) {
+  // get all pitch samples within a 0.5s window around current time
+  const window = pitchLog.filter(p => Math.abs(parseFloat(p.time) - t) < 0.5);
+  if (window.length === 0) return null;
+
+  const inTune = window.filter(p => Math.abs(p.cents) <= 25).length;
+  const pct = Math.round((inTune / window.length) * 100);
+  const avg = Math.round(window.reduce((s, p) => s + p.cents, 0) / window.length);
+  const note = window[window.length - 1].note;
+
+  return { pct, avg, note };
+}
+
 restartBtn.addEventListener('click', () => {
   if (!currentAudio) return;
+  clearInterval(progressInterval);
   currentAudio.currentTime = 0;
-  currentAudio.play();
+  playbackProgress.value = 0;
+  playbackTime.textContent = '0:00';
   pauseBtn.textContent = '⏸ pause';
+
+  currentAudio.onended = () => {
+    clearInterval(progressInterval);
+    playbackProgress.value = 100;
+    pauseBtn.textContent = '▶ play';
+  };
+
+  currentAudio.play();
+  startProgressInterval();
 });

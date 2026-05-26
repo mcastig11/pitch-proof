@@ -373,31 +373,25 @@
     <p class="status" id="status">tap to start</p>
 
     <div class="card" id="playbackCard" style="display:none;">
-      <div class="card-header">
-        <span class="card-title">now playing</span>
-        <span class="badge badge-gray" id="playbackTime">0:00</span>
-      </div>
-      <div style="height: 6px; background: #ebebeb; border-radius: 99px; margin-bottom: 14px;">
-        <div id="playbackProgress" style="height: 100%; width: 0%; background: #111; border-radius: 99px; transition: width 0.25s linear;"></div>
-      </div>
-      <div style="display: flex; gap: 10px;">
-        <button class="btn-action" id="pauseBtn">⏸ pause</button>
-        <button class="btn-action" id="restartBtn">↩ restart</button>
-      </div>
-    </div>
+  <div class="card-header">
+    <span class="card-title">now playing</span>
+    <span class="badge badge-gray" id="playbackTime">0:00</span>
+  </div>
+  <input type="range" id="playbackProgress" min="0" max="100" value="0" step="0.1"
+    style="width:100%; margin-bottom:14px; accent-color:#111; cursor:pointer;">
+  <div style="display: flex; gap: 10px;">
+    <button class="btn-action" id="pauseBtn">⏸ pause</button>
+    <button class="btn-action" id="restartBtn">↩ restart</button>
+  </div>
+</div>
 
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">samples</div>
-        <div class="stat-value" id="statSamples">—</div>
-        <div class="stat-sub">this session</div>
-      </div>
-      <div class="stat-card">
+    <div class="stats-row" style="display: flex; gap: 20px;">
+      <div class="stat-card" style="flex: 1;">
         <div class="stat-label">in tune</div>
         <div class="stat-value" id="statInTune">—</div>
         <div class="stat-sub" id="statInTuneSub">—</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" style="flex: 1;">
         <div class="stat-label">avg drift</div>
         <div class="stat-value" id="statDrift">—</div>
         <div class="stat-sub" id="statDriftSub">—</div>
