@@ -28,7 +28,11 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
   3. During the example attempt, the score shows its current position and provisional pitch and timing observations; when tracking loses confidence, the singer sees an ungraded state and can restore position without restarting the app.
   4. A singer can use the primary practice controls and read score-position status with a keyboard and without relying on color alone.
 **Exit gate:** Replay annotated example-score timelines covering a pickup, silence, wrong pitch, and octave ambiguity; check count-in, position, and microphone lifecycle on a real browser and device. Any experimental pitch or timing observations remain provisional until Phase 4 measurement. This phase does not accept arbitrary PDF uploads.
-**Plans:** TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Verified example tracer, fixture, and timeline
+- [ ] 01-02-PLAN.md — Microphone lifecycle and score-position recovery
+- [ ] 01-03-PLAN.md — Accessible controls and browser verification
 **UI hint**: yes
 
 ### Phase 2: Private Practice Access
@@ -104,7 +108,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Verified Example Practice | 0/TBD | Not started | - |
+| 1. Verified Example Practice | 0/3 | Not started | - |
 | 2. Private Practice Access | 0/TBD | Not started | - |
 | 3. Corrected PDF Score | 0/TBD | Not started | - |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |
