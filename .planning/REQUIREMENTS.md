@@ -22,8 +22,8 @@
 
 - [x] **PRAC-01**: A singer can choose a starting measure and review the selected part and tempo before singing.
 - [x] **PRAC-02**: A metronome and count-in begin from the selected measure.
-- [ ] **PRAC-03**: A singer can check microphone readiness and start, stop, or retry a session.
-- [ ] **PRAC-04**: The score shows the current position and provides a way to recover if tracking is lost.
+- [x] **PRAC-03**: A singer can check microphone readiness and start, stop, or retry a session.
+- [x] **PRAC-04**: The score shows the current position and provides a way to recover if tracking is lost.
 
 ### Real-Time Feedback
 
@@ -87,8 +87,8 @@ Each v1 requirement has exactly one owning phase. Later phases may strengthen an
 | SCORE-04 | Phase 3 | Pending |
 | PRAC-01 | Phase 1 | Complete |
 | PRAC-02 | Phase 1 | Complete |
-| PRAC-03 | Phase 1 | Pending |
-| PRAC-04 | Phase 1 | Pending |
+| PRAC-03 | Phase 1 | Complete |
+| PRAC-04 | Phase 1 | Complete |
 | FEED-01 | Phase 4 | Pending |
 | FEED-02 | Phase 4 | Pending |
 | FEED-03 | Phase 4 | Pending |

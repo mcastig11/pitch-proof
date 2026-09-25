@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 current_phase: 1
 current_phase_name: Verified Example Practice
-current_plan: 1
+current_plan: 2
 status: planning
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-09-25T20:51:33.152Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-09-25T21:40:57.057Z"
 last_activity: 2026-09-25
 last_activity_desc: Phase 1 plans verified; all requirements and locked decisions covered.
-state_head: 906cb8d3c4d0bd9833ec75815baf8a3d83785ae8
+state_head: afa276541882d226d21e80111f9a5d1a4a56237e
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-24)
 ## Current Position
 
 Phase: 1 (Verified Example Practice) — READY TO EXECUTE
-Current Plan: 1
+Current Plan: 2
 Total Plans in Phase: 3
 Status: Ready to execute
 Last Activity: 2026-09-25 — Phase 1 plans verified; all requirements and locked decisions covered.
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 01 P01 | 25m | 2 tasks | 7 files |
+| Phase 01 P02 | 44m | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,9 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 1]: The example fixture is an original one-part vocal exercise with a one-beat pickup, four 4/4 measures, and fixed 96 BPM tempo.
 - [Phase 1]: Count-in clicks use an equal-gain first-beat accent and stop before singing begins; no extra cue is played.
 - [Phase 1]: Microphone observations stay provisional and are not graded or attached to written notes.
+- [Phase 1]: Position trust follows fixture audio time and remains independent of pitch availability or ambiguity.
+- [Phase 1]: Clock uncertainty removes current-position claims and note association until recovery count-in completes.
+- [Phase 1]: The original measure remains the retry origin; recovery starts a new timeline segment from the selected measure.
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-09-25T20:51:33.113Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-09-25T21:40:57.015Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None

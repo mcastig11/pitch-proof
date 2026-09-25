@@ -31,7 +31,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
   4. A singer can use the primary practice controls and read score-position status with a keyboard and without relying on color alone.
 
 **Exit gate:** Replay annotated example-score timelines covering a pickup, silence, wrong pitch, and octave ambiguity; check count-in, position, and microphone lifecycle on a real browser and device. Any experimental pitch or timing observations remain provisional until Phase 4 measurement. This phase does not accept arbitrary PDF uploads.
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 Plans:
 **Wave 1**
 
@@ -39,7 +39,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Microphone lifecycle and score-position recovery
+- [x] 01-02-PLAN.md — Microphone lifecycle and score-position recovery
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -135,7 +135,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Verified Example Practice | 1/3 | In Progress|  |
+| 1. Verified Example Practice | 2/3 | In Progress|  |
 | 2. Private Practice Access | 0/TBD | Not started | - |
 | 3. Corrected PDF Score | 0/TBD | Not started | - |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |
