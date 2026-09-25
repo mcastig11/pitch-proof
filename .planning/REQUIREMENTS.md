@@ -74,36 +74,36 @@ Deferred until the score-guided single-pass workflow and feedback accuracy are v
 
 ## Traceability
 
-Roadmap creation will assign every v1 requirement to exactly one phase.
+Each v1 requirement has exactly one owning phase. Later phases may strengthen an earlier capability without taking ownership of its requirement.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Unmapped | Pending |
-| AUTH-02 | Unmapped | Pending |
-| LIB-01 | Unmapped | Pending |
-| SCORE-01 | Unmapped | Pending |
-| SCORE-02 | Unmapped | Pending |
-| SCORE-03 | Unmapped | Pending |
-| SCORE-04 | Unmapped | Pending |
-| PRAC-01 | Unmapped | Pending |
-| PRAC-02 | Unmapped | Pending |
-| PRAC-03 | Unmapped | Pending |
-| PRAC-04 | Unmapped | Pending |
-| FEED-01 | Unmapped | Pending |
-| FEED-02 | Unmapped | Pending |
-| FEED-03 | Unmapped | Pending |
-| HIST-01 | Unmapped | Pending |
-| HIST-02 | Unmapped | Pending |
-| HIST-03 | Unmapped | Pending |
-| AUDIO-01 | Unmapped | Pending |
-| AUDIO-02 | Unmapped | Pending |
-| PRIV-01 | Unmapped | Pending |
-| ACCESS-01 | Unmapped | Pending |
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| LIB-01 | Phase 3 | Pending |
+| SCORE-01 | Phase 3 | Pending |
+| SCORE-02 | Phase 3 | Pending |
+| SCORE-03 | Phase 3 | Pending |
+| SCORE-04 | Phase 3 | Pending |
+| PRAC-01 | Phase 1 | Pending |
+| PRAC-02 | Phase 1 | Pending |
+| PRAC-03 | Phase 1 | Pending |
+| PRAC-04 | Phase 1 | Pending |
+| FEED-01 | Phase 4 | Pending |
+| FEED-02 | Phase 4 | Pending |
+| FEED-03 | Phase 4 | Pending |
+| HIST-01 | Phase 5 | Pending |
+| HIST-02 | Phase 5 | Pending |
+| HIST-03 | Phase 5 | Pending |
+| AUDIO-01 | Phase 6 | Pending |
+| AUDIO-02 | Phase 6 | Pending |
+| PRIV-01 | Phase 6 | Pending |
+| ACCESS-01 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 21 total
-- Mapped to phases: 0
-- Unmapped: 21
+- Mapped to phases: 21
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-24*
