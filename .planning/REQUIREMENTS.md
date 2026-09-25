@@ -20,8 +20,8 @@
 
 ### Live Practice
 
-- [ ] **PRAC-01**: A singer can choose a starting measure and review the selected part and tempo before singing.
-- [ ] **PRAC-02**: A metronome and count-in begin from the selected measure.
+- [x] **PRAC-01**: A singer can choose a starting measure and review the selected part and tempo before singing.
+- [x] **PRAC-02**: A metronome and count-in begin from the selected measure.
 - [ ] **PRAC-03**: A singer can check microphone readiness and start, stop, or retry a session.
 - [ ] **PRAC-04**: The score shows the current position and provides a way to recover if tracking is lost.
 
@@ -85,8 +85,8 @@ Each v1 requirement has exactly one owning phase. Later phases may strengthen an
 | SCORE-02 | Phase 3 | Pending |
 | SCORE-03 | Phase 3 | Pending |
 | SCORE-04 | Phase 3 | Pending |
-| PRAC-01 | Phase 1 | Pending |
-| PRAC-02 | Phase 1 | Pending |
+| PRAC-01 | Phase 1 | Complete |
+| PRAC-02 | Phase 1 | Complete |
 | PRAC-03 | Phase 1 | Pending |
 | PRAC-04 | Phase 1 | Pending |
 | FEED-01 | Phase 4 | Pending |
@@ -101,6 +101,7 @@ Each v1 requirement has exactly one owning phase. Later phases may strengthen an
 | ACCESS-01 | Phase 1 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 21 total
 - Mapped to phases: 21
 - Unmapped: 0
