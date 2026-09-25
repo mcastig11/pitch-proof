@@ -6,7 +6,7 @@
   const fixture = fixtureApi?.EXAMPLE_FIXTURE;
   const ids = ['fixture-title', 'part-select', 'start-measure', 'tempo-meter', 'score-summary', 'score', 'position',
     'mic-status', 'input-status', 'mic-button', 'count-status', 'beat-display', 'pitch-observation', 'onset-observation',
-    'start-button', 'stop-button', 'retry-button', 'reload-button', 'live-announcement'];
+    'start-button', 'stop-button', 'retry-button', 'lost-place-button', 'reload-button', 'live-announcement'];
   const ui = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
   const scoreFrame = document.getElementById('score-frame');
   const svgNamespace = 'http://www.w3.org/2000/svg';
@@ -14,9 +14,11 @@
   let microphoneReady = false;
   let sessionActive = false;
   let attemptStartMeasure = null;
-  let practiceStartAudioTime = null;
   let positionFrame = null;
   let lastPositionText = '';
+  let positionTracker = null;
+  let positionUncertain = false;
+  let practiceFollowing = false;
 
   function setText(node, value) { node.textContent = value; }
 
@@ -120,6 +122,7 @@
     ui.startMeasure.disabled = false;
     ui.tempoMeter.textContent = `${fixture.tempoBpm} BPM · ${fixture.meter.label}`;
     drawScore();
+    positionTracker = fixtureApi.createPositionTracker(fixture);
     audio = audioApi.createPracticeAudio();
     ui.reloadButton.hidden = true;
   }
@@ -134,7 +137,7 @@
     }
   }
 
-  function updateScorePosition(position) {
+  function updateScorePosition(position, { uncertain = false } = {}) {
     if (!position) return;
     const labels = Array.from(ui.score.querySelectorAll('[data-measure-label]'));
     const selectedLabel = labels.find((label) => label.dataset.measureLabel === position.measureId);
@@ -147,10 +150,13 @@
     cursor.setAttribute('x1', markerX);
     cursor.setAttribute('x2', markerX);
     cursor.removeAttribute('hidden');
+    cursor.classList.toggle('uncertain', uncertain);
     ui.score.querySelectorAll('[data-measure-outline]').forEach((outline) => {
-      outline.setAttribute('stroke', outline.dataset.measureOutline === position.measureId ? '#135e63' : 'transparent');
+      outline.setAttribute('stroke', !uncertain && outline.dataset.measureOutline === position.measureId ? '#135e63' : 'transparent');
     });
-    const line = `Following score: measure ${position.label}, beat ${position.beat}.`;
+    const line = uncertain
+      ? `Last confirmed position: ${position.label}. Current position unknown.`
+      : `Following score: measure ${position.label}, beat ${position.beat}.`;
     if (line !== lastPositionText) {
       setText(ui.position, line);
       lastPositionText = line;
@@ -162,10 +168,36 @@
     }
   }
 
+  function enterPositionUncertain(reason) {
+    if (!practiceFollowing || positionUncertain) return;
+    const snapshot = positionTracker.markUncertain(reason);
+    if (positionFrame !== null) cancelAnimationFrame(positionFrame);
+    positionFrame = null;
+    positionUncertain = true;
+    practiceFollowing = false;
+    updateScorePosition(snapshot.lastConfirmedPosition, { uncertain: true });
+    setText(ui.pitchObservation, 'Listening for a sung note');
+    setText(ui.onsetObservation, 'No onset detected yet');
+    setText(ui.countStatus, 'Position uncertain. This passage is ungraded. Choose a measure to resume.');
+    ui.startMeasure.disabled = false;
+    ui.startButton.hidden = false;
+    ui.startButton.disabled = !microphoneReady;
+    ui.startButton.textContent = 'Resume with count-in';
+    ui.stopButton.hidden = false;
+    ui.retryButton.hidden = true;
+    ui.lostPlaceButton.hidden = true;
+    ui.liveAnnouncement.textContent = 'Position uncertain. This passage is ungraded. Choose a measure to resume.';
+  }
+
   function followPosition() {
-    if (!sessionActive) return;
+    if (!sessionActive || !practiceFollowing) return;
     const now = audio.getAudioTime();
-    const position = fixtureApi.getPositionAtTime(fixture, Math.max(0, now - practiceStartAudioTime), attemptStartMeasure);
+    const tracked = positionTracker.update(now);
+    if (tracked.status === 'uncertain') {
+      enterPositionUncertain(tracked.reason);
+      return;
+    }
+    const position = tracked.position;
     updateScorePosition(position);
     if (position) {
       setText(ui.countStatus, `Following score: measure ${position.label}, beat ${position.beat}.`);
@@ -177,12 +209,17 @@
 
   function setIdleAfterStop(copy) {
     sessionActive = false;
+    practiceFollowing = false;
+    positionUncertain = false;
+    lastPositionText = '';
     if (positionFrame !== null) cancelAnimationFrame(positionFrame);
     positionFrame = null;
     ui.startMeasure.disabled = false;
     ui.startButton.hidden = false;
     ui.startButton.disabled = !microphoneReady;
+    ui.startButton.textContent = 'Start practice';
     ui.stopButton.hidden = true;
+    ui.lostPlaceButton.hidden = true;
     ui.retryButton.hidden = false;
     setText(ui.countStatus, copy);
     setText(ui.pitchObservation, 'Listening for a sung note');
@@ -233,25 +270,34 @@
   }
 
   async function startPractice() {
-    if (!microphoneReady || sessionActive) return;
+    if (!microphoneReady || (sessionActive && !positionUncertain)) return;
     const startMeasure = ui.startMeasure.value;
     if (!fixtureApi.getStartMeasures(fixture).some((measure) => measure.id === startMeasure)) return;
-    attemptStartMeasure = startMeasure;
+    const recovering = positionUncertain;
+    if (recovering && !positionTracker.beginRecovery(startMeasure)) return;
+    if (!attemptStartMeasure) attemptStartMeasure = startMeasure;
     sessionActive = true;
+    practiceFollowing = false;
     ui.startMeasure.disabled = true;
     ui.startButton.hidden = true;
     ui.stopButton.hidden = false;
     ui.retryButton.hidden = true;
+    ui.lostPlaceButton.hidden = true;
     ui.pitchObservation.textContent = 'Listening for a sung note';
     ui.onsetObservation.textContent = 'No onset detected yet';
     ui.liveAnnouncement.textContent = `Count-in started at ${startMeasure === 'pickup' ? 'Pickup' : `measure ${startMeasure}`}`;
     const beatCount = fixture.meter.beatsPerMeasure;
     try {
-      const times = audio.startPractice({
+      await audio.resume();
+      audio.startPractice({
         measureId: startMeasure,
         beats: beatCount,
         tempoBpm: fixture.tempoBpm,
         mapBeat: (elapsed) => fixtureApi.nearestBeatAtTime(fixture, Math.max(0, elapsed), startMeasure),
+        onClockSuspended: () => {
+          if (practiceFollowing) enterPositionUncertain('audio-suspended');
+          else if (sessionActive) endAttempt();
+        },
         onBeat: (beat, total) => {
           renderBeatDisplay(beat, total);
           ui.countStatus.replaceChildren();
@@ -261,25 +307,37 @@
           ui.countStatus.append(beatBadge, document.createTextNode(`Count-in: ${beat} of ${total}. Start at ${startMeasure === 'pickup' ? 'Pickup' : `measure ${startMeasure}`}.`));
         },
         onFollowing: (startTime) => {
-          practiceStartAudioTime = startTime;
+          const trackingStarted = recovering
+            ? positionTracker.completeRecovery(startTime)
+            : positionTracker.start(startMeasure, startTime);
+          if (!trackingStarted) {
+            enterPositionUncertain('invalid-recovery-position');
+            return;
+          }
+          positionUncertain = false;
+          practiceFollowing = true;
           ui.beatDisplay.replaceChildren();
           ui.countStatus.textContent = 'Following score';
-          const initial = fixtureApi.getPositionAtTime(fixture, 0, attemptStartMeasure);
-          updateScorePosition(initial);
+          ui.startMeasure.disabled = true;
+          ui.startButton.textContent = 'Start practice';
+          ui.lostPlaceButton.hidden = false;
+          updateScorePosition(positionTracker.snapshot().position);
           positionFrame = requestAnimationFrame(followPosition);
           ui.liveAnnouncement.textContent = 'Practice started';
           scoreFrame.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         },
         onObservation: (observation) => {
+          if (!positionTracker.acceptObservation({ kind: 'microphone-frame' })) return;
           ui.pitchObservation.textContent = observation.pitchText;
           ui.onsetObservation.textContent = observation.onsetText;
           ui.inputStatus.textContent = observation.rms > 0.01 ? 'Input detected' : 'Waiting for sound';
         },
       });
-      practiceStartAudioTime = times.practiceStartAudioTime;
     } catch (error) {
       console.error(error);
       sessionActive = false;
+      practiceFollowing = false;
+      positionUncertain = false;
       microphoneReady = false;
       await audio.stop();
       ui.micStatus.textContent = 'Practice could not continue. Check your microphone and audio output, then choose Try again.';
@@ -288,22 +346,27 @@
       ui.startButton.hidden = false;
       ui.startButton.disabled = true;
       ui.stopButton.hidden = true;
+      ui.lostPlaceButton.hidden = true;
       ui.retryButton.hidden = false;
     }
   }
 
   async function retryAttempt() {
     if (!attemptStartMeasure) return;
-    const retryMeasure = ui.startMeasure.value || attemptStartMeasure;
+    const retryMeasure = attemptStartMeasure;
     ui.startMeasure.value = retryMeasure;
     await checkMicrophone();
-    if (microphoneReady) startPractice();
+    if (microphoneReady) await startPractice();
   }
 
   ui.micButton.addEventListener('click', checkMicrophone);
   ui.startButton.addEventListener('click', startPractice);
   ui.stopButton.addEventListener('click', endAttempt);
   ui.retryButton.addEventListener('click', retryAttempt);
+  ui.lostPlaceButton.addEventListener('click', () => enterPositionUncertain('user-lost-place'));
   ui.reloadButton.addEventListener('click', () => window.location.reload());
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) enterPositionUncertain('visibility-loss');
+  });
   loadFixture();
 })();

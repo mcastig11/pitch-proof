@@ -157,5 +157,105 @@
     return nearestPosition?.beat ?? null;
   }
 
-  return { EXAMPLE_FIXTURE, validateFixture, getStartMeasures, getPositionAtTime, nearestBeatAtTime };
+  function createPositionTracker(fixture) {
+    if (!validateFixture(fixture).valid) throw new Error('Cannot track position for an invalid fixture.');
+    let status = 'idle';
+    let reason = null;
+    let startMeasureId = null;
+    let recoveryMeasureId = null;
+    let timelineStartAt = null;
+    let lastAudioTime = null;
+    let position = null;
+    let lastConfirmedPosition = null;
+    let observationEpoch = 0;
+
+    const clonePosition = (value) => value ? { ...value } : null;
+    const snapshot = () => ({
+      status,
+      reason,
+      position: clonePosition(position),
+      lastConfirmedPosition: clonePosition(lastConfirmedPosition),
+      observationEpoch,
+    });
+    const hasMeasure = (measureId) => getStartMeasures(fixture).some((measure) => measure.id === String(measureId));
+
+    function start(measureId, audioTime) {
+      if (!hasMeasure(measureId) || !Number.isFinite(audioTime)) return false;
+      status = 'following';
+      reason = null;
+      startMeasureId = String(measureId);
+      recoveryMeasureId = null;
+      timelineStartAt = audioTime;
+      lastAudioTime = audioTime;
+      position = getPositionAtTime(fixture, 0, startMeasureId);
+      lastConfirmedPosition = clonePosition(position);
+      observationEpoch++;
+      return Boolean(position);
+    }
+
+    function update(audioTime) {
+      if (status !== 'following') return snapshot();
+      const beatDuration = 60 / fixture.tempoBpm;
+      if (!Number.isFinite(audioTime) || audioTime < lastAudioTime || audioTime - lastAudioTime > beatDuration) {
+        return markUncertain('clock-gap');
+      }
+      lastAudioTime = audioTime;
+      position = getPositionAtTime(fixture, audioTime - timelineStartAt, startMeasureId);
+      if (position) lastConfirmedPosition = clonePosition(position);
+      return snapshot();
+    }
+
+    function markUncertain(uncertaintyReason = 'position-uncertain') {
+      if (status !== 'following') return snapshot();
+      status = 'uncertain';
+      reason = uncertaintyReason;
+      position = null;
+      observationEpoch++;
+      return snapshot();
+    }
+
+    function beginRecovery(measureId) {
+      if (status !== 'uncertain' || !hasMeasure(measureId)) return false;
+      status = 'recovering';
+      reason = null;
+      recoveryMeasureId = String(measureId);
+      position = null;
+      observationEpoch++;
+      return true;
+    }
+
+    function completeRecovery(audioTime) {
+      if (status !== 'recovering' || !Number.isFinite(audioTime)) return false;
+      status = 'following';
+      reason = null;
+      startMeasureId = recoveryMeasureId;
+      recoveryMeasureId = null;
+      timelineStartAt = audioTime;
+      lastAudioTime = audioTime;
+      position = getPositionAtTime(fixture, 0, startMeasureId);
+      if (!position) {
+        status = 'uncertain';
+        reason = 'invalid-recovery-position';
+        return false;
+      }
+      lastConfirmedPosition = clonePosition(position);
+      observationEpoch++;
+      return true;
+    }
+
+    function acceptObservation(observation) {
+      if (status !== 'following' || !observation || typeof observation !== 'object') return null;
+      return {
+        kind: typeof observation.kind === 'string' ? observation.kind : null,
+        graded: false,
+        measureId: null,
+        note: null,
+        observationEpoch,
+      };
+    }
+
+    return { start, update, markUncertain, beginRecovery, completeRecovery, acceptObservation, snapshot };
+  }
+
+  return { EXAMPLE_FIXTURE, validateFixture, getStartMeasures, getPositionAtTime, nearestBeatAtTime, createPositionTracker };
 });

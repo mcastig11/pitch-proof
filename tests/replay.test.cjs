@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 const { EXAMPLE_FIXTURE, createPositionTracker } = require('../practice-fixture.js');
+const { createPracticeAudio } = require('../practice-audio.js');
 
 test('pickup, silence, wrong pitch, and octave ambiguity stay descriptive and ungraded', () => {
   assert.equal(typeof createPositionTracker, 'function');
@@ -66,4 +67,59 @@ test('recovery validates the chosen measure, clears stale observations, and resu
   assert.equal(resumed.status, 'following');
   assert.equal(resumed.position.measureId, '2');
   assert.equal(resumed.position.beat, 1);
+});
+
+test('audio clock suspension cancels the current schedule and recovery reuses count-in', async () => {
+  let context;
+  let stateChange;
+  let nextFrame = 1;
+  const frames = new Map();
+  const frequencies = [];
+  let suspensionCount = 0;
+  class FakeAudioContext {
+    constructor() {
+      this.currentTime = 12;
+      this.sampleRate = 48000;
+      this.state = 'running';
+      this.destination = {};
+      context = this;
+    }
+    addEventListener(_type, callback) { stateChange = callback; }
+    removeEventListener() { stateChange = null; }
+    createAnalyser() { return { fftSize: 32, connect() {}, disconnect() {}, getFloatTimeDomainData() {} }; }
+    createMediaStreamSource() { return { connect() {}, disconnect() {} }; }
+    createOscillator() {
+      const oscillator = { frequency: {}, connect() {}, disconnect() {}, start() {}, stop() {} };
+      Object.defineProperty(oscillator.frequency, 'value', { set(value) { frequencies.push(value); } });
+      return oscillator;
+    }
+    createGain() { return { gain: { setValueAtTime() {}, linearRampToValueAtTime() {} }, connect() {}, disconnect() {} }; }
+    async resume() { this.state = 'running'; stateChange?.(); }
+    async close() { this.state = 'closed'; }
+  }
+  const audio = createPracticeAudio({
+    mediaDevices: { getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }) },
+    AudioContext: FakeAudioContext,
+    requestAnimationFrame(callback) { const id = nextFrame++; frames.set(id, callback); return id; },
+    cancelAnimationFrame(id) { frames.delete(id); },
+  });
+  await audio.checkMicrophone();
+  const startOptions = {
+    measureId: '1', beats: 2, tempoBpm: 96, mapBeat: () => 1,
+    onClockSuspended() { suspensionCount++; },
+  };
+
+  audio.startPractice(startOptions);
+  assert.equal(audio.state, 'count-in');
+  context.state = 'suspended';
+  stateChange();
+  assert.equal(audio.state, 'suspended');
+  assert.equal(frames.size, 0);
+  assert.equal(suspensionCount, 1);
+
+  await audio.resume();
+  audio.startPractice(startOptions);
+  assert.equal(audio.state, 'count-in');
+  assert.deepEqual(frequencies, [1046, 880, 1046, 880]);
+  await audio.stop();
 });

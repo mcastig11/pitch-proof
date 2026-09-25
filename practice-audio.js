@@ -88,6 +88,8 @@
     let beatAtAudioTime = null;
     let analysisState = {};
     const clickSources = new Set();
+    let stateChangeHandler = null;
+    let onClockSuspended = null;
 
     async function checkMicrophone() {
       if (permissionPending) return false;
@@ -108,6 +110,14 @@
         analyser.fftSize = 2048;
         source = context.createMediaStreamSource(stream);
         source.connect(analyser);
+        stateChangeHandler = () => {
+          if (!context || context.state === 'running') return;
+          state = 'suspended';
+          active = false;
+          stopScheduled();
+          onClockSuspended?.();
+        };
+        context.addEventListener?.('statechange', stateChangeHandler);
         if (context.state === 'suspended') await context.resume();
         if (generation !== requestGeneration) {
           return false;
@@ -164,10 +174,21 @@
       oscillator.stop(at + 0.05);
     }
 
-    function startPractice({ measureId, beats, tempoBpm, onBeat, onFollowing, onObservation, mapBeat }) {
+    async function resume() {
       if (!context || !stream) throw new Error('Check the microphone before starting practice.');
+      const generation = requestGeneration;
+      if (context.state && context.state !== 'running') await context.resume();
+      if (generation !== requestGeneration || !context || !stream || (context.state && context.state !== 'running')) {
+        throw new Error('Microphone audio was stopped before practice could start.');
+      }
+    }
+
+    function startPractice({ measureId, beats, tempoBpm, onBeat, onFollowing, onObservation, onClockSuspended: onSuspended, mapBeat }) {
+      if (!context || !stream) throw new Error('Check the microphone before starting practice.');
+      if (context.state && context.state !== 'running') throw new Error('Resume microphone audio before starting practice.');
       if (!Number.isInteger(beats) || beats < 1 || !Number.isFinite(tempoBpm) || tempoBpm <= 0) throw new Error('Count-in timing is invalid.');
       stopScheduled();
+      onClockSuspended = onSuspended;
       state = 'count-in';
       selectedMeasureId = String(measureId);
       analysisState = {};
@@ -244,6 +265,11 @@
       }
       if (context) {
         const oldContext = context;
+        if (stateChangeHandler) {
+          try { oldContext.removeEventListener?.('statechange', stateChangeHandler); } catch (_) { /* Continue closing the context. */ }
+        }
+        stateChangeHandler = null;
+        onClockSuspended = null;
         context = null;
         try { await oldContext.close(); } catch (_) { /* Teardown remains idempotent if close has already failed. */ }
       }
@@ -256,7 +282,7 @@
       state = 'stopped';
     }
 
-    return { checkMicrophone, startPractice, stop, getAudioTime: () => context?.currentTime ?? null, get state() { return state; } };
+    return { checkMicrophone, resume, startPractice, stop, getAudioTime: () => context?.currentTime ?? null, get state() { return state; } };
   }
 
   return { RMS_GATE, RMS_RELEASE, rmsOf, detectPitch, analyzeAudioFrame, createPracticeAudio };

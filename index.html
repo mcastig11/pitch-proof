@@ -48,6 +48,7 @@
     .staff { stroke: #506063; stroke-width: 1; }
     .barline { stroke: #17292b; stroke-width: 2; }
     .cursor { stroke: #135e63; stroke-width: 3; }
+    .cursor.uncertain { stroke: #506063; stroke-dasharray: 4 4; }
     [hidden] { display: none !important; }
     @media (max-width: 959px) { .page { padding: 24px; } .setup { grid-template-columns: repeat(2, minmax(0, 1fr)); } .practice-grid { grid-template-columns: 1fr; gap: 24px; } }
     @media (max-width: 599px) { .page { padding: 16px; } header { align-items: flex-start; flex-direction: column; margin-bottom: 24px; } .panel { padding: 16px; } .setup { grid-template-columns: 1fr; } .setup-title { grid-column: auto; } .transport > button { flex: 1 1 100%; } }
@@ -98,6 +99,7 @@
     <div class="transport" aria-label="Practice controls">
       <button id="start-button" type="button" class="primary" disabled>Start practice</button>
       <button id="stop-button" type="button" hidden>Stop practice</button>
+      <button id="lost-place-button" type="button" hidden>I lost my place</button>
       <button id="retry-button" type="button" hidden>Retry attempt</button>
       <button id="reload-button" type="button" hidden>Reload example</button>
     </div>
