@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-09-25T22:31:18.613Z",
+  "phase": "01",
+  "phase_name": "Verified Example Practice",
+  "phase_dir": ".planning/phases/01-verified-example-practice",
+  "plan": 3,
+  "task": 2,
+  "total_tasks": 2,
+  "status": "paused",
+  "completed_tasks": [
+    { "id": 1, "name": "Expose accessible controls and state announcements", "status": "done", "commit": "dcb14a6" },
+    { "id": 2, "name": "Verify responsive layout and the full accessible practice flow", "status": "in_progress", "progress": "Automated accessibility contract and responsive assertions are implemented; manual browser/device acceptance remains pending.", "commit": "dda2b07" }
+  ],
+  "remaining_tasks": [
+    { "id": 2, "name": "Complete human browser, audio-device, keyboard, viewport, zoom, and reduced-motion acceptance; record evidence", "status": "not_started" },
+    { "id": 3, "name": "Write 01-03-SUMMARY.md after acceptance passes, then run phase verification", "status": "not_started" }
+  ],
+  "blockers": [
+    { "description": "Phase 1 exit gate requires real browser and microphone/output-device acceptance; no device evidence has been recorded.", "type": "human_action", "workaround": "Resume with $gsd-resume-work or $gsd-verify-work 1 and record named browser/version, audio devices, and outcomes. Do not mark Plan 01-03 complete until the human checks pass." }
+  ],
+  "async_jobs": [],
+  "human_actions_pending": [
+    { "action": "Run the browser/device acceptance checks listed in 01-03-PLAN.md and record names, versions, and results.", "context": "The plan requires actual microphone/output, keyboard/live-region, responsive viewport/zoom, and reduced-motion validation; Node tests cannot establish these results.", "blocking": true }
+  ],
+  "decisions": [
+    { "decision": "Use sequential, non-worktree GSD execution for this project.", "rationale": "The Codex isolation resolver reported orchestrator-worktree but provided no executor command (exec:null); the user approved setting workflow.use_worktrees=false so execution could safely proceed sequentially.", "phase": "01" },
+    { "decision": "Treat score/pitch/onset observations as provisional and ungraded; do not infer sharp/flat or early/late correctness from this fixture phase.", "rationale": "Locked Phase 1 product boundary; authoritative feedback requires later evidence and score validation.", "phase": "01" }
+  ],
+  "uncommitted_files": [
+    " M .planning/config.json",
+    " M .planning/state.json",
+    "?? .gsd/",
+    "?? .planning/research/.cache/"
+  ],
+  "next_action": "Resume Phase 1 Plan 01-03 human acceptance. Inspect .planning/phases/01-verified-example-practice/01-03-PLAN.md and run the named browser/audio-device checks; then record evidence and complete the plan summary and phase verification.",
+  "context_notes": "Plans 01-01 and 01-02 are complete with summaries; Plan 01-03 has two implementation commits and passes the full 29-test suite, but is intentionally incomplete because its human acceptance gate is blocking. Current branch: gsd/phase-01-verified-example-practice. Preserve .gsd/ and .planning/research/.cache/; neither is part of this task. The config edit disabling worktrees and state.json changes are currently uncommitted."
+}
