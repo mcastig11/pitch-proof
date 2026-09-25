@@ -91,6 +91,7 @@ test('transition announcements use one polite live region without per-beat updat
 test('responsive layout confines score overflow and respects reduced motion', () => {
   assert.match(html, /\.practice-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*2fr\)\s+minmax\(280px,\s*1fr\)/);
   assert.match(html, /\.score-frame\s*\{[^}]*overflow-x:\s*auto/);
+  assert.match(html, /\.practice-grid\s*>\s*\*\s*\{\s*min-width:\s*0/);
   assert.match(html, /@media\s*\(max-width:\s*959px\)/);
   assert.match(html, /\.practice-grid\s*\{\s*grid-template-columns:\s*1fr/);
   assert.match(html, /@media\s*\(max-width:\s*599px\)/);
