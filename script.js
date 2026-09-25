@@ -252,7 +252,7 @@
         mapBeat: (elapsed) => fixtureApi.nearestBeatAtTime(fixture, Math.max(0, elapsed), startMeasure),
         onBeat: (beat, total) => {
           renderBeatDisplay(beat, total);
-          ui.countStatus.innerHTML = '';
+          ui.countStatus.replaceChildren();
           const beatBadge = document.createElement('span');
           beatBadge.className = 'beat-number active';
           beatBadge.textContent = String(beat);

@@ -74,8 +74,6 @@
     const AudioContextClass = options.AudioContext || globalThis.AudioContext || globalThis.webkitAudioContext;
     const requestFrame = options.requestAnimationFrame || globalThis.requestAnimationFrame?.bind(globalThis);
     const cancelFrame = options.cancelAnimationFrame || globalThis.cancelAnimationFrame?.bind(globalThis);
-    const setTimer = options.setTimeout || globalThis.setTimeout.bind(globalThis);
-    const clearTimer = options.clearTimeout || globalThis.clearTimeout.bind(globalThis);
     let stream = null;
     let context = null;
     let analyser = null;
@@ -87,7 +85,6 @@
     let selectedMeasureId = null;
     let beatAtAudioTime = null;
     let analysisState = {};
-    const timers = new Set();
     const oscillators = new Set();
 
     async function checkMicrophone() {
@@ -100,21 +97,27 @@
       }
       await releaseGraph();
       stream = nextStream;
-      context = new AudioContextClass();
-      analyser = context.createAnalyser();
-      analyser.fftSize = 2048;
-      source = context.createMediaStreamSource(stream);
-      source.connect(analyser);
-      if (context.state === 'suspended') await context.resume();
-      return true;
+      try {
+        context = new AudioContextClass();
+        analyser = context.createAnalyser();
+        analyser.fftSize = 2048;
+        source = context.createMediaStreamSource(stream);
+        source.connect(analyser);
+        if (context.state === 'suspended') await context.resume();
+        return true;
+      } catch (error) {
+        await releaseGraph();
+        throw error;
+      }
     }
 
-    function beginSampling(callback) {
+    function beginSampling(callback, clockCallback) {
       if (!analyser || !context || !requestFrame) throw new Error('Microphone must be ready before practice starts.');
       active = true;
       const buffer = new Float32Array(analyser.fftSize);
       const tick = () => {
         if (!active || !analyser || !context) return;
+        clockCallback?.(context.currentTime);
         analyser.getFloatTimeDomainData(buffer);
         const analysis = analyzeAudioFrame(buffer, context.sampleRate, analysisState, {
           audioTime: context.currentTime,
@@ -157,31 +160,35 @@
       const countInStart = context.currentTime + 0.08;
       practiceStartAudioTime = countInStart + beats * beatDuration;
       beatAtAudioTime = (elapsed) => mapBeat(elapsed, selectedMeasureId);
+      let lastVisualBeat = 0;
+      let followingStarted = false;
       for (let beat = 0; beat < beats; beat++) {
         const at = countInStart + beat * beatDuration;
         scheduleClick(at, beat === 0);
-        const timer = setTimer(() => {
-          timers.delete(timer);
-          if (active && context) onBeat?.(beat + 1, beats);
-        }, Math.max(0, (at - context.currentTime) * 1000));
-        timers.add(timer);
       }
-      const startTimer = setTimer(() => {
-        timers.delete(startTimer);
-        if (!active || !context) return;
-        onFollowing?.(practiceStartAudioTime);
-      }, Math.max(0, (practiceStartAudioTime - context.currentTime) * 1000));
-      timers.add(startTimer);
+      const updateClock = (audioTime) => {
+        if (audioTime < countInStart) return;
+        if (audioTime < practiceStartAudioTime) {
+          const beat = Math.min(beats, Math.floor((audioTime - countInStart) / beatDuration) + 1);
+          if (beat !== lastVisualBeat) {
+            lastVisualBeat = beat;
+            onBeat?.(beat, beats, countInStart + (beat - 1) * beatDuration);
+          }
+          return;
+        }
+        if (!followingStarted) {
+          followingStarted = true;
+          onFollowing?.(practiceStartAudioTime);
+        }
+      };
       beginSampling((analysis) => {
         if (context.currentTime < practiceStartAudioTime) return;
         onObservation?.(analysis);
-      });
+      }, updateClock);
       return { countInStart, practiceStartAudioTime };
     }
 
     function stopScheduled() {
-      timers.forEach(clearTimer);
-      timers.clear();
       oscillators.forEach((oscillator) => {
         try { oscillator.stop(); } catch (_) { /* It may already have ended. */ }
         try { oscillator.disconnect(); } catch (_) { /* It may already be disconnected. */ }
@@ -194,16 +201,23 @@
     async function releaseGraph() {
       active = false;
       stopScheduled();
-      if (source) { source.disconnect(); source = null; }
-      if (analyser) { analyser.disconnect?.(); analyser = null; }
+      if (source) {
+        try { source.disconnect(); } catch (_) { /* Continue releasing the remaining resources. */ }
+        source = null;
+      }
+      if (analyser) {
+        try { analyser.disconnect?.(); } catch (_) { /* Continue releasing the remaining resources. */ }
+        analyser = null;
+      }
       if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+        try { stream.getTracks().forEach((track) => { try { track.stop(); } catch (_) { /* Tracks are released independently. */ } }); }
+        catch (_) { /* A failed track lookup must not prevent closing the audio context. */ }
         stream = null;
       }
       if (context) {
         const oldContext = context;
         context = null;
-        await oldContext.close();
+        try { await oldContext.close(); } catch (_) { /* Teardown remains idempotent if close has already failed. */ }
       }
     }
 

@@ -92,8 +92,8 @@
     if (!Array.isArray(events) || !Number.isFinite(capacity)) return;
     let end = 0;
     for (const event of events) {
-      if (!event || !Number.isFinite(event.beat) || !Number.isFinite(event.duration) ||
-          event.beat < 1 || event.duration <= 0 || event.beat < end || event.beat + event.duration - 1 > capacity ||
+      if (!event || !Number.isInteger(event.beat) || !Number.isInteger(event.duration) ||
+          event.beat !== end + 1 || event.duration <= 0 || event.beat + event.duration - 1 > capacity ||
           !['note', 'rest'].includes(event.type) || (event.type === 'note' && !validPitch(event.pitch)) ||
           (event.type === 'rest' && event.pitch !== undefined)) {
         fail(`${label} contains an invalid or overlapping event.`);
@@ -152,7 +152,9 @@
     const beatsBeforeStart = starts.slice(0, startIndex).reduce((sum, item, index) => {
       return sum + (index === 0 ? fixture.pickup.beats : fixture.meter.beatsPerMeasure);
     }, 0);
-    return Math.max(1, Math.round(beatsBeforeStart + seconds / (60 / fixture.tempoBpm)) + 1);
+    const nearestBeatIndex = Math.max(0, Math.round(beatsBeforeStart + seconds / (60 / fixture.tempoBpm)));
+    const nearestPosition = getPositionAtTime(fixture, nearestBeatIndex * (60 / fixture.tempoBpm), 'pickup');
+    return nearestPosition?.beat ?? null;
   }
 
   return { EXAMPLE_FIXTURE, validateFixture, getStartMeasures, getPositionAtTime, nearestBeatAtTime };
