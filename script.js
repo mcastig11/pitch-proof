@@ -323,7 +323,7 @@
           ui.lostPlaceButton.hidden = false;
           updateScorePosition(positionTracker.snapshot().position);
           positionFrame = requestAnimationFrame(followPosition);
-          ui.liveAnnouncement.textContent = 'Practice started';
+          ui.liveAnnouncement.textContent = recovering ? 'Position recovered. Practice resumed.' : 'Practice started';
           scoreFrame.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         },
         onObservation: (observation) => {

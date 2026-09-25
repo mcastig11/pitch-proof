@@ -71,7 +71,7 @@
     <div class="practice-grid">
       <section aria-labelledby="score-heading">
         <h2 id="score-heading">Example score</h2>
-        <p class="position-line" id="position" aria-live="polite">Microphone not checked</p>
+        <p class="position-line" id="position">Microphone not checked</p>
         <div class="score-frame" id="score-frame" tabindex="0" role="region" aria-label="Scrollable example score">
           <p id="score-summary" class="muted">Loading example score…</p>
           <svg id="score" role="img" aria-labelledby="score-title score-desc" hidden></svg>
@@ -80,13 +80,13 @@
       <aside class="rail" aria-label="Practice status">
         <section class="status-box" aria-labelledby="mic-heading">
           <div class="status-heading" id="mic-heading">Microphone</div>
-          <p id="mic-status" role="status">Microphone not checked</p>
+          <p id="mic-status">Microphone not checked</p>
           <p id="input-status" class="muted">Waiting for sound</p>
           <button id="mic-button" type="button">Check microphone</button>
         </section>
         <section class="status-box" aria-labelledby="count-heading">
           <div class="status-heading" id="count-heading">Metronome and position</div>
-          <p id="count-status" aria-live="polite">Ready for count-in</p>
+          <p id="count-status">Ready for count-in</p>
           <div id="beat-display" aria-label="Count-in beat"></div>
         </section>
         <section class="observation" aria-labelledby="observation-heading">
@@ -103,7 +103,7 @@
       <button id="retry-button" type="button" hidden>Retry attempt</button>
       <button id="reload-button" type="button" hidden>Reload example</button>
     </div>
-    <p id="live-announcement" class="muted" role="status" aria-live="polite"></p>
+  <p id="live-announcement" class="muted" role="status" aria-live="polite"></p>
   </main>
   <script src="practice-fixture.js"></script>
   <script src="practice-audio.js"></script>
