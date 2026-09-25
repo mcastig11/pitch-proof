@@ -48,13 +48,14 @@ test('silence stays in listening state; a silence-to-tone edge reports its nearb
 });
 
 test('microphone practice schedules count-in only, transitions on the next beat, and releases local resources', async () => {
-  const scheduledTimers = [];
+  const queuedFrames = [];
   const nodes = [];
   const stoppedTracks = [];
   const callbacks = { beats: [], following: false };
   const stream = { getTracks: () => [{ stop: () => stoppedTracks.push('track') }] };
+  let fakeContext;
   class FakeContext {
-    constructor() { this.currentTime = 10; this.sampleRate = 44100; this.destination = {}; this.closed = false; }
+    constructor() { this.currentTime = 10; this.sampleRate = 44100; this.destination = {}; this.closed = false; fakeContext = this; }
     createAnalyser() { return { fftSize: 2048, connect() {}, disconnect() {}, getFloatTimeDomainData() {} }; }
     createMediaStreamSource() { return { connect() {}, disconnect() {} }; }
     createOscillator() {
@@ -72,10 +73,8 @@ test('microphone practice schedules count-in only, transitions on the next beat,
   const audio = audioApi.createPracticeAudio({
     mediaDevices: { getUserMedia: async () => stream },
     AudioContext: FakeContext,
-    requestAnimationFrame: () => 1,
+    requestAnimationFrame: (callback) => { queuedFrames.push(callback); return queuedFrames.length; },
     cancelAnimationFrame() {},
-    setTimeout: (fn, delay) => { const timer = { fn, delay }; scheduledTimers.push(timer); return timer; },
-    clearTimeout() {},
   });
   assert.equal(await audio.checkMicrophone(), true);
   const start = audio.startPractice({
@@ -90,7 +89,18 @@ test('microphone practice schedules count-in only, transitions on the next beat,
   assert.ok(nodes.slice(1).every((node) => node.frequency.value === 880));
   assert.ok(Math.abs(nodes[0].stoppedAt - nodes[0].startedAt - 0.05) < 1e-9);
   assert.equal(start.practiceStartAudioTime, start.countInStart + 4 * (60 / 96));
-  scheduledTimers.forEach((timer) => timer.fn());
+  const runAt = (time) => {
+    fakeContext.currentTime = time;
+    const frame = queuedFrames.shift();
+    assert.ok(frame, 'a visual audio-clock frame should be scheduled');
+    frame();
+  };
+  const beatDuration = 60 / 96;
+  runAt(start.countInStart);
+  runAt(start.countInStart + beatDuration);
+  runAt(start.countInStart + beatDuration * 2);
+  runAt(start.countInStart + beatDuration * 3);
+  runAt(start.practiceStartAudioTime);
   assert.deepEqual(callbacks.beats, [1, 2, 3, 4]);
   assert.equal(callbacks.following, true);
   const oldContext = audio.getAudioTime;
@@ -99,4 +109,16 @@ test('microphone practice schedules count-in only, transitions on the next beat,
   assert.equal(oldContext(), null);
   await audio.stop();
   assert.deepEqual(stoppedTracks, ['track']);
+});
+
+test('microphone setup failure stops the newly granted stream before surfacing the error', async () => {
+  let stopped = 0;
+  const stream = { getTracks: () => [{ stop: () => stopped++ }] };
+  class BrokenAudioContext { constructor() { throw new Error('Audio output could not start'); } }
+  const audio = audioApi.createPracticeAudio({
+    mediaDevices: { getUserMedia: async () => stream },
+    AudioContext: BrokenAudioContext,
+  });
+  await assert.rejects(audio.checkMicrophone(), /Audio output could not start/);
+  assert.equal(stopped, 1);
 });
