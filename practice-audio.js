@@ -80,34 +80,48 @@
     let source = null;
     let frameId = null;
     let requestGeneration = 0;
+    let permissionPending = false;
+    let state = 'idle';
     let active = false;
     let practiceStartAudioTime = null;
     let selectedMeasureId = null;
     let beatAtAudioTime = null;
     let analysisState = {};
-    const oscillators = new Set();
+    const clickSources = new Set();
 
     async function checkMicrophone() {
+      if (permissionPending) return false;
+      permissionPending = true;
       const generation = ++requestGeneration;
-      if (!mediaDevices?.getUserMedia || !AudioContextClass) throw new Error('Microphone audio is not available in this browser.');
-      const nextStream = await mediaDevices.getUserMedia({ audio: true });
-      if (generation !== requestGeneration) {
-        nextStream.getTracks().forEach((track) => track.stop());
-        return false;
-      }
-      await releaseGraph();
-      stream = nextStream;
+      state = 'checking';
       try {
+        await releaseGraph();
+        if (!mediaDevices?.getUserMedia || !AudioContextClass) throw new Error('Microphone audio is not available in this browser.');
+        const nextStream = await mediaDevices.getUserMedia({ audio: true });
+        if (generation !== requestGeneration) {
+          stopTracks(nextStream);
+          return false;
+        }
+        stream = nextStream;
         context = new AudioContextClass();
         analyser = context.createAnalyser();
         analyser.fftSize = 2048;
         source = context.createMediaStreamSource(stream);
         source.connect(analyser);
         if (context.state === 'suspended') await context.resume();
+        if (generation !== requestGeneration) {
+          return false;
+        }
+        state = 'ready';
         return true;
       } catch (error) {
-        await releaseGraph();
+        if (generation === requestGeneration) {
+          await releaseGraph();
+          state = 'error';
+        }
         throw error;
+      } finally {
+        if (generation === requestGeneration) permissionPending = false;
       }
     }
 
@@ -140,11 +154,11 @@
       gain.gain.linearRampToValueAtTime(0, at + 0.045);
       oscillator.connect(gain);
       gain.connect(context.destination);
-      oscillators.add(oscillator);
+      const click = { oscillator, gain };
+      clickSources.add(click);
       oscillator.onended = () => {
-        oscillator.disconnect();
-        gain.disconnect();
-        oscillators.delete(oscillator);
+        disconnectClick(click);
+        clickSources.delete(click);
       };
       oscillator.start(at);
       oscillator.stop(at + 0.05);
@@ -154,6 +168,7 @@
       if (!context || !stream) throw new Error('Check the microphone before starting practice.');
       if (!Number.isInteger(beats) || beats < 1 || !Number.isFinite(tempoBpm) || tempoBpm <= 0) throw new Error('Count-in timing is invalid.');
       stopScheduled();
+      state = 'count-in';
       selectedMeasureId = String(measureId);
       analysisState = {};
       const beatDuration = 60 / tempoBpm;
@@ -178,6 +193,7 @@
         }
         if (!followingStarted) {
           followingStarted = true;
+          state = 'following';
           onFollowing?.(practiceStartAudioTime);
         }
       };
@@ -189,13 +205,26 @@
     }
 
     function stopScheduled() {
-      oscillators.forEach((oscillator) => {
-        try { oscillator.stop(); } catch (_) { /* It may already have ended. */ }
-        try { oscillator.disconnect(); } catch (_) { /* It may already be disconnected. */ }
+      clickSources.forEach((click) => {
+        try { click.oscillator.stop(); } catch (_) { /* It may already have ended. */ }
+        disconnectClick(click);
       });
-      oscillators.clear();
+      clickSources.clear();
       if (frameId !== null && cancelFrame) cancelFrame(frameId);
       frameId = null;
+    }
+
+    function disconnectClick(click) {
+      try { click.oscillator.disconnect(); } catch (_) { /* Continue releasing the remaining audio nodes. */ }
+      try { click.gain.disconnect(); } catch (_) { /* It may already be disconnected. */ }
+    }
+
+    function stopTracks(targetStream) {
+      try {
+        targetStream?.getTracks?.().forEach((track) => {
+          try { track.stop(); } catch (_) { /* Release other tracks even if one fails. */ }
+        });
+      } catch (_) { /* A failed track lookup must not prevent audio graph cleanup. */ }
     }
 
     async function releaseGraph() {
@@ -210,8 +239,7 @@
         analyser = null;
       }
       if (stream) {
-        try { stream.getTracks().forEach((track) => { try { track.stop(); } catch (_) { /* Tracks are released independently. */ } }); }
-        catch (_) { /* A failed track lookup must not prevent closing the audio context. */ }
+        stopTracks(stream);
         stream = null;
       }
       if (context) {
@@ -223,10 +251,12 @@
 
     async function stop() {
       requestGeneration++;
+      permissionPending = false;
       await releaseGraph();
+      state = 'stopped';
     }
 
-    return { checkMicrophone, startPractice, stop, getAudioTime: () => context?.currentTime ?? null };
+    return { checkMicrophone, startPractice, stop, getAudioTime: () => context?.currentTime ?? null, get state() { return state; } };
   }
 
   return { RMS_GATE, RMS_RELEASE, rmsOf, detectPitch, analyzeAudioFrame, createPracticeAudio };

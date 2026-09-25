@@ -203,6 +203,7 @@
 
   async function checkMicrophone() {
     ui.micButton.disabled = true;
+    ui.startButton.disabled = true;
     ui.micStatus.textContent = 'Checking microphone…';
     ui.micStatus.classList.remove('error');
     try {
@@ -210,6 +211,7 @@
       if (!ready) return;
       microphoneReady = true;
       ui.micStatus.textContent = 'Microphone ready. Sing a note to check the input level.';
+      ui.micButton.textContent = 'Check microphone';
       ui.inputStatus.textContent = 'Waiting for sound';
       ui.liveAnnouncement.textContent = 'Microphone ready';
       ui.startButton.disabled = false;
@@ -230,7 +232,7 @@
     }
   }
 
-  function startPractice() {
+  async function startPractice() {
     if (!microphoneReady || sessionActive) return;
     const startMeasure = ui.startMeasure.value;
     if (!fixtureApi.getStartMeasures(fixture).some((measure) => measure.id === startMeasure)) return;
@@ -279,7 +281,7 @@
       console.error(error);
       sessionActive = false;
       microphoneReady = false;
-      audio.stop();
+      await audio.stop();
       ui.micStatus.textContent = 'Practice could not continue. Check your microphone and audio output, then choose Try again.';
       ui.micStatus.classList.add('error');
       ui.startMeasure.disabled = false;

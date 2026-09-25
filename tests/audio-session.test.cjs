@@ -12,6 +12,8 @@ function deferred() {
 function makeAudioHarness({ getUserMedia, failAnalyser = false } = {}) {
   const tracks = [];
   const contexts = [];
+  const clickSources = [];
+  const gainNodes = [];
   const frames = new Map();
   let nextFrame = 1;
   const mediaDevices = {
@@ -35,6 +37,24 @@ function makeAudioHarness({ getUserMedia, failAnalyser = false } = {}) {
       return { fftSize: 32, connect() {}, disconnect() {}, getFloatTimeDomainData() {} };
     }
     createMediaStreamSource() { return { connect() {}, disconnect() {} }; }
+    createOscillator() {
+      const oscillator = {
+        frequency: {},
+        stopCalls: 0,
+        disconnectCalls: 0,
+        connect() {},
+        start() {},
+        stop() { this.stopCalls++; },
+        disconnect() { this.disconnectCalls++; },
+      };
+      clickSources.push(oscillator);
+      return oscillator;
+    }
+    createGain() {
+      const gain = { gain: { setValueAtTime() {}, linearRampToValueAtTime() {} }, disconnectCalls: 0, connect() {}, disconnect() { this.disconnectCalls++; } };
+      gainNodes.push(gain);
+      return gain;
+    }
     async close() { this.closed++; this.state = 'closed'; }
   }
   const audio = createPracticeAudio({
@@ -43,7 +63,7 @@ function makeAudioHarness({ getUserMedia, failAnalyser = false } = {}) {
     requestAnimationFrame(callback) { const id = nextFrame++; frames.set(id, callback); return id; },
     cancelAnimationFrame(id) { frames.delete(id); },
   });
-  return { audio, tracks, contexts, frames };
+  return { audio, tracks, contexts, frames, clickSources, gainNodes };
 }
 
 test('only one microphone permission request can be pending', async () => {
@@ -80,14 +100,17 @@ test('a permission result that arrives after stop is released and cannot revive 
 
 test('permission denial leaves the session retryable and does not retain a prior graph', async () => {
   const track = { stopped: 0, stop() { this.stopped++; } };
+  const retryTrack = { stopped: 0, stop() { this.stopped++; } };
   let requests = 0;
   const { audio, contexts } = makeAudioHarness({
     getUserMedia: async () => {
       requests++;
-      if (requests === 1) return { getTracks: () => [track] };
-      const error = new Error('permission denied');
-      error.name = 'NotAllowedError';
-      throw error;
+      if (requests === 2) {
+        const error = new Error('permission denied');
+        error.name = 'NotAllowedError';
+        throw error;
+      }
+      return { getTracks: () => [requests === 1 ? track : retryTrack] };
     },
   });
 
@@ -97,7 +120,10 @@ test('permission denial leaves the session retryable and does not retain a prior
   assert.equal(track.stopped, 1);
   assert.equal(contexts[0].closed, 1);
   assert.equal(audio.state, 'error');
-  assert.equal(await audio.checkMicrophone(), false);
+  assert.equal(await audio.checkMicrophone(), true);
+  assert.equal(audio.state, 'ready');
+  await audio.stop();
+  assert.equal(retryTrack.stopped, 1);
 });
 
 test('setup failure releases the granted track and can be safely stopped repeatedly', async () => {
@@ -114,4 +140,20 @@ test('setup failure releases the granted track and can be safely stopped repeate
   assert.equal(track.stopped, 1);
   assert.equal(contexts[0].closed, 1);
   assert.equal(audio.state, 'stopped');
+});
+
+test('stopping practice cancels sampling and releases scheduled count-in nodes', async () => {
+  const { audio, frames, clickSources, gainNodes, contexts } = makeAudioHarness();
+  await audio.checkMicrophone();
+  audio.startPractice({ measureId: '1', beats: 2, tempoBpm: 96, mapBeat: () => 1 });
+
+  assert.equal(frames.size, 1);
+  assert.equal(clickSources.length, 2);
+  await audio.stop();
+
+  assert.equal(frames.size, 0);
+  assert.ok(clickSources.every((source) => source.stopCalls === 2 && source.disconnectCalls === 1));
+  assert.ok(gainNodes.every((gain) => gain.disconnectCalls === 1));
+  assert.equal(audio.state, 'stopped');
+  assert.equal(contexts[0].closed, 1);
 });
