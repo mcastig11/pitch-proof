@@ -78,7 +78,7 @@ coverage:
         status: pass
     human_judgment: false
 
-duration: 21m
+duration: 25m
 completed: 2026-09-25
 status: complete
 ---

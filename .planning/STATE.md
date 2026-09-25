@@ -60,7 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
-| Phase 01 P01 | 21m | 2 tasks | 7 files |
+| Phase 01 P01 | 25m | 2 tasks | 7 files |
 
 ## Accumulated Context
 
