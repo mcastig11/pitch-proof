@@ -1,353 +1,307 @@
-// ─── Pitch detection helpers ───────────────────────────────────────────────
+(() => {
+  'use strict';
 
-let mediaRecorder = null;
-let recordedChunks = [];
-let startTime = null;
-const statSamples   = document.getElementById('statSamples');
-const statInTune    = document.getElementById('statInTune');
-const statInTuneSub = document.getElementById('statInTuneSub');
-const statDrift     = document.getElementById('statDrift');
-const statDriftSub  = document.getElementById('statDriftSub');
-const tuningBadge   = document.getElementById('tuningBadge');
-const waveformBadge = document.getElementById('waveformBadge');
+  const fixtureApi = window.PitchProofFixture;
+  const audioApi = window.PitchProofAudio;
+  const fixture = fixtureApi?.EXAMPLE_FIXTURE;
+  const ids = ['fixture-title', 'part-select', 'start-measure', 'tempo-meter', 'score-summary', 'score', 'position',
+    'mic-status', 'input-status', 'mic-button', 'count-status', 'beat-display', 'pitch-observation', 'onset-observation',
+    'start-button', 'stop-button', 'retry-button', 'reload-button', 'live-announcement'];
+  const ui = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
+  const scoreFrame = document.getElementById('score-frame');
+  const svgNamespace = 'http://www.w3.org/2000/svg';
+  let audio = null;
+  let microphoneReady = false;
+  let sessionActive = false;
+  let attemptStartMeasure = null;
+  let practiceStartAudioTime = null;
+  let positionFrame = null;
+  let lastPositionText = '';
 
-const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  function setText(node, value) { node.textContent = value; }
 
-// converts raw frequency into MIIDI number (musical note system)
-function freqToNote(freq) {
-  if (freq <= 0) return null;
-  // A4 = 440 Hz, MIDI note 69
-  const midi = 12 * Math.log2(freq / 440) + 69;
-  const rounded = Math.round(midi);
-  const cents = Math.round((midi - rounded) * 100);
-  const noteName = NOTE_NAMES[rounded % 12];
-  const octave = Math.floor(rounded / 12) - 1;
-  return { note: `${noteName}${octave}`, cents, midi: rounded };
-}
+  function unavailable() {
+    ui.score.hidden = true;
+    ui.scoreSummary.hidden = true;
+    setText(ui.fixtureTitle, 'Example score unavailable');
+    const body = document.createElement('p');
+    body.textContent = 'The verified example could not be opened. Reload the example to practice.';
+    ui.scoreSummary.replaceWith(body);
+    ui.reloadButton.hidden = false;
+    ui.startButton.disabled = true;
+    ui.micButton.disabled = true;
+  }
 
-// Autocorrelation pitch detection
-/*
- * takes snapshot of audio wave, compared against shifted copy
- * offset shows wavelength, converts wavelength into frequency
- */
-function detectPitch(buffer, sampleRate) {
-  const SIZE = buffer.length;
-  const MAX_SAMPLES = Math.floor(SIZE / 2);
-  let bestOffset = -1;
-  let bestCorrelation = 0;
-  let rms = 0;
+  function addSvg(parent, tag, attributes = {}, text = '') {
+    const child = document.createElementNS(svgNamespace, tag);
+    Object.entries(attributes).forEach(([name, value]) => child.setAttribute(name, String(value)));
+    if (text) child.textContent = text;
+    parent.append(child);
+    return child;
+  }
 
-  for (let i = 0; i < SIZE; i++) rms += buffer[i] * buffer[i];
-  rms = Math.sqrt(rms / SIZE);
-  if (rms < 0.01) return -1; // too quiet
+  function pitchY(pitch) {
+    const match = /^([A-G])(#|b)?(\d)$/.exec(pitch);
+    if (!match) return 160;
+    const steps = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+    const diatonic = Number(match[3]) * 7 + steps[match[1]];
+    return 184 - diatonic * 4;
+  }
 
-  let lastCorrelation = 1;
-  let foundGoodCorrelation = false;
-
-  for (let offset = 1; offset < MAX_SAMPLES; offset++) {
-    let correlation = 0;
-    for (let i = 0; i < MAX_SAMPLES; i++) {
-      correlation += Math.abs(buffer[i] - buffer[i + offset]);
+  function drawScore() {
+    const allMeasures = [
+      { ...fixture.pickup, displayLabel: fixture.pickup.label },
+      ...fixture.measures.map((measure) => ({ ...measure, displayLabel: measure.label })),
+    ];
+    const pickupWidth = 110;
+    const measureWidth = 150;
+    const width = pickupWidth + measureWidth * fixture.measures.length + 24;
+    ui.score.replaceChildren();
+    ui.score.setAttribute('viewBox', `0 0 ${width} 220`);
+    ui.score.setAttribute('aria-label', `${fixture.title}, ${fixture.part.name} part`);
+    addSvg(ui.score, 'title', { id: 'score-title' }, `${fixture.title} — ${fixture.part.name}`);
+    addSvg(ui.score, 'desc', { id: 'score-desc' }, `Original ${fixture.part.name} vocal exercise in ${fixture.meter.label}, ${fixture.tempoBpm} beats per minute. Pickup followed by ${fixture.measures.length} measures.`);
+    for (let line = 0; line < 5; line++) {
+      addSvg(ui.score, 'line', { x1: 12, x2: width - 12, y1: 100 + line * 16, y2: 100 + line * 16, class: 'staff' });
     }
-    correlation = 1 - correlation / MAX_SAMPLES;
-
-    if (correlation > 0.9 && correlation > lastCorrelation) {
-      foundGoodCorrelation = true;
-      if (correlation > bestCorrelation) {
-        bestCorrelation = correlation;
-        bestOffset = offset;
-      }
-    } else if (foundGoodCorrelation) {
-      break;
-    }
-    lastCorrelation = correlation;
-  }
-
-  if (bestOffset === -1) return -1;
-  return sampleRate / bestOffset;
-}
-
-// ─── State ─────────────────────────────────────────────────────────────────
-
-let audioContext = null;
-let analyser = null;
-let source = null;
-let animFrame = null;
-let isRecording = false;
-let pitchLog = []; // stores detected notes while recording
-
-// ─── DOM refs ──────────────────────────────────────────────────────────────
-
-const recordBtn    = document.getElementById('recordBtn');
-const recordLabel  = document.getElementById('recordLabel');
-const statusEl     = document.getElementById('status');
-const noteNameEl   = document.getElementById('noteName');
-const frequencyEl  = document.getElementById('frequency');
-const centsFillEl  = document.getElementById('centsFill');
-const centsValueEl = document.getElementById('centsValue');
-const waveformCanvas = document.getElementById('waveform');
-const waveCtx      = waveformCanvas.getContext('2d');
-const feedbackBox  = document.getElementById('feedbackBox');
-const feedbackBtn  = document.getElementById('feedbackBtn');
-
-// ─── Recording ─────────────────────────────────────────────────────────────
-
-recordBtn.addEventListener('click', async () => {
-  if (!isRecording) {
-    await startRecording();
-  } else {
-    stopRecording();
-  }
-});
-
-// asynchronous to keep other operations running
-async function startRecording() {
-    startTime = Date.now();
-
-  try {
-    // pops up for allow media
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioContext = new AudioContext();
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    source = audioContext.createMediaStreamSource(stream);
-    source.connect(analyser);
-    // builds pipeline into analyser
-
-    isRecording = true;
-    pitchLog = [];
-    recordBtn.classList.add('recording');
-    recordLabel.textContent = 'STOP';
-    statusEl.textContent = 'listening...';
-
-    drawLoop();
-
-    // Set up media recording
-    mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) recordedChunks.push(e.data);
-    };
-    mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-
-        // Create a download link and auto-click it
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pitch-recording-${Date.now()}.webm`;
-        a.click();
-
-        // Also save the URL so you can play it back in the app
-        lastRecordingURL = url;
-    };
-    mediaRecorder.start();
-  } catch (err) {
-    statusEl.textContent = 'mic access denied — please check browser permissions';
-    console.error(err);
-  }
-}
-
-function stopRecording() {
-  isRecording = false;
-  cancelAnimationFrame(animFrame);
-  if (source) source.disconnect();
-  if (audioContext) audioContext.close();
-
-  recordBtn.classList.remove('recording');
-  recordLabel.textContent = 'START SINGING';
-  statusEl.textContent = `done — ${pitchLog.length} pitch samples captured`;
-
-  // Reset display
-  noteNameEl.textContent = '—';
-  noteNameEl.className = 'note-name';
-  frequencyEl.textContent = '— Hz';
-  centsFillEl.style.left = '50%';
-  centsValueEl.textContent = '0 cents';
-
-  // Clear waveform
-  waveCtx.clearRect(0, 0, waveformCanvas.width, waveformCanvas.height);
-
-  // Stop media recorder
-  mediaRecorder.stop();
-}
-
-// ─── Draw loop (pitch + waveform) ──────────────────────────────────────────
-
-function drawLoop() {
-  animFrame = requestAnimationFrame(drawLoop);
-
-  const bufferLength = analyser.fftSize;
-  const dataArray = new Float32Array(bufferLength);
-  analyser.getFloatTimeDomainData(dataArray);
-
-  // Pitch detection
-  const freq = detectPitch(dataArray, audioContext.sampleRate);
-  if (freq > 60 && freq < 1200) {
-    const result = freqToNote(freq);
-    if (result) {
-      noteNameEl.textContent = result.note;
-      frequencyEl.textContent = `${Math.round(freq)} Hz`;
-      updateCentsMeter(result.cents);
-
-      // Classify tuning
-      const absC = Math.abs(result.cents);
-      noteNameEl.className = 'note-name ' + (absC < 10 ? 'in-tune' : 'off-tune');
-
-      pitchLog.push({
-        note: result.note,
-        cents: result.cents,
-        freq: Math.round(freq),
-        time: ((Date.now() - startTime) / 1000).toFixed(1) // seconds since start
-        });
-
-        const inTune = pitchLog.filter(p => Math.abs(p.cents) <= 15).length;
-        const pct = pitchLog.length ? Math.round((inTune / pitchLog.length) * 100) : 0;
-        const avg = pitchLog.length ? Math.round(pitchLog.reduce((s,p) => s + p.cents, 0) / pitchLog.length) : 0;
-
-        statSamples.textContent = pitchLog.length;
-        statInTune.textContent = pct + '%';
-        statInTuneSub.textContent = 'this session';
-        statDrift.textContent = (avg > 0 ? '+' : '') + avg + '¢';
-        statDriftSub.textContent = avg > 5 ? 'slightly sharp' : avg < -5 ? 'slightly flat' : 'on target';
-    }
-  } else {
-    noteNameEl.textContent = '—';
-    frequencyEl.textContent = '— Hz';
-    noteNameEl.className = 'note-name';
-  }
-
-  // Waveform drawing
-  const w = waveformCanvas.width = waveformCanvas.offsetWidth * window.devicePixelRatio;
-  const h = waveformCanvas.height = waveformCanvas.offsetHeight * window.devicePixelRatio;
-
-  waveCtx.clearRect(0, 0, w, h);
-  waveCtx.strokeStyle = '#7c6fff';
-  waveCtx.lineWidth = 2;
-  waveCtx.beginPath();
-
-  const sliceWidth = w / bufferLength;
-  let x = 0;
-  for (let i = 0; i < bufferLength; i++) {
-    const v = dataArray[i];
-    const y = (v * h / 2) + h / 2;
-    if (i === 0) waveCtx.moveTo(x, y);
-    else waveCtx.lineTo(x, y);
-    x += sliceWidth;
-  }
-  waveCtx.stroke();
-}
-
-function updateCentsMeter(cents) {
-  // Map cents (-50 to +50) to percentage position (0% to 100%)
-  const clamped = Math.max(-50, Math.min(50, cents));
-  const percent = 50 + clamped; // 0–100
-  centsFillEl.style.left = `${percent}%`;
-
-  const absC = Math.abs(clamped);
-  centsFillEl.className = 'cents-fill ' + (absC < 10 ? 'in-tune' : clamped > 0 ? 'sharp' : 'flat');
-  centsValueEl.textContent = `${cents > 0 ? '+' : ''}${cents} cents`;
-}
-
-// ─── AI Feedback ───────────────────────────────────────────────────────────
-
-feedbackBtn.addEventListener('click', getAIFeedback);
-
-async function getAIFeedback() {
-  if (pitchLog.length === 0) {
-    feedbackBox.textContent = 'No pitch data yet — sing something first, then click this button!';
-    return;
-  }
-
-  // Summarize the pitch log
-  const notes = pitchLog.map(p => p.note);
-  const noteCount = {};
-  notes.forEach(n => { noteCount[n] = (noteCount[n] || 0) + 1; });
-  const topNotes = Object.entries(noteCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([note, count]) => `${note} (${count}x)`)
-    .join(', ');
-
-  const avgCents = Math.round(pitchLog.reduce((s, p) => s + p.cents, 0) / pitchLog.length);
-  const sharpCount = pitchLog.filter(p => p.cents > 15).length;
-  const flatCount  = pitchLog.filter(p => p.cents < -15).length;
-  const inTuneCount = pitchLog.length - sharpCount - flatCount;
-
-  // Group off-pitch moments by timestamp
-  const offMoments = pitchLog
-    .filter(p => Math.abs(p.cents) > 15)
-    .reduce((acc, p) => {
-      const last = acc[acc.length - 1];
-      if (last && p.time - last.time < 0.5) {
-        last.endTime = p.time;
-        last.cents.push(p.cents);
-      } else {
-        acc.push({ time: p.time, endTime: p.time, note: p.note, cents: [p.cents] });
-      }
-      return acc;
-    }, [])
-    .map(m => {
-      const avgC = Math.round(m.cents.reduce((a, b) => a + b, 0) / m.cents.length);
-      const direction = avgC > 0 ? 'sharp' : 'flat';
-      return `at ${m.time}s–${m.endTime}s: singing ${m.note}, ${Math.abs(avgC)} cents ${direction}`;
-    })
-    .join('\n');
-
-  const summary = `
-The singer sang for ${pitchLog[pitchLog.length - 1]?.time || 0} seconds.
-Most common notes: ${topNotes}.
-Average deviation: ${avgCents > 0 ? '+' : ''}${avgCents} cents.
-In tune: ${inTuneCount}. Sharp: ${sharpCount}. Flat: ${flatCount}.
-
-Specific off-pitch moments:
-${offMoments || 'None detected — great tuning!'}
-  `.trim();
-
-  feedbackBox.textContent = 'Analyzing your singing...';
-  feedbackBox.className = 'feedback-box loading';
-  feedbackBtn.disabled = true;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'YOUR_API_KEY_HERE',
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 400,
-        messages: [{
-          role: 'user',
-          content: `You are a friendly and encouraging vocal coach. A student just sang and here is their pitch accuracy data:\n\n${summary}\n\nGive them 3-4 sentences of specific feedback. Call out the exact timestamps where they went off pitch, whether they were sharp or flat at those moments, and give one concrete tip to fix it. Keep it warm and motivating.`
-        }]
-      })
+    addSvg(ui.score, 'text', { x: 18, y: 145, class: 'measure' }, '𝄞');
+    addSvg(ui.score, 'text', { x: 45, y: 128, class: 'measure' }, 'C');
+    addSvg(ui.score, 'text', { x: 48, y: 147, class: 'measure' }, fixture.meter.label);
+    let x = 86;
+    allMeasures.forEach((measure, measureIndex) => {
+      const regionWidth = measureIndex === 0 ? pickupWidth : measureWidth;
+      const startX = x;
+      addSvg(ui.score, 'text', { x: startX + 5, y: 48, class: 'measure', 'data-measure-label': measure.id }, measure.displayLabel);
+      const outline = addSvg(ui.score, 'rect', {
+        x: startX, y: 70, width: regionWidth, height: 114, rx: 4,
+        fill: 'none', stroke: 'transparent', 'stroke-width': 2, 'data-measure-outline': measure.id,
+      });
+      measure.events.forEach((event) => {
+        const eventX = startX + 22 + ((event.beat - 1) / (measureIndex === 0 ? fixture.pickup.beats : fixture.meter.beatsPerMeasure)) * (regionWidth - 34);
+        if (event.type === 'rest') {
+          addSvg(ui.score, 'text', { x: eventX, y: 148, class: 'rest' }, '𝄽');
+        } else {
+          const note = addSvg(ui.score, 'ellipse', { cx: eventX, cy: pitchY(event.pitch), rx: 7, ry: 5, class: 'note' });
+          addSvg(ui.score, 'line', { x1: eventX + 6, y1: pitchY(event.pitch), x2: eventX + 6, y2: pitchY(event.pitch) - 31, class: 'staff' });
+          note.setAttribute('aria-label', event.pitch);
+        }
+      });
+      addSvg(ui.score, 'line', { x1: startX + regionWidth, x2: startX + regionWidth, y1: 92, y2: 170, class: 'barline' });
+      outline.dataset.measureOutline = measure.id;
+      x += regionWidth;
     });
-
-    const data = await response.json();
-    const text = data.content?.[0]?.text || 'Could not get feedback. Check your API key.';
-    feedbackBox.textContent = text;
-    feedbackBox.className = 'feedback-box';
-  } catch (err) {
-    feedbackBox.textContent = 'Error connecting to Claude API. Check your API key and internet connection.';
-    feedbackBox.className = 'feedback-box';
-    console.error(err);
+    addSvg(ui.score, 'line', { id: 'score-cursor', x1: 86, x2: 86, y1: 68, y2: 186, class: 'cursor', hidden: true });
+    ui.scoreSummary.textContent = `${fixture.title}: ${fixture.part.name} part, ${fixture.measures.length} measures, ${fixture.tempoBpm} BPM.`;
+    ui.scoreSummary.hidden = false;
+    ui.score.hidden = false;
   }
 
-  feedbackBtn.disabled = false;
-}
-
-const playbackBtn = document.getElementById('playbackBtn');
-let lastRecordingURL = null;
-
-// Show it after recording stops (inside mediaRecorder.onstop)
-playbackBtn.style.display = 'block';
-
-playbackBtn.addEventListener('click', () => {
-  if (lastRecordingURL) {
-    const audio = new Audio(lastRecordingURL);
-    audio.play();
+  function loadFixture() {
+    const validation = fixtureApi?.validateFixture(fixture);
+    if (!validation?.valid) {
+      console.error('Example fixture is invalid.', validation?.errors);
+      unavailable();
+      return;
+    }
+    ui.fixtureTitle.textContent = fixture.title;
+    ui.partSelect.replaceChildren();
+    const partOption = document.createElement('option');
+    partOption.value = fixture.part.id;
+    partOption.textContent = fixture.part.name;
+    ui.partSelect.append(partOption);
+    ui.partSelect.disabled = false;
+    ui.startMeasure.replaceChildren();
+    fixtureApi.getStartMeasures(fixture).forEach((measure) => {
+      const option = document.createElement('option');
+      option.value = measure.id;
+      option.textContent = measure.label;
+      ui.startMeasure.append(option);
+    });
+    ui.startMeasure.disabled = false;
+    ui.tempoMeter.textContent = `${fixture.tempoBpm} BPM · ${fixture.meter.label}`;
+    drawScore();
+    audio = audioApi.createPracticeAudio();
+    ui.reloadButton.hidden = true;
   }
-});
+
+  function renderBeatDisplay(activeBeat, totalBeats) {
+    ui.beatDisplay.replaceChildren();
+    for (let beat = 1; beat <= totalBeats; beat++) {
+      const badge = document.createElement('span');
+      badge.className = `beat-number${activeBeat === beat ? ' active' : ''}`;
+      badge.textContent = String(beat);
+      ui.beatDisplay.append(badge);
+    }
+  }
+
+  function updateScorePosition(position) {
+    if (!position) return;
+    const labels = Array.from(ui.score.querySelectorAll('[data-measure-label]'));
+    const selectedLabel = labels.find((label) => label.dataset.measureLabel === position.measureId);
+    if (!selectedLabel) return;
+    const labelX = Number(selectedLabel.getAttribute('x'));
+    const measureStart = position.measureId === 'pickup' ? 86 : 86 + 110 + (Number(position.measureId) - 1) * 150;
+    const measureDuration = position.measureId === 'pickup' ? fixture.pickup.beats : fixture.meter.beatsPerMeasure;
+    const markerX = measureStart + 12 + ((position.beat - 1 + position.beatFraction) / measureDuration) * (position.measureId === 'pickup' ? 98 : 138);
+    const cursor = ui.score.querySelector('#score-cursor');
+    cursor.setAttribute('x1', markerX);
+    cursor.setAttribute('x2', markerX);
+    cursor.removeAttribute('hidden');
+    ui.score.querySelectorAll('[data-measure-outline]').forEach((outline) => {
+      outline.setAttribute('stroke', outline.dataset.measureOutline === position.measureId ? '#135e63' : 'transparent');
+    });
+    const line = `Following score: measure ${position.label}, beat ${position.beat}.`;
+    if (line !== lastPositionText) {
+      setText(ui.position, line);
+      lastPositionText = line;
+    }
+    if (selectedLabel && scoreFrame.scrollWidth > scoreFrame.clientWidth) {
+      const right = selectedLabel.getBoundingClientRect().right;
+      const frame = scoreFrame.getBoundingClientRect();
+      if (right > frame.right) scoreFrame.scrollBy({ left: right - frame.right, behavior: 'smooth' });
+    }
+  }
+
+  function followPosition() {
+    if (!sessionActive) return;
+    const now = audio.getAudioTime();
+    const position = fixtureApi.getPositionAtTime(fixture, Math.max(0, now - practiceStartAudioTime), attemptStartMeasure);
+    updateScorePosition(position);
+    if (position) {
+      setText(ui.countStatus, `Following score: measure ${position.label}, beat ${position.beat}.`);
+      positionFrame = requestAnimationFrame(followPosition);
+    } else {
+      endAttempt();
+    }
+  }
+
+  function setIdleAfterStop(copy) {
+    sessionActive = false;
+    if (positionFrame !== null) cancelAnimationFrame(positionFrame);
+    positionFrame = null;
+    ui.startMeasure.disabled = false;
+    ui.startButton.hidden = false;
+    ui.startButton.disabled = !microphoneReady;
+    ui.stopButton.hidden = true;
+    ui.retryButton.hidden = false;
+    setText(ui.countStatus, copy);
+    setText(ui.pitchObservation, 'Listening for a sung note');
+    setText(ui.onsetObservation, 'No onset detected yet');
+    ui.liveAnnouncement.textContent = copy;
+  }
+
+  async function endAttempt() {
+    if (!sessionActive) return;
+    const originalStart = attemptStartMeasure;
+    try { await audio.stop(); } catch (error) { console.error(error); }
+    microphoneReady = false;
+    ui.micStatus.textContent = 'Microphone not checked';
+    ui.inputStatus.textContent = 'Waiting for sound';
+    setIdleAfterStop(`Attempt ended. You can retry from measure ${originalStart === 'pickup' ? 'Pickup' : originalStart}. No grades were saved.`);
+    setText(ui.position, 'Microphone not checked');
+  }
+
+  async function checkMicrophone() {
+    ui.micButton.disabled = true;
+    ui.micStatus.textContent = 'Checking microphone…';
+    ui.micStatus.classList.remove('error');
+    try {
+      const ready = await audio.checkMicrophone();
+      if (!ready) return;
+      microphoneReady = true;
+      ui.micStatus.textContent = 'Microphone ready. Sing a note to check the input level.';
+      ui.inputStatus.textContent = 'Waiting for sound';
+      ui.liveAnnouncement.textContent = 'Microphone ready';
+      ui.startButton.disabled = false;
+      ui.retryButton.hidden = true;
+      ui.position.textContent = 'Microphone ready';
+    } catch (error) {
+      console.error(error);
+      microphoneReady = false;
+      ui.micStatus.textContent = error?.name === 'NotFoundError'
+        ? 'No microphone input was found. Connect a microphone, then choose Try microphone again.'
+        : 'Microphone access is off. Allow access in your browser, then choose Try microphone again.';
+      ui.micStatus.classList.add('error');
+      ui.micButton.textContent = 'Try microphone again';
+      ui.startButton.disabled = true;
+      ui.liveAnnouncement.textContent = 'Microphone unavailable';
+    } finally {
+      ui.micButton.disabled = false;
+    }
+  }
+
+  function startPractice() {
+    if (!microphoneReady || sessionActive) return;
+    const startMeasure = ui.startMeasure.value;
+    if (!fixtureApi.getStartMeasures(fixture).some((measure) => measure.id === startMeasure)) return;
+    attemptStartMeasure = startMeasure;
+    sessionActive = true;
+    ui.startMeasure.disabled = true;
+    ui.startButton.hidden = true;
+    ui.stopButton.hidden = false;
+    ui.retryButton.hidden = true;
+    ui.pitchObservation.textContent = 'Listening for a sung note';
+    ui.onsetObservation.textContent = 'No onset detected yet';
+    ui.liveAnnouncement.textContent = `Count-in started at ${startMeasure === 'pickup' ? 'Pickup' : `measure ${startMeasure}`}`;
+    const beatCount = fixture.meter.beatsPerMeasure;
+    try {
+      const times = audio.startPractice({
+        measureId: startMeasure,
+        beats: beatCount,
+        tempoBpm: fixture.tempoBpm,
+        mapBeat: (elapsed) => fixtureApi.nearestBeatAtTime(fixture, Math.max(0, elapsed), startMeasure),
+        onBeat: (beat, total) => {
+          renderBeatDisplay(beat, total);
+          ui.countStatus.innerHTML = '';
+          const beatBadge = document.createElement('span');
+          beatBadge.className = 'beat-number active';
+          beatBadge.textContent = String(beat);
+          ui.countStatus.append(beatBadge, document.createTextNode(`Count-in: ${beat} of ${total}. Start at ${startMeasure === 'pickup' ? 'Pickup' : `measure ${startMeasure}`}.`));
+        },
+        onFollowing: (startTime) => {
+          practiceStartAudioTime = startTime;
+          ui.beatDisplay.replaceChildren();
+          ui.countStatus.textContent = 'Following score';
+          const initial = fixtureApi.getPositionAtTime(fixture, 0, attemptStartMeasure);
+          updateScorePosition(initial);
+          positionFrame = requestAnimationFrame(followPosition);
+          ui.liveAnnouncement.textContent = 'Practice started';
+          scoreFrame.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        },
+        onObservation: (observation) => {
+          ui.pitchObservation.textContent = observation.pitchText;
+          ui.onsetObservation.textContent = observation.onsetText;
+          ui.inputStatus.textContent = observation.rms > 0.01 ? 'Input detected' : 'Waiting for sound';
+        },
+      });
+      practiceStartAudioTime = times.practiceStartAudioTime;
+    } catch (error) {
+      console.error(error);
+      sessionActive = false;
+      microphoneReady = false;
+      audio.stop();
+      ui.micStatus.textContent = 'Practice could not continue. Check your microphone and audio output, then choose Try again.';
+      ui.micStatus.classList.add('error');
+      ui.startMeasure.disabled = false;
+      ui.startButton.hidden = false;
+      ui.startButton.disabled = true;
+      ui.stopButton.hidden = true;
+      ui.retryButton.hidden = false;
+    }
+  }
+
+  async function retryAttempt() {
+    if (!attemptStartMeasure) return;
+    const retryMeasure = ui.startMeasure.value || attemptStartMeasure;
+    ui.startMeasure.value = retryMeasure;
+    await checkMicrophone();
+    if (microphoneReady) startPractice();
+  }
+
+  ui.micButton.addEventListener('click', checkMicrophone);
+  ui.startButton.addEventListener('click', startPractice);
+  ui.stopButton.addEventListener('click', endAttempt);
+  ui.retryButton.addEventListener('click', retryAttempt);
+  ui.reloadButton.addEventListener('click', () => window.location.reload());
+  loadFixture();
+})();

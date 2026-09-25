@@ -1,435 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pitch Proof</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pitch Proof — Example practice</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: #f9f9f8;
-      color: #111;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-    }
-
-    /* Nav */
-    nav {
-      background: #fff;
-      border-bottom: 0.5px solid #e0e0e0;
-      padding: 0 32px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      font-size: 15px;
-      font-weight: 500;
-      color: #111;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .nav-brand-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #111;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .nav-link {
-      font-size: 13px;
-      color: #444;
-    }
-
-    .nav-btn {
-      font-size: 13px;
-      background: #111;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 6px 14px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    /* Main layout */
-    .main {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-
-    /* Hero */
-    .hero {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .hero h1 {
-      font-size: 26px;
-      font-weight: 500;
-      color: #111;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-
-    .hero p {
-      font-size: 14px;
-      color: #555;
-      line-height: 1.6;
-    }
-
-    /* Record row */
-    .record-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .btn-record {
-      flex: 1;
-      background: #111;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: opacity 0.15s;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .btn-record:hover { opacity: 0.85; }
-    .btn-record.recording { background: #c0392b; }
-
-    .record-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #fff;
-    }
-
-    .btn-record.recording .record-dot {
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-
-    .btn-playback {
-      background: #fff;
-      color: #111;
-      border: 0.5px solid #bbb;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .btn-playback:hover { background: #f4f4f3; }
-
-    /* Status */
-    .status {
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-      margin-bottom: 20px;
-      margin-top: -8px;
-    }
-
-    /* Stats row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .stat-card {
-      background: #fff;
-      border: 0.5px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: #777;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .stat-value {
-      font-size: 22px;
-      font-weight: 500;
-      color: #111;
-    }
-
-    .stat-sub {
-      font-size: 12px;
-      color: #555;
-      margin-top: 2px;
-    }
-
-    /* Cards */
-    .card {
-      background: #fff;
-      border: 0.5px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 12px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .card-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: #111;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 3px 9px;
-      border-radius: 99px;
-      font-weight: 500;
-    }
-
-    .badge-green  { background: #eaf3de; color: #27500a; }
-    .badge-amber  { background: #faeeda; color: #633806; }
-    .badge-gray   { background: #e8e8e8; color: #333; }
-    .badge-red    { background: #fcebeb; color: #791f1f; }
-
-    /* Pitch display */
-    .pitch-display {
-      text-align: center;
-      padding: 8px 0 16px;
-    }
-
-    .note-name {
-      font-size: 56px;
-      font-weight: 500;
-      color: #111;
-      line-height: 1;
-      letter-spacing: -2px;
-      transition: color 0.2s;
-    }
-
-    .note-name.in-tune  { color: #3b6d11; }
-    .note-name.off-tune { color: #854f0b; }
-
-    .frequency {
-      font-size: 13px;
-      color: #555;
-      margin-top: 6px;
-    }
-
-    /* Cents meter */
-    .cents-bar-container {
-      margin: 4px 0 0;
-    }
-
-    .cents-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #777;
-      margin-bottom: 5px;
-    }
-
-    .cents-track {
-      height: 6px;
-      background: #ebebeb;
-      border-radius: 99px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cents-fill {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 4px;
-      background: #111;
-      border-radius: 99px;
-      left: 50%;
-      transform: translateX(-50%);
-      transition: left 0.1s ease, background 0.2s;
-    }
-
-    .cents-fill.in-tune { background: #3b6d11; }
-    .cents-fill.sharp   { background: #c0392b; }
-    .cents-fill.flat    { background: #854f0b; }
-
-    .cents-value {
-      text-align: center;
-      font-size: 12px;
-      color: #555;
-      margin-top: 5px;
-    }
-
-    /* Waveform */
-    canvas#waveform {
-      width: 100%;
-      height: 64px;
-      border-radius: 8px;
-      background: #f4f4f3;
-      display: block;
-    }
-
-    /* Feedback */
-    .feedback-box {
-      font-size: 13px;
-      color: #333;
-      line-height: 1.7;
-      padding: 14px;
-      background: #f4f4f3;
-      border-radius: 8px;
-      border: 0.5px solid #e0e0e0;
-      min-height: 60px;
-      white-space: pre-wrap;
-    }
-
-    .feedback-box.loading {
-      color: #777;
-      font-style: italic;
-    }
-
-    .btn-action {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 0.5px solid #bbb;
-      background: #fff;
-      font-size: 13px;
-      color: #111;
-      cursor: pointer;
-      margin-top: 10px;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.15s;
-    }
-
-    .btn-action:hover { background: #f4f4f3; }
-    .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17292b; background: #fcfbf8; font-synthesis: none; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 16px; line-height: 1.5; }
+    button, select { font: inherit; }
+    button, select { min-height: 44px; }
+    button { border: 1px solid #aab9ba; border-radius: 8px; background: white; color: inherit; padding: 8px 16px; cursor: pointer; }
+    button:disabled, select:disabled { cursor: not-allowed; opacity: .55; }
+    button:focus-visible, select:focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    .page { max-width: 1200px; padding: 32px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 32px; }
+    header strong { font-size: 20px; }
+    header span, .muted { color: #506063; }
+    h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
+    h2 { font-size: 20px; line-height: 1.2; margin: 0 0 16px; }
+    p { margin: 0 0 16px; }
+    .scope { max-width: 760px; color: #506063; }
+    .panel { background: #eaf0ef; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .setup { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(130px, 1fr)); gap: 16px; align-items: end; }
+    .setup-title { grid-column: 1 / -1; }
+    .field { display: grid; gap: 4px; min-width: 0; }
+    label, .label { font-size: 14px; font-weight: 600; }
+    select { width: 100%; padding: 8px; border: 1px solid #aab9ba; border-radius: 8px; background: white; }
+    .practice-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+    .score-frame { min-width: 0; overflow-x: auto; background: white; border: 1px solid #aab9ba; border-radius: 8px; padding: 16px; }
+    .score-frame svg { display: block; width: 100%; min-width: 680px; height: auto; }
+    .position-line { min-height: 48px; font-weight: 600; }
+    .rail { display: grid; gap: 16px; }
+    .status-box { background: #eaf0ef; border-radius: 8px; padding: 16px; overflow-wrap: anywhere; }
+    .status-box p:last-child { margin-bottom: 0; }
+    .status-heading { font-weight: 600; }
+    .observation { background: #eaf0ef; border-radius: 8px; padding: 16px; }
+    .observation p { margin: 8px 0 0; }
+    .transport { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .primary { background: #135e63; color: white; border-color: #135e63; }
+    .error { color: #a32929; }
+    .beat-number { display: inline-grid; place-items: center; width: 36px; height: 36px; margin-right: 8px; border: 2px solid #aab9ba; border-radius: 50%; font-weight: 600; }
+    .beat-number.active { border-color: #135e63; box-shadow: 0 0 0 3px #d3e3e1; }
+    .measure { fill: #17292b; font: 600 14px system-ui, sans-serif; }
+    .note { fill: #17292b; }
+    .rest { fill: #506063; font: 16px system-ui, sans-serif; }
+    .staff { stroke: #506063; stroke-width: 1; }
+    .barline { stroke: #17292b; stroke-width: 2; }
+    .cursor { stroke: #135e63; stroke-width: 3; }
+    [hidden] { display: none !important; }
+    @media (max-width: 959px) { .page { padding: 24px; } .setup { grid-template-columns: repeat(2, minmax(0, 1fr)); } .practice-grid { grid-template-columns: 1fr; gap: 24px; } }
+    @media (max-width: 599px) { .page { padding: 16px; } header { align-items: flex-start; flex-direction: column; margin-bottom: 24px; } .panel { padding: 16px; } .setup { grid-template-columns: 1fr; } .setup-title { grid-column: auto; } .transport > button { flex: 1 1 100%; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; } }
   </style>
 </head>
 <body>
-
-  <nav>
-    <div class="nav-brand">
-      <div class="nav-brand-dot"></div>
-      pitch proof
-    </div>
-    <div class="nav-links">
-      <span class="nav-link">history</span>
-      <span class="nav-link">settings</span>
-      <button class="nav-btn">new session</button>
-    </div>
-  </nav>
-
-  <div class="main">
-
-    <div class="hero">
-      <h1>pitch accuracy coach</h1>
-      <p>sing a note — get real-time pitch feedback and ai coaching</p>
-    </div>
-
-    <div class="record-row">
-      <button class="btn-record" id="recordBtn">
-        <span class="record-dot"></span>
-        <span id="recordLabel">start singing</span>
-      </button>
-      <button class="btn-playback" id="playbackBtn" style="display:none;">▶ play back</button>
-    </div>
-
-    <p class="status" id="status">tap to start</p>
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">samples</div>
-        <div class="stat-value" id="statSamples">—</div>
-        <div class="stat-sub">this session</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">in tune</div>
-        <div class="stat-value" id="statInTune">—</div>
-        <div class="stat-sub" id="statInTuneSub">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">avg drift</div>
-        <div class="stat-value" id="statDrift">—</div>
-        <div class="stat-sub" id="statDriftSub">—</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">live pitch</span>
-        <span class="badge badge-gray" id="tuningBadge">waiting</span>
-      </div>
-      <div class="pitch-display">
-        <div class="note-name" id="noteName">—</div>
-        <div class="frequency" id="frequency">— Hz</div>
-      </div>
-      <div class="cents-bar-container">
-        <div class="cents-labels">
-          <span>flat ♭</span>
-          <span>in tune</span>
-          <span>sharp ♯</span>
+  <main class="page">
+    <header><strong>Pitch Proof</strong><span>Example practice</span></header>
+    <section aria-labelledby="page-title">
+      <h1 id="page-title">Practice the example score</h1>
+      <p class="scope">This verified example lets you try score-guided practice. Pitch and timing observations are provisional, not grades.</p>
+    </section>
+    <section class="panel setup" aria-labelledby="setup-heading">
+      <div class="setup-title"><h2 id="setup-heading">Prepare your practice</h2><p id="fixture-title" class="muted">Loading example score…</p></div>
+      <div class="field"><label for="part-select">Vocal part</label><select id="part-select" disabled></select></div>
+      <div class="field"><label for="start-measure">Starting measure</label><select id="start-measure" disabled></select></div>
+      <div class="field"><span class="label">Tempo and meter</span><span id="tempo-meter">—</span></div>
+    </section>
+    <div class="practice-grid">
+      <section aria-labelledby="score-heading">
+        <h2 id="score-heading">Example score</h2>
+        <p class="position-line" id="position" aria-live="polite">Microphone not checked</p>
+        <div class="score-frame" id="score-frame" tabindex="0" role="region" aria-label="Scrollable example score">
+          <p id="score-summary" class="muted">Loading example score…</p>
+          <svg id="score" role="img" aria-labelledby="score-title score-desc" hidden></svg>
         </div>
-        <div class="cents-track">
-          <div class="cents-fill" id="centsFill"></div>
-        </div>
-        <div class="cents-value" id="centsValue">0 cents</div>
-      </div>
+      </section>
+      <aside class="rail" aria-label="Practice status">
+        <section class="status-box" aria-labelledby="mic-heading">
+          <div class="status-heading" id="mic-heading">Microphone</div>
+          <p id="mic-status" role="status">Microphone not checked</p>
+          <p id="input-status" class="muted">Waiting for sound</p>
+          <button id="mic-button" type="button">Check microphone</button>
+        </section>
+        <section class="status-box" aria-labelledby="count-heading">
+          <div class="status-heading" id="count-heading">Metronome and position</div>
+          <p id="count-status" aria-live="polite">Ready for count-in</p>
+          <div id="beat-display" aria-label="Count-in beat"></div>
+        </section>
+        <section class="observation" aria-labelledby="observation-heading">
+          <div class="status-heading" id="observation-heading">Live observations · not graded</div>
+          <p id="pitch-observation">Listening for a sung note</p>
+          <p id="onset-observation">No onset detected yet</p>
+        </section>
+      </aside>
     </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">waveform</span>
-        <span class="badge badge-gray" id="waveformBadge">idle</span>
-      </div>
-      <canvas id="waveform"></canvas>
+    <div class="transport" aria-label="Practice controls">
+      <button id="start-button" type="button" class="primary" disabled>Start practice</button>
+      <button id="stop-button" type="button" hidden>Stop practice</button>
+      <button id="retry-button" type="button" hidden>Retry attempt</button>
+      <button id="reload-button" type="button" hidden>Reload example</button>
     </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">ai coach feedback</span>
-      </div>
-      <div class="feedback-box" id="feedbackBox">your feedback will appear here after you sing and click the button below.</div>
-      <button class="btn-action" id="feedbackBtn">get ai feedback</button>
-    </div>
-
-  </div>
-
+    <p id="live-announcement" class="muted" role="status" aria-live="polite"></p>
+  </main>
+  <script src="practice-fixture.js"></script>
+  <script src="practice-audio.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
