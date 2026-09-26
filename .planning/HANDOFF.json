@@ -1,6 +1,6 @@
-{
+﻿{
   "version": "1.0",
-  "timestamp": "2026-09-25T22:31:18.613Z",
+  "timestamp": "2026-09-26T07:06:25.370Z",
   "phase": "01",
   "phase_name": "Verified Example Practice",
   "phase_dir": ".planning/phases/01-verified-example-practice",
@@ -9,30 +9,66 @@
   "total_tasks": 2,
   "status": "paused",
   "completed_tasks": [
-    { "id": 1, "name": "Expose accessible controls and state announcements", "status": "done", "commit": "dcb14a6" },
-    { "id": 2, "name": "Verify responsive layout and the full accessible practice flow", "status": "in_progress", "progress": "Automated accessibility contract and responsive assertions are implemented; manual browser/device acceptance remains pending.", "commit": "dda2b07" }
+    {
+      "id": 1,
+      "name": "Expose accessible controls and state announcements",
+      "status": "done",
+      "commit": "dcb14a6"
+    },
+    {
+      "id": 2,
+      "name": "Verify responsive layout and full accessible practice flow",
+      "status": "in_progress",
+      "progress": "Implementation, 31 automated tests, score/marker/count-in, keyboard flow, provisional audio cases, and responsive browser checks passed; final focus and screen-reader announcement observation pending."
+    }
   ],
   "remaining_tasks": [
-    { "id": 2, "name": "Complete human browser, audio-device, keyboard, viewport, zoom, and reduced-motion acceptance; record evidence", "status": "not_started" },
-    { "id": 3, "name": "Write 01-03-SUMMARY.md after acceptance passes, then run phase verification", "status": "not_started" }
+    {
+      "id": 2,
+      "name": "Finish real-browser accessibility acceptance and close Plan 01-03",
+      "status": "in_progress"
+    }
   ],
   "blockers": [
-    { "description": "Phase 1 exit gate requires real browser and microphone/output-device acceptance; no device evidence has been recorded.", "type": "human_action", "workaround": "Resume with $gsd-resume-work or $gsd-verify-work 1 and record named browser/version, audio devices, and outcomes. Do not mark Plan 01-03 complete until the human checks pass." }
+    {
+      "description": "User paused before confirming refreshed score-frame focus outline and live-region announcements with assistive technology.",
+      "type": "human_action",
+      "workaround": "Resume by collecting the pending observation; record unavailable assistive technology accurately if applicable."
+    }
   ],
   "async_jobs": [],
   "human_actions_pending": [
-    { "action": "Run the browser/device acceptance checks listed in 01-03-PLAN.md and record names, versions, and results.", "context": "The plan requires actual microphone/output, keyboard/live-region, responsive viewport/zoom, and reduced-motion validation; Node tests cannot establish these results.", "blocking": true }
+    {
+      "action": "Report whether the score frame has a visible focus outline and whether Narrator announces microphone-ready and count-in-start transitions.",
+      "context": "Blocking Plan 01-03 Task 2 human accessibility evidence.",
+      "blocking": true
+    }
   ],
   "decisions": [
-    { "decision": "Use sequential, non-worktree GSD execution for this project.", "rationale": "The Codex isolation resolver reported orchestrator-worktree but provided no executor command (exec:null); the user approved setting workflow.use_worktrees=false so execution could safely proceed sequentially.", "phase": "01" },
-    { "decision": "Treat score/pitch/onset observations as provisional and ungraded; do not infer sharp/flat or early/late correctness from this fixture phase.", "rationale": "Locked Phase 1 product boundary; authoritative feedback requires later evidence and score validation.", "phase": "01" }
+    {
+      "decision": "Keep microphone observations provisional and ungraded, including wrong pitch and octave cases.",
+      "rationale": "Phase 1 cannot claim authoritative score-note grading.",
+      "phase": "01"
+    },
+    {
+      "decision": "Remove the SVG hidden attribute explicitly and verify after a hard refresh.",
+      "rationale": "Setting the hidden property false did not reveal the rendered SVG in Chrome.",
+      "phase": "01"
+    }
   ],
   "uncommitted_files": [
+    " M .planning/STATE.md",
     " M .planning/config.json",
     " M .planning/state.json",
+    " M index.html",
+    " M script.js",
+    " M tests/accessibility-contract.test.cjs",
     "?? .gsd/",
-    "?? .planning/research/.cache/"
+    "?? .planning/debug/",
+    "?? .planning/phases/01-verified-example-practice/01-03-ACCEPTANCE.md",
+    "?? .planning/research/.cache/",
+    "?? tests/page-startup.test.cjs"
   ],
-  "next_action": "Resume Phase 1 Plan 01-03 human acceptance. Inspect .planning/phases/01-verified-example-practice/01-03-PLAN.md and run the named browser/audio-device checks; then record evidence and complete the plan summary and phase verification.",
-  "context_notes": "Plans 01-01 and 01-02 are complete with summaries; Plan 01-03 has two implementation commits and passes the full 29-test suite, but is intentionally incomplete because its human acceptance gate is blocking. Current branch: gsd/phase-01-verified-example-practice. Preserve .gsd/ and .planning/research/.cache/; neither is part of this task. The config edit disabling worktrees and state.json changes are currently uncommitted."
+  "next_action": "Run $gsd-resume-work, read 01-03-ACCEPTANCE.md, obtain the pending focus/Narrator result, then finish Plan 01-03 only if the exit gate is met.",
+  "context_notes": "Chrome installed version 152.0.7977.84; user observed score and audio checks at localhost:8000. Windows lists one microphone and speaker endpoint; exact Chrome selections not independently confirmed. npm.cmd test passes 31/31. The current state files are stale about plan progress. Handoff files are committed separately by pause-work."
 }
