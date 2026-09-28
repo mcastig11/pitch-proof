@@ -1,0 +1,1 @@
+{"content":"MDN documents scheduling short oscillator events against AudioContext.currentTime using a look-ahead scheduler; use this audio clock for count-in clicks and derive visual beat changes from scheduled timestamps.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-09-25T06:36:34.279Z","ttl":86400000,"kind":"docs"}

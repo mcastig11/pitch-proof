@@ -1,0 +1,1 @@
+{"content":"MDN states requestAnimationFrame is one-shot and typically repaint paced, and callbacks pause in background tabs; it cannot be the audio clock or sole continuation mechanism for score position.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-09-25T06:36:36.536Z","ttl":86400000,"kind":"web"}
