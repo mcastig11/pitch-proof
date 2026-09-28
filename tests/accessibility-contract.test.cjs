@@ -57,6 +57,7 @@ test('primary controls retain natural DOM keyboard order', () => {
 
 test('keyboard focus is visible with at least a two-pixel outline', () => {
   assert.match(html, /button:focus-visible\s*,\s*select:focus-visible\s*\{[^}]*outline:\s*2px\s+solid/i);
+  assert.match(html, /\.score-frame:focus-visible\s*\{[^}]*outline:\s*2px\s+solid/i);
 });
 
 test('position and provisional observation meaning remains visible as text', () => {

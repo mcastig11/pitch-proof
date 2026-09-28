@@ -7,7 +7,10 @@
   const ids = ['fixture-title', 'part-select', 'start-measure', 'tempo-meter', 'score-summary', 'score', 'position',
     'mic-status', 'input-status', 'mic-button', 'count-status', 'beat-display', 'pitch-observation', 'onset-observation',
     'start-button', 'stop-button', 'retry-button', 'lost-place-button', 'reload-button', 'live-announcement'];
-  const ui = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
+  const ui = Object.fromEntries(ids.map((id) => [
+    id.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()),
+    document.getElementById(id),
+  ]));
   const scoreFrame = document.getElementById('score-frame');
   const svgNamespace = 'http://www.w3.org/2000/svg';
   let audio = null;
@@ -23,7 +26,7 @@
   function setText(node, value) { node.textContent = value; }
 
   function unavailable() {
-    ui.score.hidden = true;
+    ui.score.setAttribute('hidden', '');
     ui.scoreSummary.hidden = true;
     setText(ui.fixtureTitle, 'Example score unavailable');
     const body = document.createElement('p');
@@ -47,7 +50,8 @@
     if (!match) return 160;
     const steps = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
     const diatonic = Number(match[3]) * 7 + steps[match[1]];
-    return 184 - diatonic * 4;
+    // The treble staff's bottom line is E4 at y=164; each diatonic step is half a staff space.
+    return 164 - (diatonic - (4 * 7 + steps.E)) * 8;
   }
 
   function drawScore() {
@@ -83,8 +87,10 @@
         if (event.type === 'rest') {
           addSvg(ui.score, 'text', { x: eventX, y: 148, class: 'rest' }, '𝄽');
         } else {
-          const note = addSvg(ui.score, 'ellipse', { cx: eventX, cy: pitchY(event.pitch), rx: 7, ry: 5, class: 'note' });
-          addSvg(ui.score, 'line', { x1: eventX + 6, y1: pitchY(event.pitch), x2: eventX + 6, y2: pitchY(event.pitch) - 31, class: 'staff' });
+          const noteY = pitchY(event.pitch);
+          if (noteY === 180) addSvg(ui.score, 'line', { x1: eventX - 11, x2: eventX + 11, y1: 180, y2: 180, class: 'staff' });
+          const note = addSvg(ui.score, 'ellipse', { cx: eventX, cy: noteY, rx: 7, ry: 5, class: 'note' });
+          addSvg(ui.score, 'line', { x1: eventX + 6, y1: noteY, x2: eventX + 6, y2: noteY - 31, class: 'staff' });
           note.setAttribute('aria-label', event.pitch);
         }
       });
@@ -95,7 +101,7 @@
     addSvg(ui.score, 'line', { id: 'score-cursor', x1: 86, x2: 86, y1: 68, y2: 186, class: 'cursor', hidden: true });
     ui.scoreSummary.textContent = `${fixture.title}: ${fixture.part.name} part, ${fixture.measures.length} measures, ${fixture.tempoBpm} BPM.`;
     ui.scoreSummary.hidden = false;
-    ui.score.hidden = false;
+    ui.score.removeAttribute('hidden');
   }
 
   function loadFixture() {

@@ -30,6 +30,7 @@
     .practice-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
     .practice-grid > * { min-width: 0; }
     .score-frame { min-width: 0; overflow-x: auto; background: white; border: 1px solid #aab9ba; border-radius: 8px; padding: 16px; }
+    .score-frame:focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
     .score-frame svg { display: block; width: 100%; min-width: 680px; height: auto; }
     .position-line { min-height: 48px; font-weight: 600; }
     .rail { display: grid; gap: 16px; }
