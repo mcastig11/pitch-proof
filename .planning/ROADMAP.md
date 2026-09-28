@@ -8,7 +8,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
 
 **Phase Numbering:** Integer phases are planned milestone work; decimal phases are reserved for urgent insertions.
 
-- [ ] **Phase 1: Verified Example Practice** - A singer can complete a short, score-guided attempt from a chosen measure using a manually verified example.
+- [x] **Phase 1: Verified Example Practice** - A singer can complete a short, score-guided attempt from a chosen measure using a manually verified example. (completed 2026-09-27)
 - [ ] **Phase 2: Private Practice Access** - A singer can create, recover, and access a private practice workspace.
 - [ ] **Phase 3: Corrected PDF Score** - A singer can turn a supported PDF into a confirmed, correctable single-part score while keeping the source visible.
 - [ ] **Phase 4: Trustworthy Live Feedback** - A singer can see measured pitch and timing results on the corrected score during singing.
@@ -19,7 +19,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
 
 ### Phase 1: Verified Example Practice
 
-**Goal:** A singer can rehearse one manually verified example score from a chosen measure with working microphone, tempo, transport, and accessible score-position controls.
+**Goal:** As a singer practicing at home, I want to rehearse one manually verified example score from a chosen measure with a working microphone, tempo, transport, and accessible score-position controls, so that I can keep my place and complete a guided attempt.
 **Mode:** mvp
 **Depends on:** Nothing (first phase)
 **Requirements:** PRAC-01, PRAC-02, PRAC-03, PRAC-04, ACCESS-01
@@ -31,7 +31,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
   4. A singer can use the primary practice controls and read score-position status with a keyboard and without relying on color alone.
 
 **Exit gate:** Replay annotated example-score timelines covering a pickup, silence, wrong pitch, and octave ambiguity; check count-in, position, and microphone lifecycle on a real browser and device. Any experimental pitch or timing observations remain provisional until Phase 4 measurement. This phase does not accept arbitrary PDF uploads.
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 **Wave 1**
 
@@ -43,7 +43,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Accessible controls and browser verification
+- [x] 01-03-PLAN.md — Accessible controls and browser verification
 
 **UI hint**: yes
 
@@ -135,7 +135,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Verified Example Practice | 2/3 | In Progress|  |
+| 1. Verified Example Practice | 3/3 | Complete    | 2026-09-27 |
 | 2. Private Practice Access | 0/TBD | Not started | - |
 | 3. Corrected PDF Score | 0/TBD | Not started | - |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |

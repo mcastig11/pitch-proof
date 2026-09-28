@@ -1,4 +1,4 @@
-# Plan 01-03 browser acceptance (in progress)
+# Plan 01-03 browser acceptance
 
 Date: 2026-09-27
 

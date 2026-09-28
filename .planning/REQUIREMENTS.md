@@ -42,7 +42,7 @@
 - [ ] **AUDIO-01**: A singer can optionally save a voice recording for a session; cloud recording is off by default.
 - [ ] **AUDIO-02**: A singer can play or delete a recording they chose to save.
 - [ ] **PRIV-01**: A singer can access and delete their own scores and practice data.
-- [ ] **ACCESS-01**: Primary controls and feedback work with a keyboard and do not rely on color alone.
+- [x] **ACCESS-01**: Primary controls and feedback work with a keyboard and do not rely on color alone.
 
 ## v2 Requirements
 
@@ -98,7 +98,7 @@ Each v1 requirement has exactly one owning phase. Later phases may strengthen an
 | AUDIO-01 | Phase 6 | Pending |
 | AUDIO-02 | Phase 6 | Pending |
 | PRIV-01 | Phase 6 | Pending |
-| ACCESS-01 | Phase 1 | Pending |
+| ACCESS-01 | Phase 1 | Complete |
 
 **Coverage:**
 

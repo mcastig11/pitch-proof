@@ -6,7 +6,7 @@
     {
       "number": "1",
       "name": "Verified Example Practice",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "2",
@@ -36,8 +36,8 @@
   ],
   "next": {
     "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 1)",
-    "reason": "Phase 1 of 6 — needs a plan"
+    "label": "Advance to the next step (plan phase 2)",
+    "reason": "Phase 2 of 6 — needs a plan"
   },
-  "updated_at": "2026-09-25T20:51:17.604Z"
+  "updated_at": "2026-09-28T04:19:14.507Z"
 }
