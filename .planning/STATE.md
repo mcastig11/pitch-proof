@@ -21,7 +21,7 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-24)
+See: .planning/PROJECT.md (updated 2026-09-27)
 
 **Core value:** A singer can immediately see exactly which written notes they sang sharp or flat and where they were early or late.
 **Current focus:** Phase 2 — Private Practice Access
@@ -86,10 +86,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 4: Measure follower accuracy and device timing on annotated singing before treating position or per-note feedback as authoritative.
 - Phase 3: Obtain a permissioned PDF corpus, set the supported-score boundary, and resolve OMR source mapping and deployment license.
-- Phase 4: Obtain annotated solo singing and set evidence-based pitch, timing, uncertainty, and latency limits before authoritative feedback.
+- Phase 4: Obtain annotated solo singing and set evidence-based follower, device-timing, pitch, uncertainty, and latency limits before authoritative feedback.
 - Phase 6: Define raw-audio retention and deletion behavior before pilot release.
+- Accessibility follow-up: Observe actual spoken live-region announcements with a screen reader when available; the Phase 1 DOM and browser checks did not establish speech output.
 
 ## Deferred Items
 

@@ -21,11 +21,10 @@ A singer can immediately see exactly which written notes they sang sharp or flat
 
 ### Validated
 
-- ✓ Capture microphone input in the browser and analyze it during a live session — existing
-- ✓ Estimate sung frequency, note name, and cents deviation in real time — existing
-- ✓ Record, play back, and download a singing session — existing
-- ✓ Aggregate session pitch samples into tuning statistics — existing
-- ✓ Render live session feedback in a browser interface — existing
+- ✓ Open one manually verified vocal example, review its fixed tempo, and choose a valid starting measure — Phase 1
+- ✓ Check browser microphone readiness, hear a count-in, and start, stop, or retry an example attempt — Phase 1
+- ✓ Follow the fixture's audio-clock score position, see provisional pitch/onset observations, and recover an uncertain position without grading notes — Phase 1
+- ✓ Use the example-practice controls by keyboard with visible focus and non-color status text — Phase 1
 
 ### Active
 
@@ -52,10 +51,9 @@ A singer can immediately see exactly which written notes they sang sharp or flat
 
 ## Context
 
-- The current codebase is a static browser application built with `index.html` and `script.js`.
-- It already uses Web Audio, `getUserMedia`, `MediaRecorder`, Canvas, and a local autocorrelation pitch detector.
-- The prototype has no backend, user accounts, persistence, score representation, notation recognition, or timing alignment model.
-- Current code is monolithic and has no automated test framework. Audio lifecycle bugs, inconsistent tuning thresholds, unbounded session data, and browser-exposed API credentials must be corrected rather than carried forward.
+- The current codebase is a static browser application with `index.html`, `script.js`, `practice-fixture.js`, and `practice-audio.js`.
+- Phase 1 uses Web Audio and `getUserMedia` for local analysis, an original verified score fixture, and a fixture-clock timeline. It has 32 passing Node tests and recorded Chrome/device acceptance.
+- The former prototype's recording/download, aggregate tuning statistics, and client-side AI request are no longer in the current interface. The app still has no backend, accounts, persistence, PDF recognition, or authoritative score-linked grading.
 - PDF optical music recognition is inherently imperfect. The product therefore requires a review-and-correction step before a recognized score is used for evaluation.
 - Scores may contain several staves or SATB parts, but a practice session evaluates only the one part selected by the singer.
 - Feedback must be visible during singing, directly in the score context, without requiring the singer to wait for a post-session report.
@@ -83,6 +81,7 @@ A singer can immediately see exactly which written notes they sang sharp or flat
 | Show pitch and timing feedback on the score in real time | Immediate knowledge of sharp/flat and early/late notes is the product's core value | — Pending |
 | Include accounts, cloud storage, and practice history | Users need continuity across scores and repeated attempts | — Pending |
 | Make raw recording retention optional | Progress data is valuable without forcing storage of sensitive voice recordings | — Pending |
+| Start with a manually verified example score and keep microphone observations ungraded | This proves browser timing and transport before PDF recognition and measured per-note feedback | Phase 1 verified |
 
 ## Evolution
 
@@ -102,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-24 after initialization*
+*Last updated: 2026-09-27 after Phase 1*
