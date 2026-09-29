@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-09-29T20:30:40.944Z",
+  "phase": "02",
+  "phase_name": "Private Practice Access",
+  "phase_dir": ".planning/phases/02-private-practice-access",
+  "plan": 0,
+  "task": 0,
+  "total_tasks": 0,
+  "status": "paused",
+  "completed_tasks": [
+    { "id": 1, "name": "Phase 2 discussion, research, validation, and pattern mapping", "status": "done", "commit": "6059d19" },
+    { "id": 2, "name": "Draft seven Phase 2 plans and Resend coverage matrix", "status": "done", "commit": null },
+    { "id": 3, "name": "Independent plan review", "status": "done", "commit": null }
+  ],
+  "remaining_tasks": [
+    { "id": 1, "name": "Fix three plan-checker blockers and the session-cookie security warning", "status": "not_started" },
+    { "id": 2, "name": "Rerun plan-checker and resolve any remaining findings", "status": "not_started" },
+    { "id": 3, "name": "Run Phase 2 requirements and decision coverage gates; update STATE and ROADMAP dependency annotations", "status": "not_started" },
+    { "id": 4, "name": "Commit the planning artifacts and resume commits, then push main to GitHub", "status": "not_started" }
+  ],
+  "blockers": [
+    { "description": "Plan checker found three blockers: missing persistent-cookie/browser-restart proof for D-10; one semicolon-separated verification command masks failures; open research questions are not marked and resolved. It also warned that Secure/HttpOnly/SameSite cookie attributes lack executable verification.", "type": "technical", "workaround": "Revise 02-03/02-04/02-05 and 02-RESEARCH.md, then rerun the checker." },
+    { "description": "The initial GSD commit attempt could not write .git/index.lock in the sandbox. The escalated retry staged the files but failed because this checkout has no configured author identity.", "type": "technical", "workaround": "Use the author name/email from the existing recent commits for this commit invocation only; do not change persistent git configuration. Then push main, as the user previously requested." }
+  ],
+  "async_jobs": [],
+  "human_actions_pending": [
+    { "action": "Approve release provenance and tarball integrity for better-auth 1.7.6 before its installation during execution of Plan 02-03.", "context": "Plan 02-02 is a blocking human checkpoint because the research package audit marked the release SUS only for recency.", "blocking": true }
+  ],
+  "decisions": [
+    { "decision": "Phase 2 roadmap goal is expressed as: As a singer, I want to securely access my private practice space, so that my account stays private.", "rationale": "The goal wording derives from the existing approved account-flow decisions; the GSD MVP planner requires the story format.", "phase": "02" },
+    { "decision": "The seven draft plans use Express 5, Better Auth, SQLite, a local email-capture test transport, and a Resend production adapter; no application code or dependencies were changed.", "rationale": "Research recommendation, with Better Auth provenance approval held before install.", "phase": "02" },
+    { "decision": "The server-side user.id is the primary owner identity for private resources; guest example practice remains public and provisional.", "rationale": "Preserves account isolation while keeping the Phase 1 example available to guests.", "phase": "02" }
+  ],
+  "uncommitted_files": [
+    "AM .planning/HANDOFF.json",
+    "M  .planning/ROADMAP.md",
+    "MM .planning/phases/02-private-practice-access/.continue-here.md",
+    "A  .planning/phases/02-private-practice-access/02-01-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-02-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-03-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-04-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-05-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-06-PLAN.md",
+    "A  .planning/phases/02-private-practice-access/02-07-PLAN.md",
+    "M  .planning/phases/02-private-practice-access/02-VALIDATION.md",
+    "A  .planning/phases/02-private-practice-access/COVERAGE.md"
+  ],
+  "next_action": "Resume with $gsd-resume-work, fix the checker findings, rerun plan-checker, finish GSD gates, then commit and push all Phase 2 planning and outstanding resume commits.",
+  "context_notes": "The user had previously requested Phase 2 planning. They invoked $gsd-resume-work, corrected the MVP goal via their already-discussed account decisions, and then explicitly requested $gsd-pause-work. The planning agent was interrupted during the checker revision request; it made no changes after the seven draft plans were created. Plan checker output is available in this handoff and in conversation. Branch main is two commits ahead of origin/main plus the uncommitted files listed above."
+}

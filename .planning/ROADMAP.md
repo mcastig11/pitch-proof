@@ -49,7 +49,7 @@ Plans:
 
 ### Phase 2: Private Practice Access
 
-**Goal:** A singer can securely enter a private workspace that can later hold scores and practice history.
+**Goal:** As a singer, I want to securely access my private practice space, so that my account stays private.
 **Mode:** mvp
 **Depends on:** Phase 1
 **Requirements:** AUTH-01, AUTH-02
@@ -60,7 +60,16 @@ Plans:
   3. A second signed-in account cannot open the first account's private workspace or resources through the interface or a direct request.
 
 **Exit gate:** Exercise account creation, recovery, session expiry, and two-account authorization checks, including direct resource requests. Set owner-scoped data and object access rules before the PDF library is added.
-**Plans:** TBD
+**Plans:** 7 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Isolated auth, SQLite, and email test harness
+- [ ] 02-02-PLAN.md — Better Auth package provenance checkpoint
+- [ ] 02-03-PLAN.md — Pinned auth server and first verified-signup tracer
+- [ ] 02-04-PLAN.md — Recovery, pending-account, session, and abuse controls
+- [ ] 02-05-PLAN.md — Server-side Resend transactional email transport
+- [ ] 02-06-PLAN.md — Public signup, guest example, and private workspace UI
+- [ ] 02-07-PLAN.md — Owner-scoped metadata and byte access seam
 **UI hint**: yes
 
 ### Phase 3: Corrected PDF Score

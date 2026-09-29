@@ -9,7 +9,7 @@ created: "2026-09-28"
 
 # Phase 02 — Validation Strategy
 
-> Tests and browser checks required before Phase 2 can claim private practice access. Plan/task IDs will be bound after plan decomposition.
+> Tests and browser checks required before Phase 2 can claim private practice access. Plan/task IDs are assigned below; Wave 0 and feature validation remain pending execution.
 
 ## Test Infrastructure
 
@@ -32,20 +32,18 @@ created: "2026-09-28"
 
 | Task / plan assignment | Requirement | Threat Ref | Secure behavior | Test type | Automated command | File exists | Status |
 |------------------------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| Assign during planning: account tracer | AUTH-01, AUTH-02 | T-02-01 | Unverified signup has no private access; verified first sign-in reaches example and later sign-in reaches workspace | HTTP integration | `node --test tests/auth-flow.test.cjs` | No — Wave 0 | Pending |
-| Assign during planning: ownership seam | AUTH-01, AUTH-02 | T-02-02 | A second account receives no private metadata or bytes through direct resource requests | HTTP integration | `node --test tests/ownership.test.cjs` | No — Wave 0 | Pending |
-| Assign during planning: recovery and sessions | AUTH-02 | T-02-03 | Reset link is one-use, requires fresh sign-in, and revokes all pre-reset cookies; sign-out and fixed expiry deny private reads | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | No — Wave 0 | Pending |
-| Assign during planning: public/private UI | AUTH-01, AUTH-02 | T-02-04 | Guest practice survives expired sign-in; workspace clears private content on 401; invite and navigation follow D-01–D-12 | DOM/browser contract | `node --test tests/auth-ui.test.cjs tests/page-startup.test.cjs` | No — Wave 0 for auth UI | Pending |
-| Assign during planning: abuse controls | AUTH-01, AUTH-02 | T-02-05 | Cross-origin mutation rejected, auth routes rate-limited, account existence responses generic, no private caching | HTTP integration | `node --test tests/session-security.test.cjs` | No — Wave 0 | Pending |
+| 02-03 Task 2: account tracer | AUTH-01, AUTH-02 | T-02-01 | Unverified signup has no private access; verified first sign-in reaches example and later sign-in reaches workspace | HTTP integration | `node --test tests/auth-flow.test.cjs` | No — Wave 0 | Pending |
+| 02-07 Tasks 1-2: ownership seam | AUTH-01, AUTH-02 | T-02-02 | A second account receives no private metadata or bytes through direct resource requests | HTTP integration | `node --test tests/ownership.test.cjs` | No — Wave 0 | Pending |
+| 02-04 Task 1 and 02-06 Task 1: recovery and sessions | AUTH-02 | T-02-03 | Reset link is one-use, requires fresh sign-in, and revokes all pre-reset cookies; sign-out and fixed expiry deny private reads | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | No — Wave 0 | Pending |
+| 02-06 Tasks 1-3: public/private UI | AUTH-01, AUTH-02 | T-02-04 | Guest practice survives expired sign-in; workspace clears private content on 401; invite and navigation follow D-01–D-12 | DOM/browser contract | `node --test tests/auth-ui.test.cjs tests/page-startup.test.cjs` | No — Wave 0 for auth UI | Pending |
+| 02-04 Task 2: abuse controls | AUTH-01, AUTH-02 | T-02-05 | Cross-origin mutation rejected, auth routes rate-limited, account existence responses generic, no private caching | HTTP integration | `node --test tests/session-security.test.cjs` | No — Wave 0 | Pending |
+| 02-05 Tasks 1-2: email delivery | AUTH-01, AUTH-02 | T-02-06 | Local capture is deterministic; configured production transport sends through Resend without exposing server secrets | HTTP adapter tests | `node --test tests/email-transport.test.cjs tests/auth-flow.test.cjs` | Not yet; 02-05 creates | Pending |
 
 ## Wave 0 Requirements
 
-- [ ] `tests/auth-flow.test.cjs` — isolated server/database and captured-email fixtures; signup, confirmation, sign-in, reset, resend, address correction.
-- [ ] `tests/ownership.test.cjs` — two users and inert owner-bound metadata/object records; direct request matrix.
-- [ ] `tests/session-security.test.cjs` — expiry, sign-out, all-session reset revocation, origin and rate-limit checks.
-- [ ] `tests/auth-ui.test.cjs` — public example, workspace, navigation, and session-ended behavior.
-- [ ] Server factory and local capture email transport to make tests deterministic without production credentials.
-
+- [ ] Planned in 02-01 Tasks 1-3 create tests/auth-flow.test.cjs, tests/ownership.test.cjs, tests/session-security.test.cjs, and tests/auth-ui.test.cjs with runnable isolated-server, temporary SQLite, session, and DOM-contract scaffolds.
+- [ ] Planned in 02-01 creates the server factory and injectable local capture email transport; later plans expand the Wave 0 test.todo cases.
+- [ ] 02-05 adds tests/email-transport.test.cjs for local capture and stubbed production HTTP behavior.
 ## Manual-Only Verifications
 
 | Behavior | Requirement | Why manual | Test instructions |
