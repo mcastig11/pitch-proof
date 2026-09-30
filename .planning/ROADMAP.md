@@ -63,13 +63,28 @@ Plans:
 **Plans:** 7 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 02-01-PLAN.md — Isolated auth, SQLite, and email test harness
 - [ ] 02-02-PLAN.md — Better Auth package provenance checkpoint
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 02-03-PLAN.md — Pinned auth server and first verified-signup tracer
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 02-04-PLAN.md — Recovery, pending-account, session, and abuse controls
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
 - [ ] 02-05-PLAN.md — Server-side Resend transactional email transport
 - [ ] 02-06-PLAN.md — Public signup, guest example, and private workspace UI
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
 - [ ] 02-07-PLAN.md — Owner-scoped metadata and byte access seam
+
 **UI hint**: yes
 
 ### Phase 3: Corrected PDF Score

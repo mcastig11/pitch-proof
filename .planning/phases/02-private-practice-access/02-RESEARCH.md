@@ -194,15 +194,16 @@ For future object reads, parameterize both object ID and authenticated owner ID 
 |---|---|---|
 | A1 | Seven-day fixed session duration is the desired product balance. | Users may want a shorter or longer period; planner should make the policy explicit. |
 | A2 | Address correction can restart signup rather than mutate an unverified identity. | May leave stale pending rows and surprise users who reuse the wrong address; test copy and cleanup. |
-| A3 | A persistent Node host with durable SQLite and private object storage is acceptable for deployment. | Hosting architecture would need a Postgres/object-store substitution. |
+| A3 | No production host is selected during Phase 2; defer host and sender-domain provisioning until pre-public release, with durable Node/database/private-object capabilities required. | The selected host may require a SQLite adapter or object-storage change before public release. |
 | A4 | Resend is an acceptable production transactional email provider. | Another provider may be preferred; transport boundary keeps change localized. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Production host and sending domain:** The current repository supplies neither. Implement and test locally now; before public release, provision durable server/database/object storage, HTTPS, an email sender domain, and server-side secrets. [ASSUMED]
-2. **Reset revocation semantics in 1.7.6:** Documentation says “all other sessions”; integration tests must prove **every** previously issued cookie, including the browser initiating reset if it was signed in, fails immediately after reset. [CITED: https://better-auth.com/docs/reference/options]
-3. **Stale pending account cleanup:** Choose a retention interval as part of the plan and document it as a product policy; no fixed interval is specified upstream. [ASSUMED]
+1. **Production host and sending domain — deferred until pre-public release.** [RESOLVED: no production host or mail credentials are present or assumed.] Before exposing accounts publicly, provision a long-running Node host and durable database/object storage; require HTTPS with an explicit `BETTER_AUTH_URL`, a server-only high-entropy `BETTER_AUTH_SECRET`, a verified Resend sender domain and server-only `RESEND_API_KEY`/`RESEND_FROM`; then send and receive real confirmation and reset messages and pass the two-account direct-resource, session-expiry, and cookie-flag checks. This is a release prerequisite, not a Phase 2 execution dependency. See 02-05 setup and 02-VALIDATION manual gate.
 
+2. **Reset-session revocation — require every old cookie to fail.** [RESOLVED: after password update, revoke every database session for the user, including the session that submitted reset.] The 02-04 Task 1 falsification test replays each cookie issued before reset against a direct private request and requires 401; a fresh sign-in is required. This is stronger than Better Auth documentation that mentions other sessions.
+
+3. **Stale pending-account cleanup — retain for 30 days.** [RESOLVED: delete only unverified accounts and their verification tokens when age is greater than 30 days.] Run cleanup at server startup and before auth mutations; 02-04 Task 3 tests the exact cutoff, old versus recent pending rows, and retention of verified accounts.
 ## Environment Availability
 
 | Dependency | Required by | Available | Version / condition | Fallback |

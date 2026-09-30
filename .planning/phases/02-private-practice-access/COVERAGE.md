@@ -16,7 +16,7 @@ Scope: the server uses only Resend's transactional single-email send operation t
 | Inbox labels CRUD | OPT-OUT | No mailbox or labeling workflow exists. |
 | Inbox threads list/read/update/delete/reply/forward | OPT-OUT | No inbound conversation workflow exists. |
 | Inbox drafts create/read/update/delete/send | OPT-OUT | Account email callbacks generate their own one-recipient messages; there is no inbox draft surface. |
-| Broadcasts create/send/cancel/duplicate/read/update/delete and recipient/click reports | OPT-OUT | Phase 2 sends security messages only; it has no newsletter or campaign feature. |
+| Broadcasts create/read/update/delete/send/cancel/duplicate and reports | OPT-OUT | Phase 2 sends security messages only; it has no newsletter or campaign feature. |
 | Automations CRUD, duplicate/stop, and run history | OPT-OUT | Signup and reset messages are triggered directly by Better Auth callbacks, not provider campaigns. |
 | Events create/send/read/list/update/delete | OPT-OUT | No marketing event or automation trigger is required. |
 | Templates create/read/list/update/delete/publish/duplicate | OPT-OUT | The app supplies the account email content directly; it does not manage provider templates. |
@@ -31,5 +31,5 @@ Scope: the server uses only Resend's transactional single-email send operation t
 | API keys create/list/update/delete | OPT-OUT | Operators provision a least-privilege key out of band; application users cannot manage provider credentials. |
 | Suppressions add/read/list/remove, including batch operations | OPT-OUT | The account flow does not administer provider suppression records; provider send errors are surfaced without changing suppression state. |
 | Authorized app grants list/revoke | OPT-OUT | The adapter authenticates with one server-held API key and does not use Resend OAuth grants. |
-| Webhooks create/read/list/update/delete, rotate secrets, inspect/replay events and attempts | OPT-OUT | Provider delivery events are not needed to establish account verification or password reset; the user can request another message. |
+| Webhooks CRUD, secret rotation, event and attempt inspect/replay | OPT-OUT | Provider delivery events are not needed to establish account verification or password reset; the user can request another message. |
 | OAuth client registration, authorization, token, and revocation | OPT-OUT | The server uses an operator-managed API key and does not connect user Resend accounts. |
