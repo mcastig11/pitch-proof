@@ -11,7 +11,7 @@
     {
       "number": "2",
       "name": "Private Practice Access",
-      "status": "pending"
+      "status": "in_progress"
     },
     {
       "number": "3",
@@ -39,5 +39,5 @@
     "label": "Advance to the next step",
     "reason": "Phase 02 of 6 · 17% · executing"
   },
-  "updated_at": "2026-09-30T04:36:08.916Z"
+  "updated_at": "2026-10-01T05:29:32.136Z"
 }
