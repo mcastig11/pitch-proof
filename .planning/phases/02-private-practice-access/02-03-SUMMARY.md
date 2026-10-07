@@ -53,10 +53,10 @@ coverage:
 actuals:
   tokens: 19520
   tasks: 2
-  commits: 3
-commits: 3
+  commits: 4
+commits: 4
 plan_head_before: 87582728ee5415b7af7141859d60ecacfca524de
-duration: 65min
+duration: 122min
 completed: 2026-10-07
 status: complete
 ---
@@ -67,9 +67,9 @@ status: complete
 
 ## Performance
 
-- **Duration:** 65 min (including platform approval waits)
+- **Duration:** 122 min (including platform approval waits and closeout)
 - **Started:** 2026-10-07T04:41:18.159Z
-- **Completed:** 2026-10-07T05:46:24.879Z
+- **Completed:** 2026-10-07T06:43:28.561Z
 - **Tasks:** 2
 - **Application/package/test files:** 6
 - **Actual token scale:** 19520 = ceiling of realized diff characters / 4 across the six planned application/package/test files; excludes planning metadata.
@@ -89,7 +89,7 @@ status: complete
 2. **Task 2 RED: Failing verification/private-access tracer** — `fe12b1b` (test).
 3. **Task 2 GREEN: Verified account tracer and atomic first-use routing** — `a835ff0` (feat).
 
-Summary and progress metadata are committed separately after task commits.
+**Summary and test ledger:** `94c5232` (docs). Progress metadata is committed after this summary. The final measured count of 4 includes this summary commit; the closing metadata commit follows measurement.
 
 ## Verification
 
@@ -156,6 +156,7 @@ Each appears in WINDOWS.md. No production stub blocks this plan's HTTP tracer go
 
 - Sandboxed npm registry access returned EACCES; the required elevated retries succeeded. Git writes required platform approval because .git is read-only in the sandbox.
 - npm reported unapproved install-script notices for native packages; native SQLite loaded successfully and the reviewed esbuild installer matches its platform binary setup.
+- The GSD plan advancement removed the consumed phase `.continue-here.md`; final metadata also records the orchestrator's already-consumed HANDOFF.json deletion and correction of the earlier scaffold summary's requirements metadata. These are intentional planning-artifact removals/corrections.
 
 ## User Setup Required
 

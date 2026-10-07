@@ -47,7 +47,7 @@ patterns-established:
   - "Test server fixtures accept createApp dependencies and always close HTTP, SQLite, and temporary files."
   - "Captured messages remain in memory and are never written to test output."
 
-requirements-completed: [AUTH-01, AUTH-02]
+requirements-completed: []
 
 coverage:
   - id: D1
