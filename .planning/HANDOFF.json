@@ -1,0 +1,91 @@
+{
+    "version":  "1.0",
+    "timestamp":  "2026-10-07T17:58:54.429Z",
+    "phase":  "02",
+    "phase_name":  "Private Practice Access",
+    "phase_dir":  ".planning/phases/02-private-practice-access",
+    "plan":  4,
+    "task":  1,
+    "total_tasks":  3,
+    "status":  "paused",
+    "completed_tasks":  [
+
+                        ],
+    "completed_plans":  [
+                            {
+                                "id":  "02-01",
+                                "name":  "HTTP harness and scaffolds",
+                                "status":  "done",
+                                "commit":  "a30d35a"
+                            },
+                            {
+                                "id":  "02-02",
+                                "name":  "Approved dependency provenance",
+                                "status":  "done",
+                                "commit":  "07d45f9"
+                            },
+                            {
+                                "id":  "02-03",
+                                "name":  "Verified account HTTP tracer",
+                                "status":  "done",
+                                "commit":  "74dff60"
+                            }
+                        ],
+    "remaining_tasks":  [
+                            {
+                                "id":  1,
+                                "name":  "02-04: Reset and fixed session lifecycle",
+                                "status":  "not_started"
+                            },
+                            {
+                                "id":  2,
+                                "name":  "02-04: Hostile request and enumeration protection",
+                                "status":  "not_started"
+                            },
+                            {
+                                "id":  3,
+                                "name":  "02-04: Atomic signup and recoverable pending verification",
+                                "status":  "not_started"
+                            }
+                        ],
+    "remaining_plans":  [
+                            "02-04",
+                            "02-05",
+                            "02-06",
+                            "02-07"
+                        ],
+    "blockers":  [
+
+                 ],
+    "async_jobs":  [
+
+                   ],
+    "human_actions_pending":  [
+
+                              ],
+    "decisions":  [
+                      {
+                          "decision":  "Better Auth 1.7.6 approval is satisfied and the exact dependencies are installed.",
+                          "rationale":  "Prior explicit user approval and verified provenance; do not repeat the checkpoint.",
+                          "phase":  "02"
+                      },
+                      {
+                          "decision":  "Preserve all D-01 through D-12 account decisions in 02-CONTEXT.md.",
+                          "rationale":  "The user already discussed and approved these flows; do not ask them to restate the planning.",
+                          "phase":  "02"
+                      },
+                      {
+                          "decision":  "Sequential execution on gsd/phase-02-private-practice-access; process-local Git identity only.",
+                          "rationale":  "Worktrees are disabled, main is protected, and repository Git configuration must remain untouched.",
+                          "phase":  "02"
+                      }
+                  ],
+    "uncommitted_files":  [
+                              " M .gsd/dispatch-isolation-sentinel.json",
+                              " M .planning/STATE.md",
+                              "?? .planning/HANDOFF.json",
+                              "?? .planning/phases/02-private-practice-access/.continue-here.md"
+                          ],
+    "next_action":  "Reconcile committed 02-03 SUMMARY and task commits, then continue the authorized Phase 2 execution at 02-04-PLAN.md. Do not redispatch Plan 02-03 or request dependency approval again.",
+    "context_notes":  "Plan 02-03 completed before the pause: commits 2b0d2d0, fe12b1b, a835ff0, 94c5232, 74dff60; 36 active tests passed with 29 expected future-plan TODOs. Its native executor returned PLAN COMPLETE. The prior stalled-executor recovery question is obsolete; no recovery choice is pending. AUTH-01/AUTH-02 remain open until full recovery/UI/phase acceptance. WINDOWS.md tracks seven auth-flow TODOs assigned to 02-04. Preserve and exclude the pre-existing modified .gsd/dispatch-isolation-sentinel.json. No server or watcher was launched by this workflow. Production mail transport must be tested with capture/injected fetch; live outbound email is not authorized. No push, merge, or deployment is part of this pause."
+}
