@@ -13,7 +13,15 @@ async function withAuthFixture(callback, { publicBaseURL = 'http://127.0.0.1' } 
   // fails on the private-access assertion, rather than an import/setup crash.
   const createApp = existsSync('server/app.mjs') ? (await import('../server/app.mjs')).createApp : null;
   try {
-    return await withServerFixture(callback, createApp ? {
+    return await withServerFixture(async (fixture) => {
+      try {
+        return await callback(fixture);
+      } finally {
+        // The production connection must close before the fixture deletes its
+        // SQLite file on Windows, where open native handles prevent removal.
+        app?.locals.closeDatabase();
+      }
+    }, createApp ? {
       createApp: async ({ database, emailTransport }) => {
         app = await createApp({
           databasePath: database.prepare('PRAGMA database_list').get().file,
