@@ -34,6 +34,7 @@ async function request(fixture, route, { body, cookie, requestOrigin = origin, h
   return fetch(`${fixture.url}${route}`, {
     method: body ? 'POST' : 'GET', redirect: 'manual',
     headers: {
+      host: new URL(origin).host,
       ...(requestOrigin === null ? {} : { origin: requestOrigin }),
       ...(body ? { 'content-type': 'application/json' } : {}),
       ...(cookie ? { cookie } : {}), ...headers,
@@ -124,8 +125,93 @@ test('reset tokens expire at one hour and are consumed once under concurrent req
     await signIn(fixture, email, newPassword);
   });
 });
-test.todo('sign-in does not adopt a session identifier supplied before authentication');
-test.todo('cross-origin state-changing requests are rejected');
-test.todo('auth endpoints enforce rate limits');
-test.todo('signup, resend, and reset responses do not reveal account existence');
-test.todo('private responses include Cache-Control no-store');
+test('sign-in does not adopt a session identifier supplied before authentication', async () => {
+  await withAuthFixture(async (fixture) => {
+    const email = await verifiedAccount(fixture);
+    const old = await signIn(fixture, email);
+    const next = await signIn(fixture, email, password, old);
+    assert.notEqual(old, next);
+    const forged = await signIn(fixture, email, password, 'better-auth.session_token=attacker-controlled');
+    assert.notEqual(forged, 'better-auth.session_token=attacker-controlled');
+  });
+});
+
+test('cross-origin state-changing requests are rejected', async () => {
+  await withAuthFixture(async (fixture) => {
+    const cases = [
+      ['/api/auth/sign-up/email', { email: 'hostile@example.test', password, name: 'Singer' }],
+      ['/api/auth/sign-in/email', { email: 'hostile@example.test', password }],
+      ['/api/auth/send-verification-email', { email: 'hostile@example.test' }],
+      ['/api/auth/request-password-reset', { email: 'hostile@example.test' }],
+      ['/api/auth/reset-password', { token: 'fake', newPassword }],
+      ['/api/auth/change-password', { currentPassword: password, newPassword }],
+      ['/api/auth/sign-out', {}],
+      ['/api/me/landing', {}],
+    ];
+    for (const [route, body] of cases) {
+      for (const requestOrigin of [null, 'https://attacker.example', 'null']) {
+        assert.equal((await request(fixture, route, { body, requestOrigin })).status, 403, `${route} rejects missing/foreign Origin`);
+      }
+      assert.equal((await request(fixture, route, { body, headers: { host: 'attacker.example' } })).status, 403, `${route} rejects mismatched Host`);
+    }
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 0);
+    assert.equal(fixture.emailTransport.getMessages().length, 0);
+    assert.equal((await request(fixture, cases[0][0], { body: cases[0][1] })).status, 200);
+  });
+});
+
+test('auth endpoints enforce independent bounded IP and normalized-account rate limits', async () => {
+  await withAuthFixture(async (fixture) => {
+    const body = { email: 'unknown@example.test', password };
+    assert.equal((await request(fixture, '/api/auth/sign-in/email', { body })).status, 401);
+    assert.equal((await request(fixture, '/api/auth/sign-in/email', { body: { ...body, email: ' UNKNOWN@EXAMPLE.TEST ' } })).status, 401);
+    assert.equal((await request(fixture, '/api/auth/sign-in/email', { body })).status, 429);
+    assert.equal((await request(fixture, '/api/auth/sign-in/email', { body: { ...body, email: 'other@example.test' } })).status, 401);
+    fixture.advance(60000);
+    assert.equal((await request(fixture, '/api/auth/sign-in/email', { body })).status, 401);
+  }, { rateLimits: { account: 2, ip: 100, windowMs: 60000, maxEntries: 10 } });
+  await withAuthFixture(async (fixture) => {
+    for (const email of ['one@example.test', 'two@example.test']) {
+      assert.equal((await request(fixture, '/api/auth/request-password-reset', { body: { email } })).status, 200);
+    }
+    assert.equal((await request(fixture, '/api/auth/send-verification-email', { body: { email: 'three@example.test' } })).status, 429);
+    // Guest entry points never acquire authentication/rate-limit requirements.
+    const guest = await request(fixture, '/');
+    assert.ok(![401, 403, 429].includes(guest.status));
+    const audio = await request(fixture, '/practice-audio.js');
+    assert.ok(![401, 403, 429].includes(audio.status));
+  }, { rateLimits: { account: 100, ip: 2, windowMs: 60000, maxEntries: 10 } });
+});
+
+test('signup, resend, and reset responses do not reveal account existence', async () => {
+  await withAuthFixture(async (fixture) => {
+    const verified = await verifiedAccount(fixture);
+    const pending = 'pending@example.test';
+    const fresh = 'fresh@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email: pending, password, name: 'Singer' } });
+    for (const route of ['/api/auth/sign-up/email', '/api/auth/send-verification-email', '/api/auth/request-password-reset']) {
+      const outcomes = [];
+      for (const email of [verified, pending, fresh]) {
+        const response = await request(fixture, route, { body: { email, password, name: 'Singer' } });
+        outcomes.push({ status: response.status, body: await response.json() });
+      }
+      assert.equal(outcomes[0].status, 200);
+      assert.deepEqual(outcomes[1], outcomes[0], `${route} hides pending state`);
+      assert.deepEqual(outcomes[2], outcomes[0], `${route} hides unknown state`);
+    }
+  });
+});
+
+test('private and auth responses include Cache-Control no-store', async () => {
+  await withAuthFixture(async (fixture) => {
+    for (const route of ['/api/me/workspace', '/api/auth/get-session', '/api/auth/unknown']) {
+      assert.equal((await request(fixture, route)).headers.get('cache-control'), 'no-store');
+    }
+    const failure = await request(fixture, '/api/auth/sign-in/email', { body: { email: 'unknown@example.test', password } });
+    assert.equal(failure.headers.get('cache-control'), 'no-store');
+    const hostile = await request(fixture, '/api/auth/sign-out', { body: {}, requestOrigin: null });
+    assert.equal(hostile.headers.get('cache-control'), 'no-store');
+    const cookie = await signIn(fixture, await verifiedAccount(fixture));
+    assert.equal((await request(fixture, '/api/me/workspace', { cookie })).headers.get('cache-control'), 'no-store');
+  });
+});

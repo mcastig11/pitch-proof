@@ -42,6 +42,7 @@ async function request(fixture, route, { body, cookie, origin = 'http://127.0.0.
     method: body ? 'POST' : 'GET',
     redirect: 'manual',
     headers: {
+      host: new URL(origin).host,
       origin,
       ...(body ? { 'content-type': 'application/json' } : {}),
       ...(cookie ? { cookie } : {}),
