@@ -3,6 +3,7 @@
 const assert = require('node:assert/strict');
 const { existsSync } = require('node:fs');
 const test = require('node:test');
+const { request: httpRequest } = require('node:http');
 const { withServerFixture } = require('./support/server-fixture.cjs');
 
 const password = 'Vocal-practice-strong-password-42!';
@@ -38,7 +39,8 @@ async function withAuthFixture(callback, { publicBaseURL = 'http://127.0.0.1' } 
 }
 
 async function request(fixture, route, { body, cookie, origin = 'http://127.0.0.1' } = {}) {
-  return fetch(`${fixture.url}${route}`, {
+  return new Promise((resolve, reject) => {
+    const outgoing = httpRequest(`${fixture.url}${route}`, {
     method: body ? 'POST' : 'GET',
     redirect: 'manual',
     headers: {
@@ -47,7 +49,20 @@ async function request(fixture, route, { body, cookie, origin = 'http://127.0.0.
       ...(body ? { 'content-type': 'application/json' } : {}),
       ...(cookie ? { cookie } : {}),
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    }, (incoming) => {
+      const chunks = [];
+      incoming.on('data', (chunk) => chunks.push(chunk));
+      incoming.on('end', () => {
+        const responseHeaders = new Headers();
+        for (let index = 0; index < incoming.rawHeaders.length; index += 2) {
+          responseHeaders.append(incoming.rawHeaders[index], incoming.rawHeaders[index + 1]);
+        }
+        resolve(new Response([204, 304].includes(incoming.statusCode) ? null : Buffer.concat(chunks), { status: incoming.statusCode, headers: responseHeaders }));
+      });
+      incoming.on('error', reject);
+    });
+    outgoing.on('error', reject);
+    outgoing.end(body ? JSON.stringify(body) : undefined);
   });
 }
 
