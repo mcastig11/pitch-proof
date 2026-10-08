@@ -8,7 +8,7 @@ const { withServerFixture } = require('./support/server-fixture.cjs');
 
 const password = 'Vocal-practice-strong-password-42!';
 
-async function withAuthFixture(callback, { publicBaseURL = 'http://127.0.0.1' } = {}) {
+async function withAuthFixture(callback, { publicBaseURL = 'http://127.0.0.1', clock = Date.now } = {}) {
   let app;
   // During RED the existing HTTP fixture still runs: missing auth behavior
   // fails on the private-access assertion, rather than an import/setup crash.
@@ -29,6 +29,7 @@ async function withAuthFixture(callback, { publicBaseURL = 'http://127.0.0.1' } 
           emailTransport,
           publicBaseURL,
           allowedOrigins: [publicBaseURL],
+          clock,
         });
         return app;
       },
@@ -184,11 +185,133 @@ test('insecure remote origins and production HTTP are rejected before database s
   }
 });
 
-// Remaining cases belong to the later hardening/recovery plan.
-test.todo('verification email can be resent without revealing account state');
-test.todo('corrected-address signup creates a usable pending account');
-test.todo('unknown account sign-in response is generic');
-test.todo('duplicate signup response is generic');
-test.todo('concurrent signup requests cannot create duplicate accounts');
-test.todo('password reset link changes the password and requires fresh sign-in');
-test.todo('pending accounts are removed only after the cleanup cutoff');
+test('verification email can be resent without revealing account state', async () => {
+  await withAuthFixture(async (fixture) => {
+    const email = 'pending@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } });
+    const before = fixture.emailTransport.getMessages().length;
+    const pending = await request(fixture, '/api/auth/send-verification-email', { body: { email } });
+    const unknown = await request(fixture, '/api/auth/send-verification-email', { body: { email: 'unknown@example.test' } });
+    assert.equal(pending.status, unknown.status);
+    assert.deepEqual(await pending.json(), await unknown.json());
+    assert.equal(fixture.emailTransport.getMessages().length, before + 1);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM session').get().count, 0);
+  });
+});
+
+test('corrected-address signup creates a usable pending account and invalidates prior links', async () => {
+  await withAuthFixture(async (fixture) => {
+    const email = 'typo@example.test';
+    const newEmail = 'correct@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } });
+    const oldLink = new URL(fixture.emailTransport.getLink('verification', email));
+    const id = fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(email).id;
+    const denied = await request(fixture, '/api/auth/correct-pending-email', { body: { email, password: 'wrong-password', newEmail } });
+    assert.equal(denied.status, 401, 'correction requires pending account credentials');
+    const corrected = await request(fixture, '/api/auth/correct-pending-email', { body: { email, password, newEmail: ' CORRECT@EXAMPLE.TEST ' } });
+    assert.equal(corrected.status, 200);
+    assert.equal(sessionCookie(corrected), undefined);
+    assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE id = ?').get(id).emailVerified, 0);
+    assert.equal(fixture.database.prepare('SELECT email FROM user WHERE id = ?').get(id).email, newEmail);
+    assert.equal((await request(fixture, '/api/me/workspace')).status, 401);
+    // Reusing the abandoned address must not resurrect the old email token.
+    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Another Singer' } });
+    const stale = await request(fixture, oldLink.pathname + oldLink.search);
+    assert.ok(stale.status >= 400 || new URL(stale.headers.get('location'), fixture.url).searchParams.has('error'));
+    assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE email = ?').get(email).emailVerified, 0);
+    const link = new URL(fixture.emailTransport.getLink('verification', newEmail));
+    assert.ok([200, 302].includes((await request(fixture, link.pathname + link.search)).status));
+    assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE id = ?').get(id).emailVerified, 1);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM session').get().count, 0);
+  });
+});
+
+test('unknown account sign-in response is generic', async () => {
+  await withAuthFixture(async (fixture) => {
+    const email = 'known@example.test';
+    await signupAndVerify(fixture, { email });
+    const wrong = await request(fixture, '/api/auth/sign-in/email', { body: { email, password: 'incorrect-password' } });
+    const unknown = await request(fixture, '/api/auth/sign-in/email', { body: { email: 'unknown@example.test', password: 'incorrect-password' } });
+    assert.equal(wrong.status, 401);
+    assert.equal(unknown.status, wrong.status);
+    assert.deepEqual(await unknown.json(), await wrong.json());
+  });
+});
+
+test('duplicate signup response is generic', async () => {
+  await withAuthFixture(async (fixture) => {
+    const body = { email: 'duplicate@example.test', password, name: 'Singer' };
+    const first = await request(fixture, '/api/auth/sign-up/email', { body });
+    const duplicate = await request(fixture, '/api/auth/sign-up/email', { body });
+    assert.equal(first.status, 200);
+    assert.equal(duplicate.status, first.status);
+    assert.deepEqual(await duplicate.json(), await first.json());
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 1);
+  });
+});
+
+test('concurrent signup requests cannot create duplicate accounts or first-use claims', async () => {
+  await withAuthFixture(async (fixture) => {
+    const emails = ['race@example.test', ' RACE@EXAMPLE.TEST ', 'Race@Example.Test', 'race@example.test'];
+    const signups = await Promise.all(emails.map((email) => request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } })));
+    assert.ok(signups.every((value) => value.status === 200), 'every racing signup has the generic success outcome');
+    const bodies = await Promise.all(signups.map((value) => value.json()));
+    assert.ok(bodies.every((value) => JSON.stringify(value) === JSON.stringify(bodies[0])));
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 1);
+    const link = new URL(fixture.emailTransport.getLink('verification', 'race@example.test'));
+    await request(fixture, link.pathname + link.search);
+    const signins = await Promise.all(emails.map((email) => request(fixture, '/api/auth/sign-in/email', { body: { email, password } })));
+    assert.ok(signins.every((value) => value.status === 200));
+    const landings = await Promise.all(signins.map((value) => request(fixture, '/api/me/landing', { cookie: sessionCookie(value).split(';')[0], body: {} })));
+    const routes = await Promise.all(landings.map((value) => value.json()));
+    assert.equal(routes.filter((value) => value.firstSignIn).length, 1);
+    assert.equal(routes.filter((value) => value.destination === '/workspace').length, 3);
+  });
+});
+
+test('password reset link changes the password and requires fresh sign-in', async () => {
+  await withAuthFixture(async (fixture) => {
+    const email = 'reset@example.test';
+    await signupAndVerify(fixture, { email });
+    await request(fixture, '/api/auth/request-password-reset', { body: { email, redirectTo: '/reset-password' } });
+    const link = new URL(fixture.emailTransport.getLink('reset', email));
+    const opened = await request(fixture, link.pathname + link.search);
+    assert.equal(opened.status, 302);
+    const token = new URL(opened.headers.get('location'), fixture.url).searchParams.get('token');
+    const newPassword = 'Recovered-vocal-practice-password-44!';
+    const reset = await request(fixture, '/api/auth/reset-password', { body: { token, newPassword } });
+    assert.equal(reset.status, 200);
+    assert.equal(sessionCookie(reset), undefined);
+    assert.equal((await request(fixture, '/api/me/workspace')).status, 401);
+    const signIn = await request(fixture, '/api/auth/sign-in/email', { body: { email, password: newPassword } });
+    assert.equal(signIn.status, 200);
+    const landing = await request(fixture, '/api/me/landing', { cookie: sessionCookie(signIn).split(';')[0], body: {} });
+    assert.deepEqual(await landing.json(), { destination: '/workspace', firstSignIn: false });
+  });
+});
+
+test('pending accounts are removed only after the exact cleanup cutoff on startup and auth activity', async () => {
+  let now = Date.now();
+  await withAuthFixture(async (fixture) => {
+    const day = 86400000;
+    const emails = ['old@example.test', 'boundary@example.test', 'new@example.test', 'verified@example.test'];
+    for (const email of emails) await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } });
+    const stamp = fixture.database.prepare('UPDATE user SET createdAt = ?, emailVerified = ? WHERE email = ?');
+    stamp.run(new Date(now - 30 * day - 1).toISOString(), 0, emails[0]);
+    stamp.run(new Date(now - 30 * day).toISOString(), 0, emails[1]);
+    stamp.run(new Date(now - 29 * day).toISOString(), 0, emails[2]);
+    stamp.run(new Date(now - 60 * day).toISOString(), 1, emails[3]);
+    const oldId = fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(emails[0]).id;
+    await request(fixture, '/api/auth/request-password-reset', { body: { email: 'unknown@example.test' } });
+    assert.equal(fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(emails[0]), undefined);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM verification WHERE value = ?').get(oldId).count, 0);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 3);
+    now += 1;
+    const { createApp } = await import('../server/app.mjs');
+    const restarted = await createApp({ databasePath: fixture.databasePath, publicBaseURL: 'http://127.0.0.1', emailTransport: fixture.emailTransport, clock: () => now });
+    try {
+      assert.equal(fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(emails[1]), undefined);
+      assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 2);
+    } finally { restarted.locals.closeDatabase(); }
+  }, { clock: () => now });
+});
