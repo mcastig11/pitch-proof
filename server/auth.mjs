@@ -17,7 +17,7 @@ export function validateAuthOrigin(publicBaseURL) {
   return origin.origin;
 }
 
-export function createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret }) {
+export function createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret, clock = Date.now }) {
   const baseURL = validateAuthOrigin(publicBaseURL);
   if (!emailTransport || typeof emailTransport.send !== 'function') {
     throw new Error('A server-side email transport is required.');
@@ -42,6 +42,19 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
       enabled: true,
       requireEmailVerification: true,
       autoSignIn: false,
+      // D-06: library consumption is atomic; all devices must sign in again.
+      resetPasswordTokenExpiresIn: 3600,
+      revokeSessionsOnPasswordReset: true,
+      async sendResetPassword({ user, url }) {
+        await emailTransport.send({ kind: 'reset', recipient: user.email, link: url });
+      },
+      async onPasswordReset({ user }) {
+        database.transaction(() => {
+          database.prepare('DELETE FROM session WHERE userId = ?').run(user.id);
+          // Recovery always returns to My space, including before first use.
+          database.prepare('UPDATE user SET firstSignInCompleted = 1 WHERE id = ?').run(user.id);
+        })();
+      },
     },
     emailVerification: {
       sendOnSignUp: true,
@@ -59,6 +72,17 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
       expiresIn: SESSION_LIFETIME_SECONDS,
       disableSessionRefresh: true,
       cookieCache: { enabled: false },
+    },
+    databaseHooks: {
+      session: { create: { async before(session) {
+        const now = new Date(Number(clock()));
+        return { data: { ...session, createdAt: now, updatedAt: now, expiresAt: new Date(now.getTime() + SESSION_LIFETIME_SECONDS * 1000) } };
+      } } },
+      verification: { create: { async before(verification) {
+        if (!verification.identifier.startsWith('reset-password:')) return;
+        const now = new Date(Number(clock()));
+        return { data: { ...verification, createdAt: now, updatedAt: now, expiresAt: new Date(now.getTime() + 3600000) } };
+      } } },
     },
     advanced: {
       useSecureCookies: baseURL.startsWith('https:'),

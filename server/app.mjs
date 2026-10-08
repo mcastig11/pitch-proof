@@ -1,14 +1,14 @@
 import express from 'express';
 import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
 import { createAuth, createAuthOptions, validateAuthOrigin } from './auth.mjs';
-import { claimFirstSignIn, migrateAuthDatabase, openDatabase } from './db.mjs';
+import { claimFirstSignIn, expireAuthRecords, migrateAuthDatabase, openDatabase } from './db.mjs';
 
 export async function createApp({ databasePath, emailTransport, allowedOrigins, clock = Date.now, publicBaseURL, secret } = {}) {
   // Reject insecure configuration before opening or migrating private storage.
   validateAuthOrigin(publicBaseURL);
   const database = openDatabase(databasePath);
   try {
-    const authOptions = createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret });
+    const authOptions = createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret, clock });
     await migrateAuthDatabase(authOptions);
     const auth = createAuth(authOptions);
     const app = express();
@@ -18,6 +18,10 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
     app.locals.closeDatabase = () => {
       if (database.open) database.close();
     };
+    app.use(['/api/auth', '/api/me'], (_request, _response, next) => {
+      expireAuthRecords(database, clock());
+      next();
+    });
 
     // Express 5 requires a named wildcard; leave the incoming body stream
     // intact for Better Auth by mounting it before the JSON parser.

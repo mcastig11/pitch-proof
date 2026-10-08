@@ -21,3 +21,11 @@ export function claimFirstSignIn(database, userId) {
     'UPDATE user SET firstSignInCompleted = 1 WHERE id = ? AND firstSignInCompleted = 0',
   ).run(userId).changes === 1;
 }
+
+// Use SQLite date conversion because the library stores ISO date strings.
+// Expiry is inclusive and checked before both auth and private requests.
+export function expireAuthRecords(database, now) {
+  const cutoff = new Date(Number(now)).toISOString();
+  database.prepare('DELETE FROM session WHERE julianday(expiresAt) <= julianday(?)').run(cutoff);
+  database.prepare('DELETE FROM verification WHERE julianday(expiresAt) <= julianday(?)').run(cutoff);
+}
