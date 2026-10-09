@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 current_phase: 02
 current_phase_name: Private Practice Access
-current_plan: 5 of 7
-status: Executing Phase 02; Plan 02-04 complete; next plan 02-05
-stopped_at: Completed 02-04-PLAN.md; 02-05 email transport and 02-06 UI are next
-last_updated: "2026-10-09T00:42:38.620Z"
+current_plan: 6 of 7
+status: Executing Phase 02; Plan 02-05 complete; next plan 02-06
+stopped_at: Completed 02-05-PLAN.md; next Plan 02-06 UI; AUTH-01/AUTH-02 remain open
+last_updated: "2026-10-09T00:59:29.984Z"
 last_activity: 2026-10-08
-last_activity_desc: Completed Plan 02-04 hardening with 21 auth/security passes; AUTH-01/AUTH-02 remain open
-state_head: 857fee1a5a0a03d38f563314fb9d8231e69bc99d
+last_activity_desc: Completed Plan 02-05 account email with 22 focused and 64 regression passes; AUTH-01/AUTH-02 remain open
+state_head: f89623d14ec55f1fe5af23b717b5afa56a7dba55
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
   percent: 17
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-27)
 ## Current Position
 
 Phase: 02 (Private Practice Access) — READY TO EXECUTE
-Current Plan: 5 of 7
+Current Plan: 6 of 7
 Total Plans in Phase: 7
-Status: Executing Phase 02; Plan 02-04 complete; next plan 02-05
-Last activity: 2026-10-08 — Completed Plan 02-04 hardening with 21 auth/security passes; AUTH-01/AUTH-02 remain open
+Status: Executing Phase 02; Plan 02-05 complete; next plan 02-06
+Last activity: 2026-10-08 — Completed Plan 02-05 account email with 22 focused and 64 regression passes; AUTH-01/AUTH-02 remain open
 
 Progress: [██░░░░░░░░] 17%
 
@@ -66,6 +66,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 02 P02 | 42min | 1 tasks | 4 files |
 | Phase 02 P03 | 122min | 2 tasks | 6 files |
 | Phase 02 P04 | 18h44 elapsed including user pause | 3 tasks | 8 files |
+| Phase 02 P05 | 8min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,8 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 02]: Plan 02-04 automated auth/security checks pass; AUTH-01/AUTH-02 remain open for UI, ownership, and real-browser phase acceptance.
 - [Phase 02]: Pending cleanup is bounded to 100 accounts per startup/auth mutation and excludes exact 30-day boundary and all verified accounts.
 - [Phase 02]: Verification links receive fresh nonces; digest records bound to user IDs are atomically consumed and revoked on correction, expiry, cleanup, or successful confirmation.
+- [Phase 02]: Provider delivery errors remain fixed server diagnostics; generic auth responses preserve account-existence privacy.
+- [Phase 02]: Production mail requires HTTPS, private durable SQLite, stable auth secret, and server-only Resend settings; local capture has no public inspector.
 
 ### Pending Todos
 
@@ -115,6 +118,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-09T00:36:32.610Z
-Stopped at: Completed 02-04-PLAN.md; 02-05 email transport and 02-06 UI are next
+Last session: 2026-10-09T00:59:29.920Z
+Stopped at: Completed 02-05-PLAN.md; next Plan 02-06 UI; AUTH-01/AUTH-02 remain open
 Resume file: None
