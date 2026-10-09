@@ -186,7 +186,7 @@ test('sign-out clears private content immediately, prevents duplicates and confi
   assert.equal(h.calls.filter(([url]) => url === '/api/auth/sign-out').length, 1);
   resolve(reply({}, 500)); await logout; assert.equal(h.window.location.assigned, '');
   assert.equal(h.get('sign-out').disabled, false); assert.match(h.get('account-status').textContent, /could not be completed/);
-  const retry = h.get('sign-out').emit('click'); resolve(reply()); await retry;
+  const retry = h.get('sign-out').emit('click'); resolve(reply({ success: true })); await retry;
   assert.equal(h.window.location.assigned, '/welcome');
 });
 test('Account native disclosure Escape restores trigger focus', async () => {
@@ -194,6 +194,52 @@ test('Account native disclosure Escape restores trigger focus', async () => {
   h.get('account-menu').open = true; await h.get('account-menu').emit('keydown', { key: 'Escape' });
   assert.equal(h.get('account-menu').open, false); assert.equal(h.document.activeElement, h.get('account-trigger'));
   assert.match(read('workspace.html'), /<details id="account-menu"[\s\S]*<summary id="account-trigger">Account<\/summary>[\s\S]*id="sign-out"/);
+});
+test('standalone startup serves only declared UI assets and protects private route', async () => {
+  const { startServer } = await import('../server/index.mjs');
+  const running = await startServer({ env: { NODE_ENV: 'test', PUBLIC_BASE_URL: 'http://127.0.0.1', PORT: '3000' }, listenPort: 0 });
+  const base = `http://127.0.0.1:${running.server.address().port}`;
+  try {
+    for (const route of ['/auth', '/auth.html', '/client/auth.js', '/welcome', '/welcome.html', '/client/workspace.js', '/', '/practice-audio.js']) {
+      const response = await fetch(base + route); assert.equal(response.status, 200, route); assert.ok((await response.text()).length > 0);
+    }
+    const denied = await fetch(base + '/workspace', { redirect: 'manual' }); assert.equal(denied.status, 302);
+    assert.equal(denied.headers.get('cache-control'), 'no-store'); assert.equal(denied.headers.get('location'), '/auth?mode=signin&returnTo=%2Fworkspace');
+    assert.equal((await fetch(base + '/auth')).headers.get('cache-control'), 'no-store');
+    for (const route of ['/server/app.mjs', '/server/email.mjs', '/.planning/STATE.md', '/package.json', '/tests/auth-ui.test.cjs', '/client/missing.js']) {
+      assert.equal((await fetch(base + route)).status, 404, `${route} stays outside public allowlist`);
+    }
+  } finally { await running.close(); }
+});
+test('real server completes UI confirmation, first and later landing, reset and logout', async () => {
+  await withUiServer(async (fixture, request) => {
+    let cookie = '';
+    const backend = async (url, options = {}) => {
+      const response = await request(url, { ...(options.body ? { body: JSON.parse(options.body) } : {}), cookie });
+      const session = response.headers.getSetCookie().find((header) => /session_token=/.test(header));
+      if (session) cookie = session.split(';')[0];
+      return response;
+    };
+    const h = auth({ search: '?mode=signup', fetchImpl: backend }); fill(h); await h.get('auth-form').emit('submit');
+    assert.equal(h.get('auth-heading').textContent, 'Check your email'); assert.equal(cookie, '');
+    assert.equal((await request('/workspace')).status, 302);
+    const verification = new URL(fixture.emailTransport.getLink('verification', 'singer@example.test'));
+    assert.equal((await request(verification.pathname + verification.search)).headers.get('location'), '/auth?mode=verify&confirmed=1');
+    const first = auth({ fetchImpl: backend }); fill(first); await first.get('auth-form').emit('submit'); assert.equal(first.window.location.assigned, '/');
+    const home = await request('/workspace', { cookie }); assert.equal(home.status, 200); assert.equal(home.headers.get('cache-control'), 'no-store');
+    const later = auth({ fetchImpl: backend }); fill(later); await later.get('auth-form').emit('submit'); assert.equal(later.window.location.assigned, '/workspace');
+    const resetRequest = auth({ search: '?mode=reset-request', fetchImpl: backend }); fill(resetRequest); await resetRequest.get('auth-form').emit('submit');
+    const resetLink = new URL(fixture.emailTransport.getLink('reset', 'singer@example.test'));
+    const callback = await request(resetLink.pathname + resetLink.search);
+    const target = new URL(callback.headers.get('location'), 'http://127.0.0.1'); assert.equal(target.pathname, '/auth'); assert.equal(target.searchParams.get('mode'), 'reset');
+    const reset = auth({ search: target.search, fetchImpl: backend }); fill(reset, { password: 'new-strong-password' }); await reset.get('auth-form').emit('submit');
+    assert.equal(reset.get('auth-heading').textContent, 'Password updated'); assert.equal((await request('/api/me/workspace', { cookie })).status, 401);
+    const fresh = auth({ search: '?returnTo=%2Fworkspace', fetchImpl: backend }); fill(fresh, { email: 'singer@example.test', password: 'new-strong-password' }); await fresh.get('auth-form').emit('submit');
+    assert.equal(fresh.window.location.assigned, '/workspace');
+    const workspaceUi = workspace({ fetchImpl: backend }); await workspaceUi.flush(); await new Promise((r) => setTimeout(r, 20));
+    await workspaceUi.get('sign-out').emit('click'); assert.equal(workspaceUi.window.location.assigned, '/welcome');
+    assert.equal((await request('/api/me/workspace', { cookie })).status, 401);
+  });
 });
 test.todo('signed-in example shows My space and keeps sign-out in the account menu');
 test.todo('D-03 invitation appears near practice and once after an attempt with exact copy');

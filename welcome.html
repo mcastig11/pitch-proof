@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pitch Proof — Welcome</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17292b; background: #fcfbf8; font-synthesis: none; }
+    * { box-sizing: border-box; } body { margin: 0; font-size: 16px; line-height: 1.5; }
+    .page { max-width: 1200px; padding: 32px; margin: 0 auto; } header { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; } header strong { font-size: 20px; font-weight: 600; }
+    .panel { max-width: 760px; background: #eaf0ef; border-radius: 12px; padding: 24px; margin: 0 auto; overflow-wrap: anywhere; }
+    h1 { font-size: 28px; line-height: 1.2; font-weight: 600; margin: 0 0 8px; } p { margin: 0 0 16px; }
+    .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 24px; }
+    .action { display: flex; justify-content: center; align-items: center; min-height: 44px; min-width: 44px; padding: 8px 16px; border: 1px solid #aab9ba; border-radius: 8px; background: #fff; color: inherit; text-decoration: underline; text-align: center; }
+    a:focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    @media (max-width: 959px) { .page { padding: 24px; } }
+    @media (max-width: 599px) { .page { padding: 16px; } .panel { padding: 16px; } .actions { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header><strong>Pitch Proof</strong></header>
+    <section class="panel" aria-labelledby="welcome-heading">
+      <h1 id="welcome-heading">Welcome to Pitch Proof</h1>
+      <p>Try the verified example or sign in to your private space.</p>
+      <div class="actions"><a class="action" href="/">Try the example</a><a class="action" href="/auth?mode=signin">Sign in</a></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import express from 'express';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
 import { hashPassword, verifyPassword } from 'better-auth/crypto';
 import { z } from 'zod';
@@ -166,15 +167,25 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
     app.all('/api/auth/*splat', toNodeHandler(auth));
     app.use(express.json({ limit: '16kb' }));
 
-    async function requireVerifiedSession(request, response, next) {
-      response.set('Cache-Control', 'no-store');
+    async function verifiedSession(request) {
       const result = await auth.api.getSession({ headers: fromNodeHeaders(request.headers) });
       if (!result?.user?.emailVerified || new Date(result.session.expiresAt).getTime() <= Number(clock())) {
-        return response.status(401).json({ error: 'Sign in to open your private space.' });
+        return null;
       }
+      return result;
+    }
+    async function requireVerifiedSession(request, response, next) {
+      response.set('Cache-Control', 'no-store');
+      const result = await verifiedSession(request);
+      if (!result) return response.status(401).json({ error: 'Sign in to open your private space.' });
       response.locals.session = result;
       next();
     }
+    app.get(['/workspace', '/workspace.html'], async (request, response) => {
+      response.set('Cache-Control', 'no-store');
+      if (!await verifiedSession(request)) return response.redirect('/auth?mode=signin&returnTo=%2Fworkspace');
+      return response.sendFile(fileURLToPath(new URL('../workspace.html', import.meta.url)));
+    });
 
     app.post('/api/me/landing', requireVerifiedSession, (request, response) => {
       if (request.headers.origin && !authOptions.trustedOrigins.includes(request.headers.origin)) {

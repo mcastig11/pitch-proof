@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer"><title>Pitch Proof — My space</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17292b; background: #fcfbf8; font-synthesis: none; }
+    * { box-sizing: border-box; } body { margin: 0; font-size: 16px; line-height: 1.5; }
+    .page { max-width: 1200px; padding: 32px; margin: 0 auto; } header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 32px; } header strong { font-size: 20px; font-weight: 600; }
+    .panel { max-width: 760px; background: #eaf0ef; border-radius: 12px; padding: 24px; margin: 0 auto; overflow-wrap: anywhere; }
+    h1 { font-size: 28px; line-height: 1.2; font-weight: 600; margin: 0 0 8px; } p { margin: 0 0 16px; }
+    button, a, summary { font: inherit; color: inherit; min-height: 44px; min-width: 44px; }
+    button, .action, summary { padding: 8px 16px; border: 1px solid #aab9ba; border-radius: 8px; background: #fff; }
+    button, summary { cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; } a { display: inline-block; padding: 8px 0; text-decoration: underline; }
+    .action { text-align: center; } :is(button, a, summary):focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; } .error { color: #a32929; } .muted { color: #506063; }
+    details { max-width: 100%; } details button { margin-top: 8px; } #account-status { max-width: 560px; overflow-wrap: anywhere; } [hidden] { display: none !important; }
+    @media (max-width: 959px) { .page { padding: 24px; } }
+    @media (max-width: 599px) { .page { padding: 16px; } .panel { padding: 16px; } header { flex-direction: column; } .actions > * { width: 100%; } }
+  </style>
+</head>
+<body data-page="workspace">
+  <main class="page">
+    <header><strong>Pitch Proof</strong><nav id="account-nav" aria-label="Account" hidden><details id="account-menu"><summary id="account-trigger">Account</summary><button id="sign-out" type="button">Sign out</button></details></nav></header>
+    <section class="panel" aria-labelledby="workspace-heading">
+      <h1 id="workspace-heading" tabindex="-1">My space</h1>
+      <p id="workspace-status" class="muted" role="status" aria-live="polite">Opening your private space…</p>
+      <div id="private-content" hidden></div>
+      <div class="actions"><a id="workspace-signin" class="action" href="/auth?mode=signin&amp;returnTo=%2Fworkspace" hidden>Sign in</a><button id="workspace-retry" type="button" hidden>Try again</button><a id="workspace-example" class="action" href="/" hidden>Try the example</a></div>
+      <p id="account-status" class="muted" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+  <script src="/client/workspace.js"></script>
+</body>
+</html>
