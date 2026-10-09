@@ -127,9 +127,9 @@ completed: 2026-10-09
 
 `1b1cdcd` preserved the user-requested pause between Task 3 RED and GREEN. Tasks 1-2 and the Task 3 RED commit were reconciled without replay. No separate refactor was required. Task attributes enable TDD even though phase-wide `tdd_mode` is false.
 
-## Verification
+## Test Results
 
-- `node --test --test-reporter=tap tests/auth-flow.test.cjs tests/session-security.test.cjs`: **21 tests passed**, 0 failed, 0 skipped, 0 TODO, exit 0.
+- Focused command: node --test --test-reporter=tap tests/auth-flow.test.cjs tests/session-security.test.cjs. **21 tests passed**, 0 failed, 0 skipped, 0 TODO, exit 0.
 - `npm.cmd test`: **54 active tests passed**, 0 failed, 14 pre-existing TODOs, 68 total, exit 0. The TODOs are eight UI checks assigned to Plan 02-06 and six ownership checks assigned to Plan 02-07.
 - Additional focused coverage confirms distinct links issued within one second, one winner under concurrent verification, expiry at one hour, protection of verified and existing target accounts, credential cascade deletion, and origin rejection on correction.
 - `git diff --check` passed. Created/modified plan files contain no TODO, FIXME, skipped-test, or UI-data stubs. No live email was sent; isolated capture transports were used.
