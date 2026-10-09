@@ -138,8 +138,63 @@ test('real verification callback proves confirmation server-side and rejects uns
   });
 });
 
-test.todo('welcome page gives Try the example and Sign in equal weight');
-test.todo('expired workspace session clears private content and offers sign-in');
+function workspace(options = {}) { return browserHarness('client/workspace.js', { page: 'workspace', ...options }); }
+test('welcome page gives Try the example and Sign in equal weight', () => {
+  const html = read('welcome.html');
+  const actions = [...html.matchAll(/<a class="action" href="([^"]+)">([^<]+)<\/a>/g)];
+  assert.deepEqual(actions.map((match) => [match[1], match[2]]), [['/', 'Try the example'], ['/auth?mode=signin', 'Sign in']]);
+  assert.doesNotMatch(html, /class="primary"/); assert.match(html, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+});
+test('expired workspace session clears private content and offers sign-in', async () => {
+  let valid = true;
+  const h = workspace({ fetchImpl: async () => valid ? reply({ identity: '<Singer> very-long@example.test' }) : reply({}, 401) });
+  await h.flush(); assert.match(h.get('private-content').textContent, /<Singer> very-long@example.test/);
+  assert.match(h.get('private-content').textContent, /Your own scores are coming next\./);
+  assert.equal(h.calls[0][1].cache, 'no-store'); assert.equal(h.calls[0][1].credentials, 'same-origin');
+  valid = false; await h.event('window:pageshow', { persisted: true });
+  assert.equal(h.get('private-content').textContent, ''); assert.equal(h.get('account-nav').hidden, true);
+  assert.equal(h.get('workspace-heading').textContent, 'Your sign-in has ended');
+  assert.equal(h.document.activeElement, h.get('workspace-heading'));
+  assert.equal(h.get('workspace-signin').href, '/auth?mode=signin&returnTo=%2Fworkspace');
+});
+test('workspace visibility clears identity immediately and rejects stale asynchronous responses', async () => {
+  const pending = [];
+  const h = workspace({ fetchImpl: () => new Promise((resolve) => pending.push(resolve)) });
+  assert.equal(h.get('private-content').textContent, '');
+  await h.event('window:pageshow', { persisted: true });
+  pending[1](reply({}, 401)); await h.flush();
+  pending[0](reply({ identity: 'Stale Singer' })); await h.flush();
+  assert.equal(h.get('private-content').textContent, '');
+  await h.event('document:visibilitychange'); pending[2](reply({ identity: 'Current Singer' })); await h.flush();
+  assert.match(h.get('private-content').textContent, /Current Singer/);
+  h.document.hidden = true; await h.event('document:visibilitychange');
+  assert.equal(h.get('private-content').textContent, '');
+  assert.equal(h.get('account-nav').hidden, true);
+});
+test('workspace network, server and malformed responses remove private data without claiming expiry', async () => {
+  for (const fetchImpl of [async () => { throw new Error('offline'); }, async () => reply({}, 500), async () => reply({ identity: '' }), async () => reply({ identity: {} })]) {
+    const h = workspace({ fetchImpl }); await h.flush();
+    assert.equal(h.get('private-content').textContent, '');
+    assert.equal(h.get('workspace-heading').textContent, 'Your private space could not be opened');
+    assert.equal(h.get('workspace-retry').hidden, false); assert.equal(h.get('workspace-example').href, '/');
+  }
+});
+test('sign-out clears private content immediately, prevents duplicates and confirms server success', async () => {
+  let resolve; const h = workspace({ fetchImpl: async (url) => url === '/api/me/workspace' ? reply({ identity: 'Singer' }) : new Promise((r) => { resolve = r; }) });
+  await h.flush(); const logout = h.get('sign-out').emit('click'); await h.get('sign-out').emit('click');
+  assert.equal(h.get('private-content').textContent, ''); assert.equal(h.window.location.assigned, '');
+  assert.equal(h.calls.filter(([url]) => url === '/api/auth/sign-out').length, 1);
+  resolve(reply({}, 500)); await logout; assert.equal(h.window.location.assigned, '');
+  assert.equal(h.get('sign-out').disabled, false); assert.match(h.get('account-status').textContent, /could not be completed/);
+  const retry = h.get('sign-out').emit('click'); resolve(reply()); await retry;
+  assert.equal(h.window.location.assigned, '/welcome');
+});
+test('Account native disclosure Escape restores trigger focus', async () => {
+  const h = workspace({ fetchImpl: async () => reply({ identity: 'Singer' }) }); await h.flush();
+  h.get('account-menu').open = true; await h.get('account-menu').emit('keydown', { key: 'Escape' });
+  assert.equal(h.get('account-menu').open, false); assert.equal(h.document.activeElement, h.get('account-trigger'));
+  assert.match(read('workspace.html'), /<details id="account-menu"[\s\S]*<summary id="account-trigger">Account<\/summary>[\s\S]*id="sign-out"/);
+});
 test.todo('signed-in example shows My space and keeps sign-out in the account menu');
 test.todo('D-03 invitation appears near practice and once after an attempt with exact copy');
 test.todo('guest example practice continues uninterrupted after session expiry');

@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 
 // Exercises real client events and DOM output; layout and speech remain browser checks.
-function browserHarness(file, { search = '', fetchImpl = async () => new Response('{}', { status: 401 }), windowExtras = {} } = {}) {
+function browserHarness(file, { search = '', page = 'auth', fetchImpl = async () => new Response('{}', { status: 401 }), windowExtras = {} } = {}) {
   const nodes = new Map(); const events = new Map(); const calls = []; let document;
   class Node {
     constructor(tag = 'div') {
@@ -32,6 +32,7 @@ function browserHarness(file, { search = '', fetchImpl = async () => new Respons
     createTextNode(text) { const node = new Node(); node.textContent = text; return node; },
     addEventListener(type, callback) { events.set(`document:${type}`, callback); },
   };
+  document.body = new Node('body'); document.body.dataset.page = page;
   const location = { search, pathname: '/auth', origin: 'http://localhost', assigned: '', assign(url) { this.assigned = url; }, reload() {} };
   const window = { location, addEventListener(type, callback) { events.set(`window:${type}`, callback); }, ...windowExtras };
   const context = { document, window, URL, URLSearchParams, AbortController,
