@@ -241,6 +241,46 @@ test('real server completes UI confirmation, first and later landing, reset and 
     assert.equal((await request('/api/me/workspace', { cookie })).status, 401);
   });
 });
-test.todo('signed-in example shows My space and keeps sign-out in the account menu');
-test.todo('D-03 invitation appears near practice and once after an attempt with exact copy');
-test.todo('guest example practice continues uninterrupted after session expiry');
+function example(fetchImpl) {
+  let callbacks; let stops = 0;
+  const h = browserHarness('script.js', { page: 'example', fetchImpl, windowExtras: {
+    PitchProofFixture: require('../practice-fixture.js'),
+    PitchProofAudio: { createPracticeAudio: () => ({ checkMicrophone: async () => true, resume: async () => {}, getAudioTime: () => 10,
+      startPractice: (options) => { callbacks = options; }, stop: async () => { stops += 1; }, }) },
+  } });
+  h.get('start-measure').value = '1'; h.run('client/workspace.js');
+  return { ...h, callbacks: () => callbacks, stops: () => stops };
+}
+test('signed-in example shows My space and keeps sign-out in the account menu', async () => {
+  const h = example(async () => reply({ identity: 'Private Email' })); await h.flush();
+  assert.equal(h.get('account-nav').hidden, false); assert.equal(h.get('guest-invite').hidden, true);
+  assert.equal(h.get('attempt-invite').hidden, true); assert.equal(h.get('guest-signin').hidden, true);
+  const html = read('index.html'); assert.match(html, /<a[^>]*href="\/workspace"[^>]*>My space<\/a>/);
+  assert.match(html, /<details id="account-menu"[\s\S]*<summary id="account-trigger">Account<\/summary>[\s\S]*id="sign-out"/);
+  assert.doesNotMatch(h.get('account-nav').textContent, /Private Email/);
+});
+test('D-03 invitation appears near practice and once after an attempt with exact copy', async () => {
+  const html = read('index.html'); const copy = 'Create your private space. Your own scores are coming next.';
+  assert.equal(html.split(copy).length - 1, 2, 'exact inline invitation in both approved positions');
+  assert.ok(html.indexOf('id="guest-invite"') < html.indexOf('id="setup-heading"'));
+  assert.ok(html.indexOf('id="attempt-invite"') > html.indexOf('class="transport"'));
+  const h = example(async () => reply({}, 401)); await h.flush(); assert.equal(h.get('attempt-invite').hidden, true);
+  await h.get('mic-button').emit('click'); assert.equal(h.get('attempt-invite').hidden, true, 'microphone check is not an attempt');
+  await h.get('start-button').emit('click'); h.callbacks().onBeat(1, 4); assert.equal(h.get('attempt-invite').hidden, true);
+  await h.get('stop-button').emit('click'); await h.flush(); assert.equal(h.get('attempt-invite').hidden, false);
+  await h.get('retry-button').emit('click'); await h.get('stop-button').emit('click'); await h.flush();
+  assert.equal(h.get('attempt-invite').hidden, false); assert.equal(h.get('attempt-invite').children.length, 0, 'no repeated DOM insertion');
+});
+test('guest example practice continues uninterrupted after session expiry', async () => {
+  let valid = true; const h = example(async () => valid ? reply({ identity: 'Singer' }) : reply({}, 401)); await h.flush();
+  await h.get('mic-button').emit('click'); await h.get('start-button').emit('click'); h.callbacks().onFollowing(10);
+  const requests = h.calls.length;
+  h.callbacks().onObservation({ pitchText: 'Pitch heard: A4', onsetText: 'No onset detected yet', rms: .1 });
+  assert.equal(h.calls.length, requests, 'audio observation makes no auth request');
+  valid = false; const focus = h.document.activeElement; await h.event('window:pageshow', { persisted: true });
+  assert.equal(h.get('account-nav').hidden, true); assert.equal(h.stops(), 0); assert.equal(h.get('stop-button').hidden, false);
+  assert.equal(h.document.activeElement, focus, 'account expiry never steals practice focus');
+  h.callbacks().onObservation({ pitchText: 'Pitch heard: C4', onsetText: 'No onset detected yet', rms: .1 });
+  assert.equal(h.get('pitch-observation').textContent, 'Pitch heard: C4'); assert.equal(h.stops(), 0);
+  const html = read('index.html'); assert.match(html, /data-page="example"/); assert.match(html, /src="\/client\/workspace.js"/);
+});

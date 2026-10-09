@@ -1,0 +1,9 @@
+{
+  "command": "node --test --test-reporter=tap --test-name-pattern='D-03 invitation' tests/auth-ui.test.cjs",
+  "exitCode": 1,
+  "output": "TAP version 13\n# Subtest: D-03 invitation appears near practice and once after an attempt with exact copy\nnot ok 1 - D-03 invitation appears near practice and once after an attempt with exact copy\n  ---\n  duration_ms: 2.4947\n  type: 'test'\n  location: 'C:\\\\Users\\\\casti\\\\projects\\\\pitch-proof\\\\tests\\\\auth-ui.test.cjs:262:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    exact inline invitation in both approved positions\n    \n    0 !== 2\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 2\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (C:\\Users\\casti\\projects\\pitch-proof\\tests\\auth-ui.test.cjs:264:10)\n    Test.runInAsyncScope (node:async_hooks:227:14)\n    Test.run (node:internal/test_runner/test:1382:25)\n    Test.start (node:internal/test_runner/test:1242:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 120.8856\n",
+  "targetTest": "D-03 invitation appears near practice and once after an attempt with exact copy",
+  "targetFile": "tests/auth-ui.test.cjs",
+  "expected": "Two exact inline invitation blocks with post-attempt reveal only after a genuine attempt",
+  "actual": "Zero invitation blocks"
+}
