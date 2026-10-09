@@ -157,6 +157,7 @@ test('cross-origin state-changing requests are rejected', async () => {
       ['/api/auth/sign-up/email', { email: 'hostile@example.test', password, name: 'Singer' }],
       ['/api/auth/sign-in/email', { email: 'hostile@example.test', password }],
       ['/api/auth/send-verification-email', { email: 'hostile@example.test' }],
+      ['/api/auth/correct-pending-email', { email: 'hostile@example.test', password, newEmail: 'other@example.test' }],
       ['/api/auth/request-password-reset', { email: 'hostile@example.test' }],
       ['/api/auth/reset-password', { token: 'fake', newPassword }],
       ['/api/auth/change-password', { currentPassword: password, newPassword }],

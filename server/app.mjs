@@ -1,7 +1,10 @@
 import express from 'express';
+import { randomBytes } from 'node:crypto';
 import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
+import { hashPassword, verifyPassword } from 'better-auth/crypto';
+import { z } from 'zod';
 import { createAuth, createAuthOptions, validateAuthOrigin } from './auth.mjs';
-import { claimFirstSignIn, expireAuthRecords, migrateAuthDatabase, openDatabase } from './db.mjs';
+import { claimFirstSignIn, cleanupPendingAccounts, consumeEmailVerification, correctPendingEmail, expireAuthRecords, migrateAuthDatabase, openDatabase } from './db.mjs';
 
 // Bounds memory as well as traffic. At capacity, reject new buckets rather
 // than evicting live counters and letting an attacker reset their allowance.
@@ -52,7 +55,11 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
   try {
     const authOptions = createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret, clock });
     await migrateAuthDatabase(authOptions);
+    // SQLite remains the creation gate even when separate HTTP requests race.
+    database.exec('CREATE UNIQUE INDEX IF NOT EXISTS user_email_normalized_unique ON user (lower(trim(email)))');
+    cleanupPendingAccounts(database, clock());
     const auth = createAuth(authOptions);
+    const dummyPasswordHash = await hashPassword(randomBytes(32).toString('hex'));
     const app = express();
     app.disable('x-powered-by');
     app.locals.auth = auth;
@@ -68,19 +75,64 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
         return response.status(403).json({ error: 'Request origin is not allowed.' });
       }
       expireAuthRecords(database, clock());
+      if (request.originalUrl.startsWith('/api/auth/') && request.method === 'POST') cleanupPendingAccounts(database, clock());
       next();
     });
 
     const authLimiter = createAuthLimiter(clock, rateLimits);
+    app.get('/api/auth/verify-email', (request, response) => {
+      // This route owns one-use verification; no stateless fallback may verify
+      // an address after the original account corrected it or was removed.
+      const token = request.query.token;
+      if (typeof token !== 'string' || token.length > 4096) return response.status(400).json({ error: 'Invalid verification link.' });
+      let callback;
+      if (request.query.callbackURL !== undefined) {
+        try {
+          callback = new URL(request.query.callbackURL, authOptions.baseURL);
+          if (callback.origin !== authOptions.baseURL) throw new Error('Invalid callback');
+        } catch { return response.status(403).json({ error: 'Request origin is not allowed.' }); }
+      }
+      const verified = consumeEmailVerification(database, token, clock());
+      if (callback) {
+        if (!verified) callback.searchParams.set('error', 'INVALID_TOKEN');
+        return response.redirect(callback.pathname + callback.search + callback.hash);
+      }
+      return response.status(verified ? 200 : 400).json(verified ? { status: true, user: null } : { error: 'Invalid verification link.' });
+    });
     // Read mutation bodies once, then pass a Web Request to Better Auth's
     // documented handler. GET requests retain the Node adapter/raw stream.
     app.post('/api/auth/*splat', express.json({ limit: '16kb' }), authLimiter, async (request, response) => {
       const started = performance.now();
+      if (request.path === '/api/auth/correct-pending-email') {
+        const input = z.object({ email: z.email(), password: z.string().min(1).max(128), newEmail: z.email() }).safeParse({
+          ...request.body, newEmail: typeof request.body?.newEmail === 'string' ? request.body.newEmail.trim().toLowerCase() : request.body?.newEmail,
+        });
+        if (!input.success) return response.status(400).json({ error: 'Enter a valid address and password.' });
+        const { email, password, newEmail } = input.data;
+        const user = database.prepare(`SELECT user.*, account.password FROM user JOIN account ON account.userId = user.id
+          WHERE user.email = ? AND account.providerId = 'credential'`).get(email);
+        const valid = await verifyPassword({ password, hash: user?.password || dummyPasswordHash });
+        if (!valid || !user || user.emailVerified) return response.status(401).json({ error: 'Email or password is incorrect.' });
+        let changed;
+        try { changed = correctPendingEmail(database, user, newEmail, clock()); }
+        catch (error) {
+          if (!error.code?.startsWith('SQLITE_CONSTRAINT_UNIQUE')) throw error;
+          return response.json({ status: true, message: 'Check your email for the next step if the address is eligible.' });
+        }
+        if (!changed) return response.status(401).json({ error: 'Email or password is incorrect.' });
+        await authOptions.emailVerification.sendVerificationEmail({
+          user: { ...user, email: newEmail }, url: `${authOptions.baseURL}/api/auth/verify-email?callbackURL=%2F`,
+        });
+        return response.json({ status: true, message: 'Check your email for the next step if the address is eligible.' });
+      }
       const result = await auth.handler(new Request(new URL(request.originalUrl, authOptions.baseURL), {
         method: 'POST', headers: fromNodeHeaders(request.headers), body: JSON.stringify(request.body || {}),
       }));
       const generic = ['/api/auth/sign-up/email', '/api/auth/send-verification-email', '/api/auth/request-password-reset'].includes(request.path);
-      if (generic && result.ok) {
+      const signupConflict = request.path === '/api/auth/sign-up/email' && result.status === 422
+        && (await result.clone().json()).code === 'FAILED_TO_CREATE_USER'
+        && database.prepare('SELECT id FROM user WHERE email = ?').get(request.body.email);
+      if (generic && (result.ok || signupConflict)) {
         // Public success contains no user IDs, dates, verification flags, or
         // address state. Pad fast branches so email existence is less visible.
         const remaining = 250 - (performance.now() - started);

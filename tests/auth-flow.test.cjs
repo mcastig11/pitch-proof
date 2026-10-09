@@ -238,6 +238,47 @@ test('unknown account sign-in response is generic', async () => {
   });
 });
 
+test('verification links are distinct, consumed atomically, and expire after one hour', async () => {
+  let now = Date.now();
+  await withAuthFixture(async (fixture) => {
+    const email = 'one-use@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } });
+    const first = new URL(fixture.emailTransport.getLink('verification', email));
+    await request(fixture, '/api/auth/send-verification-email', { body: { email } });
+    const latest = new URL(fixture.emailTransport.getMessages().filter((value) => value.kind === 'verification' && value.recipient === email).at(-1).link);
+    assert.notEqual(first.searchParams.get('token'), latest.searchParams.get('token'));
+    const outcomes = await Promise.all([1, 2].map(() => request(fixture, latest.pathname + latest.search)));
+    assert.equal(outcomes.filter((value) => value.status === 302 && !value.headers.get('location').includes('error=')).length, 1);
+    assert.equal(outcomes.filter((value) => value.headers.get('location')?.includes('error=')).length, 1);
+    assert.ok((await request(fixture, first.pathname + first.search)).headers.get('location').includes('error='));
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM session').get().count, 0);
+
+    const expiring = 'expired@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email: expiring, password, name: 'Singer' } });
+    const link = new URL(fixture.emailTransport.getLink('verification', expiring));
+    now += 3600000;
+    assert.ok((await request(fixture, link.pathname + link.search)).headers.get('location').includes('error='));
+    assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE email = ?').get(expiring).emailVerified, 0);
+  }, { clock: () => now });
+});
+
+test('pending correction cannot change a verified account or overwrite another account', async () => {
+  await withAuthFixture(async (fixture) => {
+    const verified = 'verified-correction@example.test';
+    await signupAndVerify(fixture, { email: verified });
+    const pending = 'pending-correction@example.test';
+    await request(fixture, '/api/auth/sign-up/email', { body: { email: pending, password, name: 'Singer' } });
+    const old = new URL(fixture.emailTransport.getLink('verification', pending));
+    assert.equal((await request(fixture, '/api/auth/correct-pending-email', { body: { email: verified, password, newEmail: 'other@example.test' } })).status, 401);
+    const collision = await request(fixture, '/api/auth/correct-pending-email', { body: { email: pending, password, newEmail: verified } });
+    assert.equal(collision.status, 200, 'target account existence is hidden');
+    assert.equal(sessionCookie(collision), undefined);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 2);
+    assert.equal((await request(fixture, old.pathname + old.search)).status, 302, 'a failed correction preserves the prior usable link');
+    assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE email = ?').get(pending).emailVerified, 1);
+  });
+});
+
 test('duplicate signup response is generic', async () => {
   await withAuthFixture(async (fixture) => {
     const body = { email: 'duplicate@example.test', password, name: 'Singer' };
@@ -305,6 +346,7 @@ test('pending accounts are removed only after the exact cleanup cutoff on startu
     await request(fixture, '/api/auth/request-password-reset', { body: { email: 'unknown@example.test' } });
     assert.equal(fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(emails[0]), undefined);
     assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM verification WHERE value = ?').get(oldId).count, 0);
+    assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM account WHERE userId = ?').get(oldId).count, 0);
     assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM user').get().count, 3);
     now += 1;
     const { createApp } = await import('../server/app.mjs');

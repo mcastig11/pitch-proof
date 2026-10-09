@@ -1,5 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { betterAuth } from 'better-auth';
+import { createEmailVerificationToken } from 'better-auth/api';
+import { registerEmailVerification } from './db.mjs';
 
 export const SESSION_LIFETIME_SECONDS = 604800;
 
@@ -31,11 +33,13 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
     throw new Error('An exact trusted-origin list is required.');
   }
   for (const origin of trustedOrigins) validateAuthOrigin(origin);
+  const effectiveSecret = authSecret || randomBytes(32).toString('hex');
 
   return {
     appName: 'Pitch Proof',
     baseURL,
-    secret: authSecret || randomBytes(32).toString('hex'),
+    secret: effectiveSecret,
+    logger: { disabled: true },
     database,
     trustedOrigins,
     emailAndPassword: {
@@ -60,7 +64,13 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
       sendOnSignUp: true,
       autoSignInAfterVerification: false,
       async sendVerificationEmail({ user, url }) {
-        await emailTransport.send({ kind: 'verification', recipient: user.email, link: url });
+        // A nonce keeps two links issued within one second distinct, including
+        // when a corrected-away address is used by a different pending user.
+        const token = await createEmailVerificationToken(effectiveSecret, user.email, undefined, 3600, { nonce: randomBytes(32).toString('hex') });
+        const link = new URL(url);
+        link.searchParams.set('token', token);
+        registerEmailVerification(database, user, token, clock());
+        await emailTransport.send({ kind: 'verification', recipient: user.email, link: link.href });
       },
     },
     user: {
@@ -74,6 +84,10 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
       cookieCache: { enabled: false },
     },
     databaseHooks: {
+      user: { create: { async before(user) {
+        const now = new Date(Number(clock()));
+        return { data: { ...user, createdAt: now, updatedAt: now } };
+      } } },
       session: { create: { async before(session) {
         const now = new Date(Number(clock()));
         return { data: { ...session, createdAt: now, updatedAt: now, expiresAt: new Date(now.getTime() + SESSION_LIFETIME_SECONDS * 1000) } };
