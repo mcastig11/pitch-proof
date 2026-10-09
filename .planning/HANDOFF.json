@@ -1,0 +1,152 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-10-09T01:28:46.700Z",
+  "phase": "02",
+  "phase_name": "Private Practice Access",
+  "phase_dir": ".planning/phases/02-private-practice-access",
+  "plan": 6,
+  "task": 3,
+  "total_tasks": 3,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Accessible signup, sign-in, verification and recovery screens",
+      "status": "done",
+      "commit": "d421980",
+      "red_commit": "f98bec4"
+    },
+    {
+      "id": 2,
+      "name": "Protected workspace and public welcome",
+      "status": "done",
+      "commit": "bdb7c26",
+      "red_commit": "95c9e40"
+    },
+    {
+      "id": 3,
+      "name": "Discreet account navigation and independent guest example",
+      "status": "done",
+      "commit": "41f2759",
+      "red_commit": "a4e5c12"
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": "02-06-closeout",
+      "name": "Measure actuals, write SUMMARY/self-check, update WINDOWS8?15 and STATE/ROADMAP, commit plan closeout",
+      "status": "not_started"
+    },
+    {
+      "id": "wave4-gate",
+      "name": "Root summary spot-check and required post-wave test/schema/codebase/UI gates",
+      "status": "not_started"
+    },
+    {
+      "id": "02-07",
+      "name": "Owner-scoped metadata/byte seam and two-account direct HTTP isolation",
+      "status": "not_started"
+    },
+    {
+      "id": "phase2-verification",
+      "name": "Code review, regression, phase verification, enabled validation/security/UI audits, persist UAT if human_needed",
+      "status": "not_started"
+    }
+  ],
+  "blockers": [],
+  "async_jobs": [],
+  "human_actions_pending": [
+    {
+      "action": "Real browser guest microphone/pitch practice through shortened session expiry; invitation/nav/menu checks",
+      "context": "No browser available: cua.getState apps[]/browsers[]; iab unavailable. Automated audio/UI seam passes are not real microphone acceptance.",
+      "blocking": true
+    },
+    {
+      "action": "Browser keyboard/focus, narrow/zoomed layout and actual spoken assistive announcements",
+      "context": "Code/DOM tests available; browser/speech not observed.",
+      "blocking": true
+    },
+    {
+      "action": "Persistence across browser restart and HTTPS Secure cookie/session enforcement",
+      "context": "WINDOWS item22 remains open; persistent SQLite path plus stable auth secret required; local default database is in memory.",
+      "blocking": true
+    },
+    {
+      "action": "Configure server-only Resend credentials, verified sender, HTTPS and durable storage before real production accounts",
+      "context": "Adapter tested with capture/stub fetch only; no host/domain/secret/live email provisioned.",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Preserve all D-01?D-12 saved account decisions; do not discuss or replan accounts again",
+      "rationale": "Complete account CONTEXT and approved UI contract are committed.",
+      "phase": "02"
+    },
+    {
+      "decision": "UI contract approved7/7 with compiled probe25/25 explicit resolutions",
+      "rationale": "840e4d1 supplies missing frontend gate prerequisite without changing user decisions.",
+      "phase": "02"
+    },
+    {
+      "decision": "Plan05 direct adapter errors are sanitized; auth callbacks retain generic public outcomes",
+      "rationale": "Delivery outages must not reveal account existence.",
+      "phase": "02"
+    },
+    {
+      "decision": "Plan06 uses server-signed short HttpOnly confirmation receipt, safe callback paths and server-selected sign-in continuation",
+      "rationale": "Forged callback success flags must not claim confirmation.",
+      "phase": "02"
+    },
+    {
+      "decision": "Plan06 extends explicit startup route/asset allowlist in server/index.mjs",
+      "rationale": "New public auth/welcome/client files must load without exposing private repository files.",
+      "phase": "02"
+    }
+  ],
+  "uncommitted_files": [
+    " M .gsd/dispatch-isolation-sentinel.json"
+  ],
+  "next_action": "Resume Plan02-06 metadata closeout only. All3 tasks are committed and full test session9420 finished84pass/6ownershipTODO, exit0. Do not replay tasks. Verify HEAD/status, measure six task commits from840e4d1 baseline, write SUMMARY/self-check, update WINDOWS and STATE/ROADMAP to6/7 executed, commit; then root wave4 gates and sequential Plan02-07.",
+  "context_notes": "User explicitly paused after Task3 GREEN. Plans01?05 fully summarized (5/7 complete); Plan06 all tasks committed but SUMMARY/STATE/WINDOWS/ROADMAP closeout NOT begun. Latest HEAD41f2759. User authorization for full Phase2 execution persists after resume. Account planning/provenance already approved. No push/merge/deploy/live provider call/new dependency install. Only dirty preexisting sentinel untouched. No pending agent/tool actions. Existing session9420 collected by originating executor, completed and closed; root cannot address agent-local process IDs. No project server started and no async manifests.",
+  "test_results": {
+    "focused": {
+      "passed": 33,
+      "failed": 0
+    },
+    "full": {
+      "total": 90,
+      "passed": 84,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 6,
+      "exit_code": 0,
+      "duration_ms": 12849
+    },
+    "remaining_todos": "Plan02-07 ownership only"
+  },
+  "execution": {
+    "branch": "gsd/phase-02-private-practice-access",
+    "head": "41f275924ad1143f024a00c4e53ef7155c3dc9a0",
+    "plan_baseline": "840e4d1",
+    "agent": "phase2_0206_ui",
+    "running_sessions": [],
+    "parallel_source_execution": false,
+    "use_worktrees": false
+  },
+  "constraints": [
+    {
+      "severity": "advisory",
+      "description": "Default exec_command fails before startup with helper_unknown_error/setup refresh. Necessary approved escalation works. Reuse general Get-Content, gsd-tools query, npm.cmd test and saved Git approvals; avoid unnecessary prompts."
+    },
+    {
+      "severity": "advisory",
+      "description": "Windows legacy node -e lost quotation marks. For unavoidable inline Node code, pass a properly PowerShell-quoted literal through stdin; do not use JSON.stringify as shell escaping."
+    },
+    {
+      "severity": "advisory",
+      "description": "Git sandbox read-only; commits need approval and process-local identity Makayla Castiglioni <castikay143@gmail.com>. Never change .git/config."
+    }
+  ]
+}
