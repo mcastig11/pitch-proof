@@ -35,6 +35,15 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
   for (const origin of trustedOrigins) validateAuthOrigin(origin);
   const effectiveSecret = authSecret || randomBytes(32).toString('hex');
 
+  async function deliverAccountEmail(message) {
+    try { await emailTransport.send(message); }
+    catch {
+      // A provider outage must not make a known address distinguishable from
+      // an unknown address. Keep public responses generic and allow resend.
+      console.error('Account email delivery failed.', { code: 'EMAIL_DELIVERY_FAILED' });
+    }
+  }
+
   return {
     appName: 'Pitch Proof',
     baseURL,
@@ -50,7 +59,7 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
       resetPasswordTokenExpiresIn: 3600,
       revokeSessionsOnPasswordReset: true,
       async sendResetPassword({ user, url }) {
-        await emailTransport.send({ kind: 'reset', recipient: user.email, link: url });
+        await deliverAccountEmail({ kind: 'reset', recipient: user.email, link: url });
       },
       async onPasswordReset({ user }) {
         database.transaction(() => {
@@ -70,7 +79,7 @@ export function createAuthOptions({ database, emailTransport, allowedOrigins, pu
         const link = new URL(url);
         link.searchParams.set('token', token);
         registerEmailVerification(database, user, token, clock());
-        await emailTransport.send({ kind: 'verification', recipient: user.email, link: link.href });
+        await deliverAccountEmail({ kind: 'verification', recipient: user.email, link: link.href });
       },
     },
     user: {

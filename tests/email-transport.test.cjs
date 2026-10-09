@@ -3,6 +3,7 @@
 const assert = require('node:assert/strict');
 const { existsSync } = require('node:fs');
 const test = require('node:test');
+const { request: httpRequest } = require('node:http');
 const { withServerFixture } = require('./support/server-fixture.cjs');
 const { createCaptureEmail: fixtureCapture } = require('./support/capture-email.cjs');
 
@@ -140,7 +141,9 @@ test('capture transport and Resend are interchangeable at verification and reset
         if (mode === 'capture') {
           const messages = emailTransport.getMessages();
           assert.deepEqual(messages.map((value) => value.kind), ['verification', 'reset']);
-          assert.ok(messages.every((value) => value.recipient === recipient && value.link.includes('token=')));
+          assert.ok(messages.every((value) => value.recipient === recipient && new URL(value.link).origin === 'https://pitch.example.test'));
+          assert.ok(messages[0].link.includes('token='));
+          assert.match(new URL(messages[1].link).pathname, /^\/api\/auth\/reset-password\/[^/]+$/);
           messages[0].link = 'changed';
           assert.notEqual(emailTransport.getMessages()[0].link, 'changed');
         } else {
@@ -165,7 +168,18 @@ test('auth email failures preserve account-existence parity and sanitized server
     try {
       const headers = { Origin: 'https://pitch.example.test', Host: 'pitch.example.test', 'Content-Type': 'application/json' };
       async function post(route, email) {
-        return fetch(fixture.url + route, { method: 'POST', headers, body: JSON.stringify({ email, password, name: 'Singer' }) });
+        // Node fetch derives Host from the connection URL; the explicit HTTP
+        // fixture must model the HTTPS reverse proxy Host separately.
+        return new Promise((resolve, reject) => {
+          const outgoing = httpRequest(fixture.url + route, { method: 'POST', headers }, (incoming) => {
+            let body = '';
+            incoming.setEncoding('utf8');
+            incoming.on('data', (chunk) => { body += chunk; });
+            incoming.on('end', () => resolve(new Response(body, { status: incoming.statusCode })));
+          });
+          outgoing.on('error', reject);
+          outgoing.end(JSON.stringify({ email, password, name: 'Singer' }));
+        });
       }
       const signup = await post('/api/auth/sign-up/email', recipient);
       assert.equal(signup.status, 200, 'delivery outage must not reveal signup state');
