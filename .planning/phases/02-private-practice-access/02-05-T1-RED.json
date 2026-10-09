@@ -1,0 +1,9 @@
+{
+  "command": "node --test --test-reporter=tap --test-name-pattern='Resend adapter sends exactly' tests/email-transport.test.cjs",
+  "exitCode": 1,
+  "output": "TAP version 13\n# Subtest: Resend adapter sends exactly one authenticated HTTPS account email\nnot ok 1 - Resend adapter sends exactly one authenticated HTTPS account email\n  ---\n  duration_ms: 2.6309\n  type: 'test'\n  location: 'C:\\\\Users\\\\casti\\\\projects\\\\pitch-proof\\\\tests\\\\email-transport.test.cjs:31:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    account confirmation must send one request\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (C:\\Users\\casti\\projects\\pitch-proof\\tests\\email-transport.test.cjs:39:10)\n    async Test.run (node:internal/test_runner/test:1389:7)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 109.9973\n",
+  "targetTest": "Resend adapter sends exactly one authenticated HTTPS account email",
+  "targetFile": "tests/email-transport.test.cjs",
+  "expected": "Verification sends one authenticated HTTPS email request.",
+  "actual": "No production adapter exists; no request was sent (0 instead of 1)."
+}
