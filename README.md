@@ -1,50 +1,63 @@
 # Pitch Proof
 
-Pitch Proof is a real-time web application designed to help singers improve their vocal accuracy. Using advanced autocorrelation algorithms and AI-driven feedback, it provides instant visual tuning data and professional-style coaching summaries.
+Pitch Proof is a browser practice platform for one singer and one selected melodic part. The current guest example is an original, manually verified vocal exercise with a pickup, four measures, and a fixed 96 BPM tempo. Microphone pitch observations are provisional; they are not measured grades. Personal PDF uploads, score correction, authoritative feedback, and saved practice history arrive in later phases.
 
-## Features
+## Guest example and Phase 1 checks
 
-- **Real-time Pitch Detection:** Analyzes audio input to identify musical notes and octave information.
-- **Cents Meter:** Visualizes how sharp or flat a note is within a 100-cent range.
-- **Waveform Visualization:** Displays a live canvas representation of the audio signal.
-- **Session Recording:** Records your singing and allows for immediate playback or download as a `.webm` file.
-- **AI Vocal Coach:** Uses the Anthropic Claude API to analyze your performance data and provide encouraging, specific feedback based on your pitch accuracy throughout the session.
+Use a modern browser with microphone support. Serve the example locally:
 
-## Technical Overview
+```sh
+python -m http.server 8000
+```
 
-- **Web Audio API:** Utilized for capturing microphone input, generating frequency data, and managing the audio context.
-- **Autocorrelation Algorithm:** A robust time-domain pitch detection method used to determine the fundamental frequency of the voice.
-- **Anthropic API Integration:** Sends summarized pitch logs to Claude (via the `claude-sonnet` model) to generate personalized coaching tips.
-- **MediaRecorder API:** Handles the capture and blob generation for audio playback and downloads.
+Open http://localhost:8000, select the starting measure, check the microphone, then start, stop, and retry. Practice includes a count-in and score-position display. Microphone permission requires localhost or HTTPS. The example needs no account or external service key.
 
-## Prerequisites
+Run the fixture, timeline, audio lifecycle, score-position replay, startup, and accessibility checks with:
 
-- A modern web browser with `getUserMedia` support (Chrome, Firefox, Edge, etc.).
-- A local web server to serve the files (required for microphone permissions in most browsers).
-- An **Anthropic API Key** for the AI feedback feature.
+```sh
+npm test
+```
 
-## Setup
+On Windows PowerShell use `npm.cmd test`. Real microphone permission, count-in sound, and device behavior also need browser verification; automated tests do not establish those physical checks.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <your-repo-url>
-    ```
-2.  **Configure the API Key:**
-    Open `script.js` and locate the following section:
-    ```javascript
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': 'YOUR_API_KEY_HERE', // Replace with your actual key
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    ```
-3.  **Run the app:**
-    Use a tool like Live Server (VS Code extension) or a simple Python server to run the project:
-    ```bash
-    python -m http.server 8000
-    ```
+## Local account server
 
-## Security Note
+With the existing dependencies available, start the Node server:
 
-This project currently makes direct browser-to-API calls for demonstration purposes. In a production environment, it is recommended to proxy these requests through a backend server to keep your API keys secure.
+```sh
+node server/index.mjs
+```
+
+Open http://localhost:3000 for the guest example. The auth API requires email confirmation before private access. Local mode stores accounts in an in-memory database by default, so restarting clears them. For local persistence, set `DATABASE_PATH` to a private SQLite file outside the public repository and set a stable `BETTER_AUTH_SECRET` of at least 32 characters in the server environment. The parent directory must exist. `PORT` defaults to 3000; `PUBLIC_BASE_URL` defaults to http://localhost on that port. `HOST` defaults to 127.0.0.1.
+
+Development and test modes capture verification and password-reset mail in process memory. They send no network requests and require no Resend account. Tests access messages only through their injected transport instance; there is no public mail inspector, token URL log, or captured-mail endpoint. An ordinary local CLI process does not print confirmation links. Account UI and ownership acceptance are still Phase 2 work.
+
+Focused mail and account checks:
+
+```sh
+node --test tests/email-transport.test.cjs tests/auth-flow.test.cjs
+```
+
+These checks use isolated databases, captured messages, and stubbed fetch. They never send real mail.
+
+## Production account email prerequisites
+
+This repository contains no production credentials or deployment host. Before opening real accounts, configure HTTPS termination, private durable SQLite storage and backups, then set these values in the server host's environment or secret manager:
+
+| Setting | Required production value |
+| --- | --- |
+| `NODE_ENV` | `production` |
+| `PUBLIC_BASE_URL` | The exact HTTPS origin, with no path, query, or embedded credentials |
+| `BETTER_AUTH_SECRET` | A stable random secret of at least 32 characters |
+| `DATABASE_PATH` | An absolute durable SQLite file path outside public assets; its private parent directory must exist |
+| `RESEND_API_KEY` | A server-only key provisioned in Resend Dashboard → API Keys; use sending access restricted to the needed domain |
+| `RESEND_FROM` | A sender on the verified domain, such as `Pitch Proof <accounts@your-domain.example>` |
+| `PORT` / `HOST` | Optional listener settings; default 3000 / 127.0.0.1 behind the HTTPS proxy |
+
+In Resend Dashboard → Domains, add the sending domain, configure the required DNS records, and wait for verification before using that sender. See Resend's [domain verification instructions](https://resend.com/docs/dashboard/domains/introduction) and [API key permissions](https://resend.com/docs/dashboard/api-keys/introduction).
+
+Start with `node server/index.mjs` after the environment is configured. Missing required settings stop startup and report field names without printing values. Invalid origins, weak auth secrets, malformed senders, and in-memory production storage are rejected. HTTPS protects the public account links; `RESEND_FROM` is an email address, not a URL. Forward the original public Host header through the HTTPS proxy so the auth origin checks match `PUBLIC_BASE_URL`. Before multiple server replicas are exposed, replace the process-local auth limiter with a shared limiter and validate the storage architecture.
+
+The server uses built-in fetch to [send one transactional message through Resend](https://resend.com/docs/api-reference/emails/send-email) at `https://api.resend.com/emails`, with a Bearer key. No Resend SDK or browser key is used. Only confirmation and reset mail is supported. Requests and response-body waits time out after 10 seconds; redirects, unsuccessful statuses, and malformed acceptance responses fail with a fixed diagnostic. Provider acceptance does not guarantee inbox delivery: an operator must monitor bounces and delivery in Resend. A delivery outage preserves generic signup/resend/reset responses to avoid exposing account existence; request a fresh message if none arrives. Password reset requires a fresh sign-in and revokes existing sessions on all devices.
+
+Keep secrets in the server environment. Never put a key in browser code, commit environment files, or log full confirmation/reset links. The server exposes only declared browser assets; private server modules, storage, and captured mail are not public routes. The complete external API scope is recorded in [.planning/phases/02-private-practice-access/COVERAGE.md](.planning/phases/02-private-practice-access/COVERAGE.md).

@@ -2,7 +2,7 @@
 
 > Full coverage by default. Opt-outs are explicit, reasoned decisions.
 
-Scope: the server uses only Resend's transactional single-email send operation to deliver account confirmation and password-reset messages. This matrix was derived from the official [Resend API Reference](https://resend.com/docs/api-reference/introduction), checked 2026-09-29. The adapter uses HTTPS, a server-side Bearer API key, a User-Agent, and checked HTTP status responses.
+Scope: the server uses only Resend's transactional single-email send operation to deliver account confirmation and password-reset messages. This matrix was derived from the official [Resend API Reference](https://resend.com/docs/api-reference/introduction), rechecked 2026-10-09. The [send contract](https://resend.com/docs/api-reference/emails/send-email) uses POST https://api.resend.com/emails with server-side Bearer authentication. The adapter includes a User-Agent, rejects redirects and unsuccessful or malformed responses, and bounds request/body waits to 10 seconds. Tests inject capture or stub fetch; no live message was sent.
 
 | capability | decision | reason |
 |---|---|---|
@@ -16,6 +16,7 @@ Scope: the server uses only Resend's transactional single-email send operation t
 | Inbox labels CRUD | OPT-OUT | No mailbox or labeling workflow exists. |
 | Inbox threads list/read/update/delete/reply/forward | OPT-OUT | No inbound conversation workflow exists. |
 | Inbox drafts create/read/update/delete/send | OPT-OUT | Account email callbacks generate their own one-recipient messages; there is no inbox draft surface. |
+| Inbox agent settings read/update | OPT-OUT | Pitch Proof has no managed inbox or email agent. |
 | Broadcasts create/read/update/delete/send/cancel/duplicate and reports | OPT-OUT | Phase 2 sends security messages only; it has no newsletter or campaign feature. |
 | Automations CRUD, duplicate/stop, and run history | OPT-OUT | Signup and reset messages are triggered directly by Better Auth callbacks, not provider campaigns. |
 | Events create/send/read/list/update/delete | OPT-OUT | No marketing event or automation trigger is required. |
@@ -33,3 +34,5 @@ Scope: the server uses only Resend's transactional single-email send operation t
 | Authorized app grants list/revoke | OPT-OUT | The adapter authenticates with one server-held API key and does not use Resend OAuth grants. |
 | Webhooks CRUD, secret rotation, event and attempt inspect/replay | OPT-OUT | Provider delivery events are not needed to establish account verification or password reset; the user can request another message. |
 | OAuth client registration, authorization, token, and revocation | OPT-OUT | The server uses an operator-managed API key and does not connect user Resend accounts. |
+
+Implementation: server/email.mjs; configuration: server/index.mjs; evidence: tests/email-transport.test.cjs. D-04 and D-06 use one private callback interface. Provider failures reject with a fixed error code; auth callbacks record only that fixed server diagnostic and preserve public known/unknown response parity. Provider acceptance does not establish inbox delivery. Sender verification and delivery monitoring stay in the operator's Resend dashboard.

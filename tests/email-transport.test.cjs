@@ -198,3 +198,43 @@ test('auth email failures preserve account-existence parity and sanitized server
     return app;
   } });
 });
+
+test('production startup rejects missing mail settings and unsafe origins without exposing values', async () => {
+  const { createServerConfiguration, startServer } = await import('../server/index.mjs');
+  const env = { NODE_ENV: 'production', PUBLIC_BASE_URL: 'https://pitch.example.test', BETTER_AUTH_SECRET: 'test-server-secret-at-least-thirty-two-characters', DATABASE_PATH: '/private/pitch-proof.sqlite', RESEND_API_KEY: apiKey, RESEND_FROM: from };
+  for (const name of ['RESEND_API_KEY', 'RESEND_FROM', 'PUBLIC_BASE_URL', 'BETTER_AUTH_SECRET', 'DATABASE_PATH']) {
+    const incomplete = { ...env };
+    delete incomplete[name];
+    await assert.rejects(startServer({ env: incomplete, fetchImpl: () => { assert.fail('startup must not call provider'); } }), (error) => {
+      assert.ok(error.message.includes(name));
+      assert.doesNotMatch(String(error), /re_test_secret|test-server-secret|private-token/);
+      return true;
+    });
+  }
+  for (const overrides of [{ PUBLIC_BASE_URL: 'http://localhost:3000' }, { PUBLIC_BASE_URL: 'https://user:private-token@pitch.example.test' }, { BETTER_AUTH_SECRET: 'short' }, { DATABASE_PATH: ':memory:' }, { NODE_ENV: 'staging' }]) {
+    assert.throws(() => createServerConfiguration({ ...env, ...overrides }), (error) => {
+      assert.doesNotMatch(String(error), /re_test_secret|private-token/);
+      return true;
+    });
+  }
+  await assert.rejects(startServer({ env: { ...env, RESEND_FROM: 'invalid\nprivate-token' } }), /RESEND_FROM/);
+  assert.equal(createServerConfiguration(env).production, true);
+});
+
+test('local startup captures mail and exposes only declared public assets', async () => {
+  const { startServer, createServerConfiguration } = await import('../server/index.mjs');
+  assert.throws(() => createServerConfiguration({ NODE_ENV: 'development', PUBLIC_BASE_URL: 'https://pitch.example.test' }), /local/);
+  const running = await startServer({ env: { NODE_ENV: 'test', PUBLIC_BASE_URL: 'http://127.0.0.1' }, listenPort: 0, fetchImpl: () => { assert.fail('local mode must not send mail'); } });
+  try {
+    await running.app.locals.auth.api.signUpEmail({ body: { email: recipient, password, name: 'Singer' } });
+    assert.equal(running.emailTransport.getMessages().length, 1);
+    const origin = `http://127.0.0.1:${running.server.address().port}`;
+    assert.match(await (await fetch(origin + '/')).text(), /Pitch Proof/);
+    for (const route of ['/server/email.mjs', '/.env', '/.planning/STATE.md', '/api/email', '/api/emails', '/api/auth/captured-emails']) {
+      const response = await fetch(origin + route);
+      assert.equal(response.status, 404, route);
+      assert.doesNotMatch(await response.text(), /re_test_secret|private-token|singer@example/);
+    }
+  } finally { await running.close(); }
+  assert.equal(running.app.locals.database.open, false);
+});
