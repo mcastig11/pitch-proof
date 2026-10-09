@@ -13,8 +13,17 @@
     button { border: 1px solid #aab9ba; border-radius: 8px; background: white; color: inherit; padding: 8px 16px; cursor: pointer; }
     button:disabled, select:disabled { cursor: not-allowed; opacity: .55; }
     button:focus-visible, select:focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    a, summary { color: inherit; min-height: 44px; min-width: 44px; }
+    a { display: inline-block; padding: 8px 0; text-decoration: underline; }
+    a:focus-visible, summary:focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    summary { padding: 8px 16px; border: 1px solid #aab9ba; border-radius: 8px; background: white; cursor: pointer; }
+    .account-nav { display: flex; flex-wrap: wrap; align-items: start; gap: 16px; max-width: 100%; }
+    .account-nav details { max-width: 100%; } .account-nav details button { margin-top: 8px; }
+    .invite { max-width: 760px; margin: 16px 0 24px; overflow-wrap: anywhere; }
+    .invite p { margin-bottom: 4px; } .invite a { font-size: 14px; }
+    #account-status { max-width: 560px; overflow-wrap: anywhere; }
     .page { max-width: 1200px; padding: 32px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 32px; }
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 32px; }
     header strong { font-size: 20px; }
     header span, .muted { color: #506063; }
     h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
@@ -57,12 +66,16 @@
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; } }
   </style>
 </head>
-<body>
+<body data-page="example">
   <main class="page">
-    <header><strong>Pitch Proof</strong><span>Example practice</span></header>
+    <header><strong>Pitch Proof</strong><span>Example practice</span>
+      <a id="guest-signin" href="/auth?mode=signin">Sign in</a>
+      <nav id="account-nav" class="account-nav" aria-label="Account" hidden><a href="/workspace">My space</a><details id="account-menu"><summary id="account-trigger">Account</summary><button id="sign-out" type="button">Sign out</button></details></nav>
+    </header>
     <section aria-labelledby="page-title">
       <h1 id="page-title">Practice the example score</h1>
       <p class="scope">This verified example lets you try score-guided practice. Pitch and timing observations are provisional, not grades.</p>
+      <div id="guest-invite" class="invite"><p class="muted">Create your private space. Your own scores are coming next.</p><a href="/auth?mode=signup">Create your private space</a></div>
     </section>
     <section class="panel setup" aria-labelledby="setup-heading">
       <div class="setup-title"><h2 id="setup-heading">Prepare your practice</h2><p id="fixture-title" class="muted">Loading example score…</p></div>
@@ -105,10 +118,13 @@
       <button id="retry-button" type="button" hidden>Retry attempt</button>
       <button id="reload-button" type="button" hidden>Reload example</button>
     </div>
+    <div id="attempt-invite" class="invite" hidden><p class="muted">Create your private space. Your own scores are coming next.</p><a href="/auth?mode=signup">Create your private space</a></div>
+    <p id="account-status" class="muted" role="status" aria-live="polite"></p>
   <p id="live-announcement" class="muted" role="status" aria-live="polite"></p>
   </main>
   <script src="practice-fixture.js"></script>
   <script src="practice-audio.js"></script>
   <script src="script.js"></script>
+  <script src="/client/workspace.js"></script>
 </body>
 </html>

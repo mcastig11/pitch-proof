@@ -242,6 +242,8 @@
     ui.inputStatus.textContent = 'Waiting for sound';
     setIdleAfterStop(`Attempt ended. You can retry from measure ${originalStart === 'pickup' ? 'Pickup' : originalStart}. No grades were saved.`);
     setText(ui.position, 'Microphone not checked');
+    // Account presentation receives only attempt completion, never audio data.
+    document.dispatchEvent?.(new Event('pitchproof:attempt-ended'));
   }
 
   async function checkMicrophone() {

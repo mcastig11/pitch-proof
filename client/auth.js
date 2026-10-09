@@ -32,7 +32,8 @@
     generation += 1; busy = false; mode = next; clearSecrets();
     const [heading, body, submit] = definitions[next];
     document.title = `Pitch Proof — ${heading}`;
-    get('auth-heading').textContent = heading; get('auth-body').textContent = body;
+    get('auth-heading').textContent = heading;
+    get('auth-body').textContent = next === 'signin' && returnTo ? 'Sign in to open your private space.' : body;
     get('auth-form').hidden = !submit; get('auth-submit').disabled = false; get('auth-submit').textContent = submit || '';
     get('email-field').hidden = next === 'reset';
     get('password-field').hidden = !['signup', 'signin', 'correction', 'reset'].includes(next);
