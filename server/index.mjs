@@ -39,7 +39,8 @@ export async function startServer({ env = process.env, fetchImpl = globalThis.fe
     : createCaptureEmail();
   const app = await createApp({ databasePath: config.databasePath, emailTransport, publicBaseURL: config.publicBaseURL, secret: config.secret });
   // Serve only declared public assets, never the repo root or captured mail.
-  const assets = { '/': 'index.html', '/index.html': 'index.html', '/script.js': 'script.js', '/practice-fixture.js': 'practice-fixture.js', '/practice-audio.js': 'practice-audio.js' };
+  const assets = { '/': 'index.html', '/index.html': 'index.html', '/script.js': 'script.js', '/practice-fixture.js': 'practice-fixture.js', '/practice-audio.js': 'practice-audio.js',
+    '/auth': 'auth.html', '/auth.html': 'auth.html', '/client/auth.js': 'client/auth.js' };
   for (const [route, file] of Object.entries(assets)) app.get(route, (_request, response) => response.sendFile(resolve(projectRoot, file)));
   const server = createServer(app);
   try {

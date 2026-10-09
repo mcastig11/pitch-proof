@@ -1,5 +1,5 @@
 import express from 'express';
-import { randomBytes } from 'node:crypto';
+import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
 import { hashPassword, verifyPassword } from 'better-auth/crypto';
 import { z } from 'zod';
@@ -80,6 +80,19 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
     });
 
     const authLimiter = createAuthLimiter(clock, rateLimits);
+    const receiptName = 'pitch-proof.confirmation';
+    const receiptOptions = { httpOnly: true, sameSite: 'lax', secure: authOptions.baseURL.startsWith('https:'), path: '/api/auth/confirmation-result', maxAge: 60000 };
+    const signReceipt = (value) => createHmac('sha256', authOptions.secret).update(value).digest('hex');
+    app.get('/api/auth/confirmation-result', (request, response) => {
+      const receipt = request.headers.cookie?.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${receiptName}=`))?.slice(receiptName.length + 1) || '';
+      const [issued, nonce, signature = ''] = receipt.split('.');
+      const expected = signReceipt(`${issued}.${nonce}`);
+      const age = Number(clock()) - Number(issued);
+      const confirmed = /^[a-f0-9]{64}$/.test(signature) && /^[a-f0-9]{32}$/.test(nonce || '')
+        && age >= 0 && age < 60000 && timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+      response.clearCookie(receiptName, receiptOptions);
+      return response.status(confirmed ? 200 : 400).json({ confirmed });
+    });
     app.get('/api/auth/verify-email', (request, response) => {
       // This route owns one-use verification; no stateless fallback may verify
       // an address after the original account corrected it or was removed.
@@ -90,10 +103,19 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
         try {
           callback = new URL(request.query.callbackURL, authOptions.baseURL);
           if (callback.origin !== authOptions.baseURL) throw new Error('Invalid callback');
+          if (callback.pathname !== '/' && !(callback.pathname === '/auth' && callback.searchParams.get('mode') === 'verify')) throw new Error('Invalid callback');
         } catch { return response.status(403).json({ error: 'Request origin is not allowed.' }); }
       }
       const verified = consumeEmailVerification(database, token, clock());
       if (callback) {
+        callback.searchParams.delete('confirmed');
+        callback.searchParams.delete('token');
+        callback.searchParams.delete('error');
+        if (verified && callback.pathname === '/auth') {
+          const value = `${Number(clock())}.${randomBytes(16).toString('hex')}`;
+          response.cookie(receiptName, `${value}.${signReceipt(value)}`, receiptOptions);
+          callback.searchParams.set('confirmed', '1');
+        }
         if (!verified) callback.searchParams.set('error', 'INVALID_TOKEN');
         return response.redirect(callback.pathname + callback.search + callback.hash);
       }
@@ -121,7 +143,7 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
         }
         if (!changed) return response.status(401).json({ error: 'Email or password is incorrect.' });
         await authOptions.emailVerification.sendVerificationEmail({
-          user: { ...user, email: newEmail }, url: `${authOptions.baseURL}/api/auth/verify-email?callbackURL=%2F`,
+          user: { ...user, email: newEmail }, url: `${authOptions.baseURL}/api/auth/verify-email?callbackURL=%2Fauth%3Fmode%3Dverify`,
         });
         return response.json({ status: true, message: 'Check your email for the next step if the address is eligible.' });
       }
@@ -159,7 +181,7 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
         return response.status(403).json({ error: 'Request origin is not allowed.' });
       }
       const firstSignIn = claimFirstSignIn(database, response.locals.session.user.id);
-      return response.json({ destination: firstSignIn ? '/' : '/workspace', firstSignIn });
+      return response.json({ destination: firstSignIn && request.body?.returnTo !== '/workspace' ? '/' : '/workspace', firstSignIn });
     });
     app.get('/api/me/workspace', requireVerifiedSession, (_request, response) => {
       return response.json({ identity: response.locals.session.user.name });

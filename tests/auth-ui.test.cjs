@@ -4,6 +4,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const test = require('node:test');
 const { browserHarness } = require('./support/browser-harness.cjs');
+const { withServerFixture } = require('./support/server-fixture.cjs');
+const { request: httpRequest } = require('node:http');
 const read = (file) => fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
 const reply = (data = {}, status = 200) => new Response(JSON.stringify(data), { status });
 const generic = 'Check your email for the next step if the address is eligible.';
@@ -98,6 +100,43 @@ test('verification and reset links never fabricate success and reset requires fr
   await invalid.get('auth-form').emit('submit'); assert.equal(invalid.get('auth-form').hidden, true); assert.match(invalid.get('auth-body').textContent, /no longer valid/);
 });
 test('browser auth source never persists passwords or bearer tokens', () => { assert.doesNotMatch(read('client/auth.js'), /localStorage|sessionStorage|document\.cookie/); });
+
+async function withUiServer(callback) {
+  const { createApp } = await import('../server/app.mjs'); let app;
+  return withServerFixture(async (fixture) => {
+    const request = (route, { body, cookie } = {}) => new Promise((resolve, reject) => {
+      const outgoing = httpRequest(`${fixture.url}${route}`, { method: body ? 'POST' : 'GET', headers: {
+        host: '127.0.0.1', origin: 'http://127.0.0.1', ...(body ? { 'content-type': 'application/json' } : {}), ...(cookie ? { cookie } : {}),
+      } }, (incoming) => {
+        const chunks = []; incoming.on('data', (chunk) => chunks.push(chunk)); incoming.on('end', () => {
+          const headers = new Headers(); for (let i = 0; i < incoming.rawHeaders.length; i += 2) headers.append(incoming.rawHeaders[i], incoming.rawHeaders[i + 1]);
+          resolve(new Response(Buffer.concat(chunks), { status: incoming.statusCode, headers }));
+        }); incoming.on('error', reject);
+      }); outgoing.on('error', reject); outgoing.end(body ? JSON.stringify(body) : undefined);
+    });
+    try { await callback(fixture, request); } finally { app.locals.closeDatabase(); }
+  }, { createApp: async ({ database, emailTransport }) => {
+    app = await createApp({ databasePath: database.prepare('PRAGMA database_list').get().file, emailTransport, publicBaseURL: 'http://127.0.0.1' }); return app;
+  } });
+}
+
+test('real verification callback proves confirmation server-side and rejects unsafe routes', async () => {
+  await withUiServer(async (fixture, request) => {
+    assert.equal((await request('/api/auth/confirmation-result')).status, 400, 'query flags alone cannot claim confirmation');
+    await request('/api/auth/sign-up/email', { body: { email: 'callback@example.test', password: 'strong-password', name: 'Singer', callbackURL: '/auth?mode=verify' } });
+    const link = new URL(fixture.emailTransport.getLink('verification', 'callback@example.test'));
+    const verified = await request(link.pathname + link.search);
+    assert.equal(verified.headers.get('location'), '/auth?mode=verify&confirmed=1');
+    const receipt = verified.headers.getSetCookie().find((value) => value.startsWith('pitch-proof.confirmation='));
+    assert.match(receipt, /HttpOnly/); assert.doesNotMatch(receipt, /session_token/);
+    const proof = await request('/api/auth/confirmation-result', { cookie: receipt.split(';')[0] });
+    assert.deepEqual(await proof.json(), { confirmed: true }); assert.equal(proof.headers.get('cache-control'), 'no-store');
+    const used = await request(link.pathname + link.search + '&confirmed=1');
+    assert.match(used.headers.get('location'), /error=INVALID_TOKEN/); assert.doesNotMatch(used.headers.get('location'), /confirmed=1/);
+    assert.equal((await request('/api/auth/verify-email?token=invalid&callbackURL=https%3A%2F%2Fevil.example')).status, 403);
+    assert.equal((await request('/api/auth/verify-email?token=invalid&callbackURL=%2Fserver%2Fapp.mjs')).status, 403);
+  });
+});
 
 test.todo('welcome page gives Try the example and Sign in equal weight');
 test.todo('expired workspace session clears private content and offers sign-in');

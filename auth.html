@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Pitch Proof — Sign in</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17292b; background: #fcfbf8; font-synthesis: none; }
+    * { box-sizing: border-box; } body { margin: 0; font-size: 16px; line-height: 1.5; }
+    .page { max-width: 1200px; padding: 32px; margin: 0 auto; } header { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; } header strong { font-size: 20px; font-weight: 600; }
+    .panel { max-width: 560px; background: #eaf0ef; border-radius: 12px; padding: 24px; margin: 0 auto 24px; overflow-wrap: anywhere; }
+    h1 { font-size: 28px; font-weight: 600; line-height: 1.2; margin: 0 0 8px; } p { margin: 0 0 16px; }
+    .field { display: grid; gap: 4px; margin-bottom: 16px; min-width: 0; } label, .requirement { font-size: 14px; font-weight: 600; line-height: 1.4; }
+    input, button, a { font: inherit; color: inherit; } input, button, .action { min-height: 44px; min-width: 44px; padding: 8px 16px; border: 1px solid #aab9ba; border-radius: 8px; background: #fff; }
+    input { width: 100%; max-width: 100%; } button { cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; }
+    a { display: inline-block; padding: 8px 0; text-decoration: underline; } .action { text-align: center; }
+    :is(input, button, a, summary):focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
+    .primary { background: #135e63; border-color: #135e63; color: white; } .error { color: #a32929; } .muted { color: #506063; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; } [hidden] { display: none !important; }
+    @media (max-width: 959px) { .page { padding: 24px; } }
+    @media (max-width: 599px) { .page { padding: 16px; } .panel { padding: 16px; } .actions > * { width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header><strong>Pitch Proof</strong><a href="/">Try the example</a></header>
+    <section class="panel" aria-labelledby="auth-heading">
+      <h1 id="auth-heading" tabindex="-1">Sign in</h1>
+      <p id="auth-body"></p>
+      <form id="auth-form" novalidate>
+        <div class="field" id="email-field"><label id="email-label" for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error"><span id="email-error" class="error"></span></div>
+        <div class="field" id="password-field"><label id="password-label" for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="password-requirement password-error"><span id="password-requirement" class="requirement" hidden>Use 8–128 characters.</span><span id="password-error" class="error"></span></div>
+        <div class="field" id="newEmail-field" hidden><label for="newEmail">Correct email address</label><input id="newEmail" name="newEmail" type="email" autocomplete="email" aria-describedby="newEmail-error"><span id="newEmail-error" class="error"></span></div>
+        <button id="auth-submit" class="primary" type="submit">Sign in</button>
+      </form>
+      <p id="auth-status" class="muted" role="status" aria-live="polite" tabindex="-1"></p>
+      <div class="actions">
+        <button id="resend" type="button" hidden>Resend confirmation email</button>
+        <button id="correct-email" type="button" hidden>Correct email address</button>
+        <a id="recover-link" class="action" href="/auth?mode=resend" hidden>Resend confirmation email</a>
+        <a id="sign-in-link" href="/auth?mode=signin">Sign in</a>
+        <a id="signup-link" href="/auth?mode=signup">Need an account? Create your private space.</a>
+        <a id="reset-link" href="/auth?mode=reset-request">Forgot your password?</a>
+        <a id="example-link" class="action" href="/">Try the example</a>
+      </div>
+    </section>
+  </main>
+  <script src="/client/auth.js"></script>
+</body>
+</html>
