@@ -1,0 +1,9 @@
+{
+  "command": "node --test --test-reporter=tap --test-name-pattern='repository list and get' tests/ownership.test.cjs",
+  "exitCode": 1,
+  "targetTest": "repository list and get always scope metadata to the required owner",
+  "targetFile": "tests/ownership.test.cjs",
+  "expected": "A callable owner-scoped repository that requires owner identity for list/get",
+  "actual": "Repository export is undefined before implementation",
+  "output": "TAP version 13\n# Subtest: repository list and get always scope metadata to the required owner\nnot ok 1 - repository list and get always scope metadata to the required owner\n  ---\n  failureType: 'testCodeFailure'\n  error: |-\n    owner-scoped repository must exist\n    + actual - expected\n    + 'undefined'\n    - 'function'\n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'function'\n  actual: 'undefined'\n  operator: 'strictEqual'\n  ...\n1..1\n# tests 1\n# pass 0\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n"
+}
