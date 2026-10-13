@@ -15,6 +15,19 @@ export async function migrateAuthDatabase(authOptions) {
   await runMigrations();
 }
 
+// D-01/D-07: this is an inert ownership contract, not score-byte storage.
+// The account FK is the same canonical user.id used by validated sessions.
+export function migratePrivateResources(database) {
+  database.exec(`CREATE TABLE IF NOT EXISTS private_resources (
+    id TEXT PRIMARY KEY NOT NULL,
+    owner_user_id TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+    mime_type TEXT NOT NULL,
+    byte_length INTEGER NOT NULL CHECK (byte_length >= 0),
+    provider_key TEXT NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS private_resources_owner_id ON private_resources(owner_user_id, id)`);
+}
+
 // One conditional write claims first use even when requests race. Identity
 // comes exclusively from the verified Better Auth session, never a request ID.
 export function claimFirstSignIn(database, userId) {
