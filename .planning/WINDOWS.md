@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 15
+open_count: 7
 waived_count: 0
-fixed_count: 7
+fixed_count: 15
 total_count: 22
-last_updated: 2026-10-09T00:33:52.711Z
+last_updated: 2026-10-13T20:26:37.276Z
 ---
 
 # Broken Windows Ledger
@@ -22,14 +22,14 @@ last_updated: 2026-10-09T00:33:52.711Z
 | 5 | 02 | skipped-test | tests/auth-flow.test.cjs | 176 | Concurrent duplicate signup test remains a pre-existing TODO assigned to Plan 02-04. | fixed |  | 2026-10-07T05:45:28.776Z | 2026-10-09T00:33:39.087Z |
 | 6 | 02 | skipped-test | tests/auth-flow.test.cjs | 177 | Password-reset flow test remains a pre-existing TODO assigned to Plan 02-04. | fixed |  | 2026-10-07T05:45:29.394Z | 2026-10-09T00:33:39.771Z |
 | 7 | 02 | skipped-test | tests/auth-flow.test.cjs | 178 | Pending-account cleanup test remains a pre-existing TODO assigned to Plan 02-04. | fixed |  | 2026-10-07T05:45:30.019Z | 2026-10-09T00:33:40.534Z |
-| 8 | 02 | skipped-test | tests/auth-ui.test.cjs | 8 | Plan 02-06 pending acceptance test: pending email state has clear confirmation copy, resend, and correction actions. | open |  | 2026-10-09T00:33:41.550Z |  |
-| 9 | 02 | skipped-test | tests/auth-ui.test.cjs | 9 | Plan 02-06 pending acceptance test: signup, sign-in, and reset forms use accessible native semantics. | open |  | 2026-10-09T00:33:42.443Z |  |
-| 10 | 02 | skipped-test | tests/auth-ui.test.cjs | 10 | Plan 02-06 pending acceptance test: first sign-in returns to example and later sign-in opens workspace. | open |  | 2026-10-09T00:33:43.230Z |  |
-| 11 | 02 | skipped-test | tests/auth-ui.test.cjs | 11 | Plan 02-06 pending acceptance test: welcome page gives Try the example and Sign in equal weight. | open |  | 2026-10-09T00:33:44.153Z |  |
-| 12 | 02 | skipped-test | tests/auth-ui.test.cjs | 12 | Plan 02-06 pending acceptance test: expired workspace session clears private content and offers sign-in. | open |  | 2026-10-09T00:33:44.993Z |  |
-| 13 | 02 | skipped-test | tests/auth-ui.test.cjs | 13 | Plan 02-06 pending acceptance test: signed-in example shows My space and keeps sign-out in the account menu. | open |  | 2026-10-09T00:33:45.845Z |  |
-| 14 | 02 | skipped-test | tests/auth-ui.test.cjs | 14 | Plan 02-06 pending acceptance test: D-03 invitation appears near practice and once after an attempt with exact copy. | open |  | 2026-10-09T00:33:46.587Z |  |
-| 15 | 02 | skipped-test | tests/auth-ui.test.cjs | 15 | Plan 02-06 pending acceptance test: guest example practice continues uninterrupted after session expiry. | open |  | 2026-10-09T00:33:47.280Z |  |
+| 8 | 02 | skipped-test | tests/auth-ui.test.cjs | 8 | Plan 02-06 pending acceptance test: pending email state has clear confirmation copy, resend, and correction actions. | fixed |  | 2026-10-09T00:33:41.550Z | 2026-10-13T20:26:30.081Z |
+| 9 | 02 | skipped-test | tests/auth-ui.test.cjs | 9 | Plan 02-06 pending acceptance test: signup, sign-in, and reset forms use accessible native semantics. | fixed |  | 2026-10-09T00:33:42.443Z | 2026-10-13T20:26:31.140Z |
+| 10 | 02 | skipped-test | tests/auth-ui.test.cjs | 10 | Plan 02-06 pending acceptance test: first sign-in returns to example and later sign-in opens workspace. | fixed |  | 2026-10-09T00:33:43.230Z | 2026-10-13T20:26:32.267Z |
+| 11 | 02 | skipped-test | tests/auth-ui.test.cjs | 11 | Plan 02-06 pending acceptance test: welcome page gives Try the example and Sign in equal weight. | fixed |  | 2026-10-09T00:33:44.153Z | 2026-10-13T20:26:33.211Z |
+| 12 | 02 | skipped-test | tests/auth-ui.test.cjs | 12 | Plan 02-06 pending acceptance test: expired workspace session clears private content and offers sign-in. | fixed |  | 2026-10-09T00:33:44.993Z | 2026-10-13T20:26:34.173Z |
+| 13 | 02 | skipped-test | tests/auth-ui.test.cjs | 13 | Plan 02-06 pending acceptance test: signed-in example shows My space and keeps sign-out in the account menu. | fixed |  | 2026-10-09T00:33:45.845Z | 2026-10-13T20:26:35.249Z |
+| 14 | 02 | skipped-test | tests/auth-ui.test.cjs | 14 | Plan 02-06 pending acceptance test: D-03 invitation appears near practice and once after an attempt with exact copy. | fixed |  | 2026-10-09T00:33:46.587Z | 2026-10-13T20:26:36.184Z |
+| 15 | 02 | skipped-test | tests/auth-ui.test.cjs | 15 | Plan 02-06 pending acceptance test: guest example practice continues uninterrupted after session expiry. | fixed |  | 2026-10-09T00:33:47.280Z | 2026-10-13T20:26:37.276Z |
 | 16 | 02 | skipped-test | tests/ownership.test.cjs | 8 | Plan 02-07 pending acceptance test: unauthenticated requests cannot read private resource metadata or bytes. | open |  | 2026-10-09T00:33:48.068Z |  |
 | 17 | 02 | skipped-test | tests/ownership.test.cjs | 9 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource metadata. | open |  | 2026-10-09T00:33:48.787Z |  |
 | 18 | 02 | skipped-test | tests/ownership.test.cjs | 10 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource bytes. | open |  | 2026-10-09T00:33:49.498Z |  |
@@ -138,10 +138,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 8,
     "description": "Plan 02-06 pending acceptance test: pending email state has clear confirmation copy, resend, and correction actions.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:41.550Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:30.081Z",
     "milestone": null
   },
   {
@@ -151,10 +151,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 9,
     "description": "Plan 02-06 pending acceptance test: signup, sign-in, and reset forms use accessible native semantics.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:42.443Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:31.140Z",
     "milestone": null
   },
   {
@@ -164,10 +164,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 10,
     "description": "Plan 02-06 pending acceptance test: first sign-in returns to example and later sign-in opens workspace.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:43.230Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:32.267Z",
     "milestone": null
   },
   {
@@ -177,10 +177,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 11,
     "description": "Plan 02-06 pending acceptance test: welcome page gives Try the example and Sign in equal weight.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:44.153Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:33.211Z",
     "milestone": null
   },
   {
@@ -190,10 +190,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 12,
     "description": "Plan 02-06 pending acceptance test: expired workspace session clears private content and offers sign-in.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:44.993Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:34.173Z",
     "milestone": null
   },
   {
@@ -203,10 +203,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 13,
     "description": "Plan 02-06 pending acceptance test: signed-in example shows My space and keeps sign-out in the account menu.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:45.845Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:35.249Z",
     "milestone": null
   },
   {
@@ -216,10 +216,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 14,
     "description": "Plan 02-06 pending acceptance test: D-03 invitation appears near practice and once after an attempt with exact copy.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:46.587Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:36.184Z",
     "milestone": null
   },
   {
@@ -229,10 +229,10 @@ last_updated: 2026-10-09T00:33:52.711Z
     "file": "tests/auth-ui.test.cjs",
     "line": 15,
     "description": "Plan 02-06 pending acceptance test: guest example practice continues uninterrupted after session expiry.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:47.280Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T20:26:37.276Z",
     "milestone": null
   },
   {
