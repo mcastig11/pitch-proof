@@ -61,3 +61,19 @@ Start with `node server/index.mjs` after the environment is configured. Missing 
 The server uses built-in fetch to [send one transactional message through Resend](https://resend.com/docs/api-reference/emails/send-email) at `https://api.resend.com/emails`, with a Bearer key. No Resend SDK or browser key is used. Only confirmation and reset mail is supported. Requests and response-body waits time out after 10 seconds; redirects, unsuccessful statuses, and malformed acceptance responses fail with a fixed diagnostic. Provider acceptance does not guarantee inbox delivery: an operator must monitor bounces and delivery in Resend. A delivery outage preserves generic signup/resend/reset responses to avoid exposing account existence; request a fresh message if none arrives. Password reset requires a fresh sign-in and revokes existing sessions on all devices.
 
 Keep secrets in the server environment. Never put a key in browser code, commit environment files, or log full confirmation/reset links. The server exposes only declared browser assets; private server modules, storage, and captured mail are not public routes. The complete external API scope is recorded in [.planning/phases/02-private-practice-access/COVERAGE.md](.planning/phases/02-private-practice-access/COVERAGE.md).
+
+## Scheduled GitHub publication on this Windows workstation
+
+The user-authorized Task Scheduler task `PitchProof-Verified-GitHub-Push` runs at **noon and 8 PM Central** while the Windows user is signed in. The computer must be on; a missed run is eligible when the workstation becomes available.
+
+The task runs [scripts/push-verified-work.ps1](scripts/push-verified-work.ps1). It requires the expected GitHub origin, a checked-out GSD branch, a clean working tree (excluding only the existing GSD dispatch sentinel), and passing tests within 120 seconds. It rechecks the branch, commit and working tree, then pushes the exact tested commit. It never stages files, creates commits, merges or force-pushes. Dirty work, failed tests, changed HEAD or unavailable credentials defer publication.
+
+Git and Node/npm must be on the user PATH, the GSD runner must remain installed under the user's .codex directory, and the existing Git credential helper must support unattended access. No password or access token is stored in the script or task. Diagnostics are in the ignored `.planning/automation/verified-push.log`.
+
+Inspect the task in Windows Task Scheduler to change times or disable it. To verify the helper without publishing, run:
+
+```powershell
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/push-verified-work.ps1 -VerifyOnly
+```
+
+The execution-policy override applies only to that process; the system policy is unchanged.

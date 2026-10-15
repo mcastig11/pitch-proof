@@ -12,7 +12,7 @@ $mutex = New-Object System.Threading.Mutex($false, 'Local\PitchProofVerifiedGitH
 $locked = $false
 
 function Write-PushLog([string]$Message) {
-  Add-Content -LiteralPath $logPath -Value ("{0} {1}" -f [DateTime]::UtcNow.ToString('o'), $Message)
+  Add-Content -LiteralPath $logPath -Encoding UTF8 -Value ("{0} {1}" -f [DateTime]::UtcNow.ToString('o'), $Message)
 }
 
 function Get-GitValue([string[]]$GitArguments) {
@@ -43,7 +43,7 @@ try {
   Write-PushLog "Verifying $branch at $verifiedHead."
   Push-Location -LiteralPath $repoRoot
   try {
-    & node $gsdTools run-with-timeout 120 -- npm.cmd test >> $logPath 2>&1
+    & node $gsdTools run-with-timeout 120 -- npm.cmd test 2>&1 | Out-File -FilePath $logPath -Append -Encoding UTF8
     if ($LASTEXITCODE -ne 0) { throw 'Tests failed or timed out; nothing pushed.' }
     Assert-PublishableTree
     if ((Get-GitValue @('rev-parse', 'HEAD')) -ne $verifiedHead -or (Get-GitValue @('branch', '--show-current')) -ne $branch) {
@@ -54,7 +54,7 @@ try {
     } else {
       # Publish the exact tested commit, even if another process commits afterward.
       $ErrorActionPreference = 'Continue'
-      & git push origin "${verifiedHead}:refs/heads/$branch" >> $logPath 2>&1
+      & git push origin "${verifiedHead}:refs/heads/$branch" 2>&1 | Out-File -FilePath $logPath -Append -Encoding UTF8
       $pushExitCode = $LASTEXITCODE
       $ErrorActionPreference = 'Stop'
       if ($pushExitCode -ne 0) { throw 'Push failed; no force push or merge attempted.' }
