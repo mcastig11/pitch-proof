@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-10-15T23:59:58.650Z",
+  "phase": "03",
+  "phase_name": "Corrected PDF Score",
+  "phase_dir": ".planning/phases/03-corrected-pdf-score",
+  "plan": null,
+  "task": 1,
+  "total_tasks": 5,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Research Phase 3 before planning",
+      "status": "in_progress",
+      "progress": "Research-first choice answered; typed researcher stopped at explicit user pause. Preliminary official-source and current-code findings preserved in .continue-here.md. No canonical research document or plans written."
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": 1,
+      "name": "Complete research and write 03-RESEARCH.md with Validation Architecture",
+      "status": "in_progress"
+    },
+    {
+      "id": 2,
+      "name": "Create validation strategy and dispatch planning security/UI pre-hooks",
+      "status": "not_started"
+    },
+    {
+      "id": 3,
+      "name": "Map patterns and author tracer-first Phase 3 plans",
+      "status": "not_started"
+    },
+    {
+      "id": 4,
+      "name": "Independent plan check, bounded revisions and mandatory gates",
+      "status": "not_started"
+    },
+    {
+      "id": 5,
+      "name": "Record planned state, commit scoped documents and push",
+      "status": "not_started"
+    }
+  ],
+  "blockers": [],
+  "async_jobs": [],
+  "human_actions_pending": [],
+  "decisions": [
+    {
+      "decision": "Research first",
+      "rationale": "User selected option 1 before planning; do not ask again.",
+      "phase": "03"
+    },
+    {
+      "decision": "All D-01 through D-12 remain locked in 03-CONTEXT.md",
+      "rationale": "User completed correction/review/confirmation discussion and requested saving it; committed 3fddaec and pushed.",
+      "phase": "03"
+    },
+    {
+      "decision": "Pause now",
+      "rationale": "Explicit $gsd-pause-work during research; no further research or execution until resumed.",
+      "phase": "03"
+    },
+    {
+      "decision": "Keep current branch and publication authorization",
+      "rationale": "plan-phase forbids branch switches; prior noon/8 PM Central push authorization persists.",
+      "phase": "03"
+    }
+  ],
+  "uncommitted_files": [
+    " M .gsd/dispatch-isolation-sentinel.json",
+    " M .planning/STATE.md",
+    "?? .planning/HANDOFF.json",
+    "?? .planning/phases/03-corrected-pdf-score/.continue-here.md"
+  ],
+  "background_processes": [
+    {
+      "origin": "https://localhost:31318",
+      "pid": 35848,
+      "observedListening": true
+    },
+    {
+      "origin": "http://localhost:31317",
+      "pid": 39556,
+      "observedListening": true
+    }
+  ],
+  "next_action": "Resume Phase 3 research from .planning/phases/03-corrected-pdf-score/.continue-here.md and 03-CONTEXT.md. Research first is already answered. No canonical RESEARCH.md or PLAN.md exists; do not execute.",
+  "context_notes": "Phase 2 remains complete. Current branch gsd/phase-02-private-practice-access, pre-pause HEAD b6293df. Research agent returned an incomplete checkpoint and is stopped. Primary URLs and exact remaining research questions are in the markdown handoff. No tool installed, corpus gathered, app edited or test run during this planning session. OMR license/source mapping, rational rhythm timeline adapter and explicit draft-save interaction with workspace refresh need research. compact_content=true, standard granularity, MVP=true, tracer-first=true, Nyquist and independent checker enabled, auto_advance=false. UI gate last returned frontend=true, hasUiSpec=false, hasFrontendEvidence=false, block=false. Default shell helper can fail; escalated scoped retry worked. Preserve unrelated dirty dispatch sentinel."
+}
