@@ -36,7 +36,7 @@ last_updated: 2026-10-15T14:30:27.997Z
 | 19 | 02 | skipped-test | tests/ownership.test.cjs | 11 | Plan 02-07 pending acceptance test: forged owner identifiers cannot bypass server-side ownership checks. | fixed |  | 2026-10-09T00:33:50.228Z | 2026-10-15T14:30:25.009Z |
 | 20 | 02 | skipped-test | tests/ownership.test.cjs | 12 | Plan 02-07 pending acceptance test: resource metadata lists only the authenticated owner records. | fixed |  | 2026-10-09T00:33:50.969Z | 2026-10-15T14:30:26.429Z |
 | 21 | 02 | skipped-test | tests/ownership.test.cjs | 13 | Plan 02-07 pending acceptance test: resource bytes are available to their authenticated owner. | fixed |  | 2026-10-09T00:33:51.686Z | 2026-10-15T14:30:27.997Z |
-| 22 | 02 | unrun-verify | tests/auth-flow.test.cjs |  | Persistent browser restart on localhost and production-like HTTPS Secure cookie checks remain human-needed at Phase 2 acceptance; HTTP cookie output and seven-day server expiry passed. | open |  | 2026-10-09T00:33:52.711Z |  |
+| 22 | 02 | unrun-verify | tests/auth-flow.test.cjs |  | Browser restart, HTTP cookie attributes and controlled expiry passed in UAT; production-like HTTPS Secure-cookie enforcement remains blocked on an HTTPS fixture. | open |  | 2026-10-09T00:33:52.711Z |  |
 
 ````json
 [
@@ -319,7 +319,7 @@ last_updated: 2026-10-15T14:30:27.997Z
     "phase": "02",
     "file": "tests/auth-flow.test.cjs",
     "line": null,
-    "description": "Persistent browser restart on localhost and production-like HTTPS Secure cookie checks remain human-needed at Phase 2 acceptance; HTTP cookie output and seven-day server expiry passed.",
+    "description": "Browser restart, HTTP cookie attributes and controlled expiry passed in UAT; production-like HTTPS Secure-cookie enforcement remains blocked on an HTTPS fixture.",
     "status": "open",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:52.711Z",

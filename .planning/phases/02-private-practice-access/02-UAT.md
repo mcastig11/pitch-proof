@@ -1,28 +1,21 @@
 ---
-status: testing
+status: partial
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T19:01:13Z
+updated: 2026-10-15T19:27:31Z
+diagnosis: complete
 ---
 
 ## Current Test
 
-number: 12
-name: Browser restart and cookie settings
-expected: |
-  Use your normal browser profile, rather than a private window. Sign in as Alice and open http://localhost:31317/workspace.
-  In browser developer tools, inspect the session cookie under Application or Storage. It should have HttpOnly enabled, SameSite=Lax, and an expiry about seven days after sign-in. The sign-in response's Set-Cookie header should contain Max-Age=604800. Do not copy the cookie value into chat.
-  Fully close that browser, reopen the same profile, and return to http://localhost:31317/workspace. My space should open without another sign-in.
-  This fixture uses HTTP localhost, so the separate HTTPS Secure-cookie check remains unverified. Passing these restart checks will not mark HTTPS as tested.
-  Reply pass if the restart and cookie checks work, or describe any check you could not perform.
-awaiting: user response
+[testing complete for the available HTTP fixture; HTTPS prerequisite remains blocked]
 
 ## Test Setup
 
 Browser-test fixture started on 2026-10-15 at http://localhost:31317, bound to 127.0.0.1. It uses the unchanged standalone server, a separate private temporary SQLite database and a stable in-memory test secret. Account messages stay in the fixture's private capture transport; no real mail or public token inspector is used. The controlling agent holds the Node session for confirmation/reset links and controlled stored-session expiry. Check server health before resuming after an interruption. No connected browser was exposed to automation; the user performs the browser actions.
 
-The original four acceptance groups are preserved below. The account lifecycle group is split into nine observable checks, giving twelve checkpoints in total. Second-account signup/confirmation and reset request/completion are separated so captured links can be prepared between them. The reset request remains a separate pending check after the identity defect reported in Test 7. No result was inferred during restructuring.
+The original four acceptance groups are preserved below. The account lifecycle group is split into nine observable checks. Microphone, accessibility, browser restart/cookies and HTTPS enforcement give thirteen checkpoints in total. Second-account signup/confirmation and reset request/completion were separated so captured links could be prepared between them. The original final group is split into the observed HTTP restart/cookie check and the blocked HTTPS check; no result was inferred during restructuring.
 
 Run through `$gsd-verify-work 2` with a connected real browser and microphone. Use disposable local accounts and an injected capture-email fixture to open confirmation/reset links privately. The ordinary `node server/index.mjs` process intentionally has no captured-mail inspector and does not print links; it cannot by itself complete this test's email steps. Do not add a public token endpoint or send real mail as a workaround.
 
@@ -87,25 +80,25 @@ expected: Traverse signup, sign-in, pending/resend/correction, reset, workspace 
 result: pass
 notes: "User reported pass to the full keyboard/layout/spoken-feedback checkpoint and did not identify unperformed checks."
 
-### 12. Persistent restart and real HTTPS cookie enforcement
-expected: With durable private SQLite and a stable server secret, sign in in a persistent browser profile, inspect the cookie's Max-Age=604800, HttpOnly and SameSite=Lax, restart the browser, and return to the same private workspace before expiry. On a configured HTTPS origin, confirm Secure is set and enforced by the browser. At controlled exact expiry, private requests fail and the visible workspace clears. Production-like storage/HTTPS setup is a prerequisite, not an observed result. This closes WINDOWS item 22 only after actual observations are recorded.
-result: [pending]
-stage: restart-and-http-cookie-observation
-subchecks:
-  browser_restart: pending
-  http_cookie_attributes: pending
-  controlled_expiry: passed-in-test-10
-  https_secure_enforcement: blocked
-notes: "The existing fixture is listening, uses durable private SQLite and a stable secret, and has one fresh Alice session. HTTPS is not provisioned at the HTTP localhost origin; the current checkpoint covers restart and HTTP cookie attributes only. A pass here must not be inferred to establish HTTPS Secure-cookie enforcement or close WINDOWS item 22."
+### 12. Persistent browser restart and HTTP cookie settings
+expected: With durable private SQLite and a stable server secret, sign in in a persistent browser profile, inspect the cookie's Max-Age=604800, HttpOnly and SameSite=Lax, restart the browser, and return to the same private workspace without another sign-in before expiry.
+result: pass
+notes: "User reported pass to the explicitly limited HTTP restart/cookie checkpoint. Controlled expiry was observed in Test 10. This result does not establish HTTPS Secure-cookie enforcement."
+
+### 13. Real HTTPS Secure-cookie enforcement
+expected: On a configured production-like HTTPS origin, confirm the session cookie has Secure enabled and the browser enforces secure transport. Production-like HTTPS setup is a prerequisite; this closes the remaining portion of WINDOWS item 22 only after actual observations.
+result: blocked
+blocked_by: server
+reason: "The available fixture is http://localhost:31317; no trusted production-like HTTPS origin is configured. Browser Secure-cookie enforcement cannot be established from that HTTP fixture."
 
 ## Summary
 
-total: 12
-passed: 10
+total: 13
+passed: 11
 issues: 1
-pending: 1
+pending: 0
 skipped: 0
-blocked: 0
+blocked: 1
 
 ## Gaps
 
@@ -128,9 +121,9 @@ blocked: 0
   missing:
     - "Use the current verified account email in the Signed in as identity while preserving any separate display-name field."
     - "Add a corrected-address sign-in/workspace regression that verifies the displayed identity after correction and fresh login."
-  debug_session: ""
+  debug_session: .planning/debug/corrected-email-workspace-identity.md
 
 ## Session Notes
 
-- Tests 1–6 and 8–11 passed; Test 7 has one reported display defect and the final restart/cookie checkpoint awaits observation. Test 10 completed after staged real-microphone expiry and recovery observations. The five-pass checkpoint was committed as 72baf2f. The identity issue was preserved immediately; implementation fixes remain for the workflow's gap-closure stage. Phase 2 and AUTH-01/AUTH-02 remain pending. HTTPS enforcement remains a prerequisite block within Test 12.
+- Tests 1–6 and 8–12 passed (eleven passes). Test 7 has the diagnosed identity display defect G-02-7. Test 13 is blocked by the missing HTTPS prerequisite, not a demonstrated implementation defect. No tests remain pending in the available fixture. Phase 2 and AUTH-01/AUTH-02 remain pending until gap closure and acceptance; WINDOWS item 22 remains open for HTTPS. No push, merge or deployment occurred.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.

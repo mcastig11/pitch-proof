@@ -5,14 +5,14 @@ status: validated
 nyquist_compliant: false
 wave_0_complete: true
 automated_gaps: 0
-human_acceptance: pending
+human_acceptance: partial
 audited: "2026-10-15"
 created: "2026-09-28"
 ---
 
 # Phase 02 — Validation Strategy
 
-> Automated validation is complete; browser acceptance remains pending. The existing sign-off contract requires the exit gate before nyquist_compliant can become true, so that field remains false until UAT passes.
+> The pre-UAT automated suite passed. Browser UAT now records eleven passing checkpoints, one diagnosed identity display defect with gap plan 02-08 ready, and one HTTPS prerequisite block. The existing sign-off contract requires the exit gate before nyquist_compliant can become true, so that field remains false.
 
 ## Test Infrastructure
 
@@ -69,6 +69,8 @@ created: "2026-09-28"
 - [ ] Set `nyquist_compliant: true` only after the Phase 2 tests and exit gate pass.
 
 **Approval:** automated coverage validated; manual exit-gate approval pending in 02-UAT.md. AUTH-01/AUTH-02 remain pending in REQUIREMENTS.
+
+**UAT update:** Browser restart and HTTP cookie settings passed. G-02-7 requires the corrected-email regression and repair in Plan 02-08. HTTPS Secure-cookie enforcement still needs a configured HTTPS fixture. The measurements in the audit below describe the pre-UAT suite, not a regression for this newly discovered defect.
 
 ## Validation Audit 2026-10-15
 

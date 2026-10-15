@@ -2,17 +2,17 @@
 gsd_state_version: "1.0"
 current_phase: 02
 current_phase_name: Private Practice Access
-current_plan: 7 of 7
-status: Phase 02 implementation complete; human verification pending
-stopped_at: "UAT: ten passes; identity defect G-02-7 open; checkpoint 12 restart/cookies pending, HTTPS not provisioned"
-last_updated: "2026-10-15T19:01:58.123Z"
+current_plan: 8 of 8
+status: Phase 02 UAT partial; identity gap plan ready; HTTPS acceptance blocked
+stopped_at: "UAT partial: eleven passes, G-02-7 Plan 02-08 verified and ready; HTTPS setup blocked"
+last_updated: "2026-10-15T19:30:52.409Z"
 last_activity: 2026-10-15
-last_activity_desc: Seven plans summarized; 96 tests pass; audits complete and browser acceptance pending
-state_head: 14d004bfd947627d8887434e000b0aace828b62f
+last_activity_desc: Eleven browser checks passed; G-02-7 diagnosed and Plan 02-08 verified; HTTPS prerequisite remains
+state_head: b8b3659c1ab1846dd942b4b63a47467a26b06cdf
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 10
+  total_plans: 11
   completed_plans: 10
   percent: 17
 ---
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-27)
 
 ## Current Position
 
-Phase: 02 (Private Practice Access) — HUMAN VERIFICATION PENDING
-Current Plan: 7 of 7
-Total Plans in Phase: 7
-Status: Phase 02 implementation complete; human verification pending
-Last activity: 2026-10-15 — Seven plans summarized; 96 tests pass; browser acceptance pending
+Phase: 02 (Private Practice Access) — GAP CLOSURE READY; HTTPS ACCEPTANCE BLOCKED
+Current Plan: 8 of 8
+Total Plans in Phase: 8
+Status: Phase 02 UAT partial; identity gap plan ready; HTTPS acceptance blocked
+Last activity: 2026-10-15 — Eleven browser checks passed; G-02-7 diagnosed and Plan 02-08 verified; HTTPS prerequisite remains
 
 Progress: [██░░░░░░░░] 17%
 
@@ -105,7 +105,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 2 acceptance: four browser/device groups in 02-UAT.md remain pending; WINDOWS 22 retains restart/HTTPS checks. Local capture requires an injected fixture to open links privately; the standalone CLI has no mail inspector.
+- Phase 2 acceptance: eleven browser checkpoints passed. G-02-7 (stale email in My space) has verified gap plan 02-08 ready for execution. HTTPS Secure-cookie enforcement remains blocked on a configured trusted HTTPS origin; WINDOWS 22 remains open for that portion. Phase 2 and AUTH-01/AUTH-02 are not complete.
 - Phase 3: Obtain a permissioned PDF corpus, set the supported-score boundary, and resolve OMR source mapping and deployment license.
 - Phase 4: Obtain annotated solo singing and set evidence-based follower, device-timing, pitch, uncertainty, and latency limits before authoritative feedback.
 - Phase 6: Define raw-audio retention and deletion behavior before pilot release.
@@ -125,6 +125,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-15T19:01:58.012Z
-Stopped at: UAT: ten passes; identity defect G-02-7 open; checkpoint 12 restart/cookies pending, HTTPS not provisioned
-Resume file: .planning/phases/02-private-practice-access/02-UAT.md
+Last session: 2026-10-15T19:30:52.265Z
+Stopped at: UAT partial: eleven passes, G-02-7 Plan 02-08 verified and ready; HTTPS setup blocked
+Resume file: .planning/phases/02-private-practice-access/02-08-PLAN.md
