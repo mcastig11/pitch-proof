@@ -3,19 +3,13 @@ status: partial
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T20:10:31Z
+updated: 2026-10-15T20:31:31Z
 diagnosis: complete
 ---
 
 ## Current Test
 
-number: 14
-name: Corrected email in My space after the repair
-expected: |
-  The local fixture has been reloaded with the fix while retaining Alice's private test database and account.
-  Open http://localhost:31317/workspace. If needed, sign out and sign in again as alice.corrected@example.test using the new password.
-  Under Signed in as, My space should now show alice.corrected@example.test rather than alice@example.test.
-awaiting: user response
+[available browser checks complete; Test 13 remains blocked on HTTPS setup]
 
 ## Test Setup
 
@@ -23,11 +17,13 @@ Browser-test fixture started on 2026-10-15 at http://localhost:31317, bound to 1
 
 The original four acceptance groups are preserved below. The account lifecycle group is split into nine observable checks. Microphone, accessibility, browser restart/cookies and HTTPS enforcement give thirteen checkpoints in total. Second-account signup/confirmation and reset request/completion were separated so captured links could be prepared between them. The original final group is split into the observed HTTP restart/cookie check and the blocked HTTPS check; no result was inferred during restructuring.
 
+Test 14 was added as the targeted post-repair identity recheck. It and the repaired original checkpoint now pass, giving thirteen passing results and one blocked HTTPS result across fourteen entries.
+
 Run through `$gsd-verify-work 2` with a connected real browser and microphone. Use disposable local accounts and an injected capture-email fixture to open confirmation/reset links privately. The ordinary `node server/index.mjs` process intentionally has no captured-mail inspector and does not print links; it cannot by itself complete this test's email steps. Do not add a public token endpoint or send real mail as a workaround.
 
 For controlled expiry, the fixture can inject createApp's clock and advance it while the browser remains open; do not wait seven days or change the production lifetime. For the restart test, use a private persistent SQLite path and stable server secret, plus a persistent browser profile. The default CLI database is in memory and is unsuitable for persistence acceptance. HTTPS acceptance requires a configured production-like HTTPS origin; none was provisioned during implementation.
 
-Automated evidence is already recorded: 96 passing tests, no skipped/TODO tests; two-account metadata/byte requests and old-cookie reset revocation pass. This UAT covers remaining real-browser observations, not a replay of completed source tasks.
+Automated evidence is already recorded: 97 passing tests, no skipped/TODO tests; two-account metadata/byte requests, old-cookie reset revocation and the corrected-email HTTP/backend-to-DOM regressions pass. This UAT covers remaining real-browser observations, not a replay of completed source tasks.
 
 ## Tests
 
@@ -57,10 +53,11 @@ result: pass
 
 ### 7. Request password recovery with two active Alice sessions
 expected: Keep Alice signed in in the original profile. Sign Bob out in the second profile, then sign Alice in there too. Both profiles open Alice's private workspace. From /auth?mode=reset-request request recovery for alice.corrected@example.test. See Check your email with the generic response; requesting recovery alone leaves both existing sessions usable. The agent prepares the captured reset link next.
-result: issue
+result: pass
+initial_result: issue
 reported: "when i sign into alice.corrected, the my space says i am signed in as alice@example.test. other than that tests pass"
 severity: minor
-notes: "User reports other observed behavior passing. The fixture independently confirms two active Alice sessions and the corrected verified email, but no captured reset message yet; request submission remains pending as Test 8."
+notes: "Original report retained above. Recovery submission and completion passed in Tests 8–9. Plan 02-08 repaired the stale identity, and the user confirmed the corrected browser value in Test 14. This checkpoint is now passing after repair, not an erased historical issue."
 
 ### 8. Send Alice's password-reset request
 expected: With Alice signed in in both profiles, open /auth?mode=reset-request, submit alice.corrected@example.test through Send reset email and see Check your email with the generic result. Refreshing both workspaces still permits access because requesting recovery alone does not revoke sessions. The agent retrieves the privately captured reset link for completion next.
@@ -99,15 +96,15 @@ reason: "The available fixture is http://localhost:31317; no trusted production-
 
 ### 14. Corrected email in My space after the repair
 expected: After the fixed server is loaded and Alice signs in freshly with alice.corrected@example.test, My space shows that corrected verified address under Signed in as. The retained display name must not substitute the abandoned signup address.
-result: [pending]
-notes: "Plan 02-08 implemented; HTTP and actual-backend DOM regressions pass in the 97-test full suite. The fixture now uses a freshly imported current app module with the same private database, secret and capture transport and the original eleven public asset handlers. This is readiness for a new browser observation, not a recorded pass."
+result: pass
+notes: "User reported pass after the fixed app was reloaded with Alice's same private test database. The browser now shows the corrected verified address. The 97-test automated suite also covers the HTTP and backend-to-DOM lifecycle."
 
 ## Summary
 
 total: 14
-passed: 11
-issues: 1
-pending: 1
+passed: 13
+issues: 0
+pending: 0
 skipped: 0
 blocked: 1
 
@@ -115,7 +112,10 @@ blocked: 1
 
 - gap_id: G-02-7
   truth: "My space identifies the current verified account without displaying an abandoned signup address as the signed-in email."
-  status: failed
+  status: resolved
+  resolved_by: 02-08-PLAN.md
+  resolved_at: 2026-10-15
+  browser_verified_at: 2026-10-15T20:31:31Z
   reason: "User reported: when i sign into alice.corrected, the my space says i am signed in as alice@example.test. other than that tests pass"
   severity: minor
   test: 7
@@ -139,5 +139,6 @@ blocked: 1
 
 ## Session Notes
 
-- Tests 1–6 and 8–12 passed (eleven passes). Test 7 preserves the original identity defect report; Plan 02-08 now fixes it with passing automated regressions, and Test 14 awaits the targeted browser recheck. Test 13 remains blocked by missing HTTPS setup. Phase 2 and AUTH-01/AUTH-02 remain pending. The user subsequently authorized GitHub publication; the verified branch has been pushed. No merge or deployment occurred.
+- G-02-7 is resolved by executed Plan 02-08 and user-confirmed Test 14. Test 7 retains the original report and is now passing after repair. All thirteen available checkpoints pass; there are no unresolved implementation issues or pending tests. Test 13 alone remains blocked by missing HTTPS setup.
+- Phase 2 and AUTH-01/AUTH-02 remain pending until the HTTPS acceptance check is observed. WINDOWS item 22 remains open for that portion. Publication is authorized and noon/8 PM Central pushes are scheduled. No merge, deployment or next-phase transition occurred.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.

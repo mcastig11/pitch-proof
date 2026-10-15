@@ -12,7 +12,13 @@ created: "2026-09-28"
 
 # Phase 02 — Validation Strategy
 
-> The pre-UAT automated suite passed. Browser UAT now records eleven passing checkpoints, one diagnosed identity display defect with gap plan 02-08 ready, and one HTTPS prerequisite block. The existing sign-off contract requires the exit gate before nyquist_compliant can become true, so that field remains false.
+> All 97 automated tests and thirteen available browser checkpoints pass. The identity defect is repaired and user-confirmed. HTTPS browser cookie enforcement is the only prerequisite block. The existing full exit-gate sign-off rule keeps nyquist_compliant false until that observation passes.
+
+## Post-UAT audit 2026-10-15
+
+All thirteen available browser checks now pass, including the repaired identity. AUTH-01/AUTH-02 have behavioral coverage in the existing 65 Phase 2 tests, plus 32 prior-phase tests; the latest full run passed all 97 with no skipped/TODO cases. Plan 02-08's two tasks have passing HTTP and actual-backend DOM commands. No new automated coverage gap was found and no test generation or repeat run is needed for this documentation-only acceptance update. The earlier audit entries below remain historical.
+
+The sole manual-only item is HTTPS browser cookie enforcement, blocked on a trusted HTTPS origin. human_acceptance remains partial and nyquist_compliant remains false under the project's existing full exit-gate sign-off rule.
 
 ## Test Infrastructure
 

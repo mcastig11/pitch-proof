@@ -1,5 +1,7 @@
 ---
-status: diagnosed
+status: resolved
+resolved: 2026-10-15
+resolved_by: 02-08-PLAN.md
 phase: 02-private-practice-access
 gap_id: G-02-7
 created: 2026-10-15
@@ -8,6 +10,8 @@ execution_mode: inline-codex-fallback
 ---
 
 # Corrected email shown incorrectly in My space
+
+Resolved by commit 5ece2db and Plan 02-08's HTTP/backend-to-DOM regressions. On 2026-10-15 the user passed UAT Test 14 after the fixture loaded the repair, confirming the corrected verified email in My space. The diagnosis below is retained as historical evidence.
 
 User report: "when i sign into alice.corrected, the my space says i am signed in as alice@example.test. other than that tests pass"
 

@@ -3,12 +3,12 @@ gsd_state_version: "1.0"
 current_phase: 02
 current_phase_name: Private Practice Access
 current_plan: 8 of 8
-status: Phase 02 gap implemented; targeted browser recheck and HTTPS acceptance pending
-stopped_at: Plan 02-08 complete, 97 tests pass; UAT 14 identity recheck and HTTPS setup pending; noon/8 PM pushes scheduled
-last_updated: "2026-10-15T20:10:31.512Z"
+status: Phase 02 browser checks passed; HTTPS acceptance blocked on setup
+stopped_at: "UAT: thirteen browser checks pass; identity defect closed; only trusted HTTPS cookie enforcement remains blocked"
+last_updated: "2026-10-15T20:34:19.280Z"
 last_activity: 2026-10-15
-last_activity_desc: Eight plans complete; 97 tests pass; identity browser recheck pending; noon/8 PM GitHub pushes configured
-state_head: 050e88acbc5e320730bb85cb5b93f694aace82a5
+last_activity_desc: Eight plans complete; 97 automated tests and 13 browser checks pass; only HTTPS acceptance remains
+state_head: c4dc652a82d713d8330574c8db4d10f3cd748709
 progress:
   total_phases: 6
   completed_phases: 1
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-27)
 Phase: 02 (Private Practice Access) — HUMAN VERIFICATION PENDING
 Current Plan: 8 of 8
 Total Plans in Phase: 8
-Status: Phase 02 gap implemented; targeted browser recheck and HTTPS acceptance pending
-Last activity: 2026-10-15 — Eight plans complete; 97 tests pass; identity browser recheck pending; noon/8 PM GitHub pushes configured
+Status: Phase 02 browser checks passed; HTTPS acceptance blocked on setup
+Last activity: 2026-10-15 — Eight plans complete; 97 automated tests and 13 browser checks pass; only HTTPS acceptance remains
 
 Progress: [██░░░░░░░░] 17%
 
@@ -98,7 +98,7 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 02]: Owner metadata/bytes derive identity only from session.user.id; authorize before an injected inert provider. No PDF bytes are persisted.
 - [Phase 02]: Crafted URL completion states are rejected; review fixes preserve actionable error focus and color. Full regression: 96 pass, no skips/TODOs.
 - [Phase 02, pre-UAT execution]: AUTH-01/AUTH-02 and phase completion awaited browser UAT; no phase advance, push, merge or deployment had occurred at that checkpoint.
-- [Phase 02, Plan 08]: Workspace identity uses the current verified email while retaining a separate display name. Full regression: 97 passing tests; targeted browser recheck and HTTPS remain.
+- [Phase 02, Plan 08]: Workspace identity uses the current verified email while retaining a separate display name. Full regression: 97 passing tests; user confirmed the corrected browser identity in UAT Test 14. Only HTTPS acceptance remains.
 - [Publication]: User authorized GitHub pushes and selected noon and 8 PM Central. Windows task PitchProof-Verified-GitHub-Push publishes the exact tested commit on the current GSD branch only after clean-worktree and test checks. No auto-commit, force push, merge or deployment.
 
 ### Pending Todos
@@ -107,7 +107,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 2 acceptance: eleven browser checkpoints passed. G-02-7 is implemented in Plan 02-08, with HTTP and actual-backend DOM regressions passing; targeted browser recheck is pending. HTTPS Secure-cookie enforcement remains blocked on a configured trusted HTTPS origin; WINDOWS 22 remains open for that portion. Phase 2 and AUTH-01/AUTH-02 are not complete.
+- Phase 2 acceptance: thirteen browser checkpoints passed; the G-02-7 identity repair is confirmed by user UAT Test 14 and automated regressions. Only HTTPS Secure-cookie enforcement remains blocked on a configured trusted HTTPS origin. WINDOWS 22 stays open; Phase 2 and AUTH-01/AUTH-02 are not complete.
 - Phase 3: Obtain a permissioned PDF corpus, set the supported-score boundary, and resolve OMR source mapping and deployment license.
 - Phase 4: Obtain annotated solo singing and set evidence-based follower, device-timing, pitch, uncertainty, and latency limits before authoritative feedback.
 - Phase 6: Define raw-audio retention and deletion behavior before pilot release.
@@ -128,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-15T20:10:31.432Z
-Stopped at: Plan 02-08 complete, 97 tests pass; UAT 14 identity recheck and HTTPS setup pending; noon/8 PM pushes scheduled
+Last session: 2026-10-15T20:34:19.140Z
+Stopped at: UAT: thirteen browser checks pass; identity defect closed; only trusted HTTPS cookie enforcement remains blocked
 Resume file: .planning/phases/02-private-practice-access/02-UAT.md

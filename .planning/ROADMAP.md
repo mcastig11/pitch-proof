@@ -60,7 +60,7 @@ Plans:
   3. A second signed-in account cannot open the first account's private workspace or resources through the interface or a direct request.
 
 **Exit gate:** Exercise account creation, recovery, session expiry, and two-account authorization checks, including direct resource requests. Set owner-scoped data and object access rules before the PDF library is added.
-**Plans:** 8/8 plans executed; 97 automated tests pass; corrected-email browser recheck and HTTPS acceptance remain outstanding
+**Plans:** 8/8 plans executed; 97 automated tests and 13 browser checkpoints pass; only HTTPS acceptance remains blocked on setup
 
 Plans:
 **Wave 1**

@@ -1,5 +1,7 @@
 # Phase 02 — UI Review
 
+**UAT update, 2026-10-15:** The existing review was viewed during the post-UAT hook; its provisional pillar scores were not recalculated and no new screenshot audit was claimed. The user has since passed the keyboard/layout/spoken-feedback and microphone/browser lifecycle checkpoints, including the repaired corrected-email identity. Those observations are recorded in 02-UAT.md. Only HTTPS cookie enforcement remains blocked. The source-only limitations below describe the earlier audit snapshot.
+
 **Audited:** 2026-10-15. **Baseline:** approved 02-UI-SPEC.md and D-01–D-12. **Mode:** inline code-only review. **Screenshots:** not captured; localhost ports 3000, 5173 and 8080 returned no HTTP response. No browser or package was installed. Screenshot ignore rules were created before detection; no binaries were generated.
 
 ## Pillar Scores

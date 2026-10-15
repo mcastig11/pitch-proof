@@ -1,8 +1,8 @@
 ---
 phase: 02-private-practice-access
-verified: 2026-10-15T20:10:31Z
+verified: 2026-10-15T20:31:31Z
 status: human_needed
-score: 18/20 must-haves verified
+score: 19/20 must-haves verified
 covered_files:
   - .gitignore
   - .planning/REQUIREMENTS.md
@@ -52,26 +52,19 @@ covered_files:
   - tests/support/server-fixture.cjs
   - welcome.html
   - workspace.html
-covered_digest: "v1:sha256:4631c2adf3d8a8e86732f57af9e133bb75132efb20e7c7b604fe4a64175a5f92"
-behavior_unverified: 2
+covered_digest: "v1:sha256:96c26f3744224f5a35c6572403c5125e1149f1b22e53eaef58589451ab341e72"
+behavior_unverified: 1
 overrides_applied: 0
 decision_coverage:
   honored: 12
   total: 12
   not_honored: []
 behavior_unverified_items:
-  - truth: Corrected email is shown in My space after the repair
-    test: UAT Test 14, fresh sign-in as alice.corrected@example.test
-    expected: Signed in as shows the corrected verified email
-    why_human: HTTP and actual-backend DOM regressions pass; the repaired physical-browser value needs confirmation
   - truth: Actual HTTPS Secure-cookie enforcement
     test: UAT Test 13 on a configured trusted HTTPS origin
     expected: Secure is set and enforced by the browser
     why_human: The available HTTP localhost fixture cannot establish this observation
 human_verification:
-  - test: Corrected email in My space after the repair
-    expected: UAT Test 14 shows alice.corrected@example.test after fresh sign-in
-    why_human: Targeted confirmation of the repaired browser-reported defect
   - test: Actual HTTPS Secure-cookie enforcement
     expected: UAT Test 13 passes on a configured trusted HTTPS origin
     why_human: Trusted HTTPS setup is missing; keep this prerequisite blocked
@@ -81,7 +74,7 @@ human_verification:
 
 **Goal:** As a singer, I want to securely access my private practice space, so that my account stays private.
 
-**Status:** human_needed. All eight plans are implemented and summarized. Plan 02-08 repairs the UAT identity defect and the bounded full suite passes 97 tests. Eleven browser checks passed. The targeted post-fix identity observation and actual HTTPS enforcement remain open. Phase 2 and AUTH-01/AUTH-02 stay pending; no override or acceptance was inferred.
+**Status:** human_needed. All eight plans are implemented and summarized. The bounded full suite passes 97 tests and all thirteen available browser checkpoints pass. The user confirmed the repaired identity in Test 14; no unresolved implementation defect remains. Actual HTTPS cookie enforcement is the sole blocked acceptance item. Phase 2 and AUTH-01/AUTH-02 stay pending; no override is used.
 
 Verification ran inline using the skills' Codex fallback. No independent verifier/sub-agent was spawned. Evidence comes from current implementation, actual HTTP/SQLite and DOM tests, not summary claims alone.
 
@@ -89,14 +82,14 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 
 | Step | Expected | Actual evidence | Status |
 | --- | --- | --- | --- |
-| Public entry | Example usable without account | Unprotected asset routes, local audio controller, guest-expiry/startup tests | VERIFIED in automated seams; real device pending |
+| Public entry | Example usable without account | Public asset routes, local audio tests and user-confirmed real microphone UAT 10 | VERIFIED |
 | Register/pending | Confirm before private access, resend/correct and guest escape | Auth HTTP tracer, correction/token tests, native forms and event-driven DOM checks | VERIFIED automatically; real browser UAT 1 |
 | Confirm and sign in | No session on confirmation; first use to example, later use to My space | SQLite session assertions, conditional first-use update, server-selected landing, callback/URL-mode tests | VERIFIED automatically |
 | Open private space | Real session identity; no upload/history claim | Authenticated no-store route and text-only workspace rendering; stale-result/expiry tests | VERIFIED automatically |
 | Recover | One-use expiring reset, all devices signed out, fresh sign-in to workspace | Multi-cookie reset/expiry/concurrency tests and UI integration | VERIFIED automatically |
 | Protect resources | Only current account can read metadata or injected bytes | Mandatory SQL owner filters; two-account HTTP and forged-owner/provider-call tests | VERIFIED |
 | Sign out/expire | Server invalidation; clear private DOM; welcome or safe reauthentication | Session-security and account UI transition tests | VERIFIED automatically |
-| Real browser/device acceptance | Usable microphone, rendered/accessibility flows and persistent HTTPS session | Eleven user-reported UAT passes; targeted repaired identity and HTTPS remain | PARTIAL |
+| Real browser/device acceptance | Usable microphone, rendered/accessibility flows and persistent HTTPS session | Thirteen UAT passes, including repaired identity; only HTTPS remains | PARTIAL |
 
 ## Goal Achievement
 
@@ -112,7 +105,7 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 | 6 | D-03: invitation uses locked copy and implies no PDF availability | VERIFIED | exact-copy test and index.html |
 | 7 | D-04: pending verification blocks private access with resend/correction/guest escape | VERIFIED | credential-gated correction, revoked links, pending DOM states and direct 401 tests |
 | 8 | D-05: first verified sign-in to example; later sign-in to workspace | VERIFIED | atomic first-use claim plus concurrent landing and UI assertions |
-| 9 | D-07: simple private home with current verified email/example/scores-coming only | HUMAN RECHECK NEEDED | Plan 02-08 HTTP and actual-backend DOM regressions pass; UAT 14 pending |
+| 9 | D-07: simple private home with current verified email/example/scores-coming only | VERIFIED | Plan 02-08 HTTP and actual-backend DOM regressions plus user-confirmed UAT 14 |
 | 10 | D-08: My space and modest Account/sign-out navigation | VERIFIED | signed-in example and disclosure/Escape tests |
 | 11 | D-09: sign-out opens equal-weight welcome actions | VERIFIED | server invalidation, UI navigation and identical welcome action assertions |
 | 12 | D-10 server portion: fixed seven-day sessions and cookie policy | VERIFIED | exact Max-Age and database lifetime, no refresh/cache, HTTPS-header and origin rejection tests |
@@ -125,7 +118,7 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 | 19 | Physical microphone practice remains uninterrupted through expiry, D-01/D-11 | VERIFIED by user | Staged UAT 10 confirmed expiry, continuity and reauthentication |
 | 20 | Keyboard, responsive/zoomed layout and spoken announcements meet the UI contract | VERIFIED by user | UAT 11 pass; no unperformed subchecks reported |
 
-**Score:** 18/20 implementation/behavior truths fully verified; targeted repaired identity and HTTPS enforcement remain open. No truth is marked passed by override.
+**Score:** 19/20 implementation/behavior truths fully verified; only actual HTTPS enforcement remains open. No truth is marked passed by override.
 
 ### Required Artifacts
 
@@ -185,8 +178,8 @@ Expected results are explicit independent account IDs, sentinel bytes, policy va
 
 | Requirement | Owning plans | Implementation evidence | Acceptance |
 | --- | --- | --- | --- |
-| AUTH-01 | 02-01 through 02-08 | Email/password signup, verification gate, correction/resend, repaired identity, UI and owner boundary | Targeted repaired identity browser recheck pending |
-| AUTH-02 | 02-01 through 02-08 | Sign-in/recovery, fixed sessions, reset revocation, current workspace identity and two-account isolation | Targeted identity recheck and HTTPS pending; restart passed |
+| AUTH-01 | 02-01 through 02-08 | Email/password signup, verification gate, correction/resend, repaired identity, UI and owner boundary | Available browser checks passed; full phase acceptance awaits HTTPS |
+| AUTH-02 | 02-01 through 02-08 | Sign-in/recovery, fixed sessions, reset revocation, current workspace identity and two-account isolation | Available browser checks and restart passed; HTTPS pending |
 
 REQUIREMENTS checkboxes remain open. Summary traceability fields do not override phase acceptance.
 
@@ -196,8 +189,8 @@ Review commit 0a97574 fixes URL-selected success states/inherited keys, error fo
 
 ### Human Verification Required
 
-The original acceptance groups are preserved as atomic checks in **02-UAT.md**. Eleven checkpoints passed, the original identity issue is retained with its implemented Plan 02-08 repair, HTTPS Test 13 remains blocked, and new Test 14 awaits confirmation of the repaired value. The local fixture has loaded the updated app module while preserving the private database, secret, capture transport and original eleven static handlers. This is readiness for browser UAT, not a new human pass.
+The original acceptance groups are preserved as atomic checks in **02-UAT.md**. Thirteen checkpoints pass, including user-confirmed Test 14 after the fixture loaded Plan 02-08's repair. Test 7 retains the original defect report and its successful repair history. HTTPS Test 13 alone remains blocked on trusted HTTPS setup. A localhost HTTP cookie/header test is not substituted for that observation.
 
 ## Gaps Summary
 
-The stale-name root cause is fixed: GET /api/me/workspace reads the verified user's current email, preserving user.name and all guards/no-store/owner-by-user.id boundaries. Actual lifecycle tests prove the corrected address reaches the DOM. The phase remains human-needed for the targeted recheck and HTTPS setup. The user subsequently authorized GitHub publication and the verified branch was pushed. No merge, deployment or next-phase transition occurred.
+The stale-name root cause is fixed and user-confirmed: GET /api/me/workspace reads the verified user's current email, preserving user.name and all guards/no-store/owner-by-user.id boundaries. Actual lifecycle tests and browser Test 14 agree. The phase remains human-needed solely for HTTPS setup and observation. GitHub publication is authorized. No merge, deployment or next-phase transition occurred.
