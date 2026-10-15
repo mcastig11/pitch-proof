@@ -152,7 +152,8 @@ test('verified account HTTP tracer enforces confirmation and atomic first-use ro
     const workspace = await request(fixture, '/api/me/workspace?ownerId=forged', { cookie });
     assert.equal(workspace.status, 200);
     assert.equal(workspace.headers.get('cache-control'), 'no-store');
-    assert.equal((await workspace.json()).identity, 'Test Singer');
+    assert.equal((await workspace.json()).identity, email);
+    assert.equal(fixture.database.prepare('SELECT name FROM user WHERE id = ?').get(user.id).name, 'Test Singer');
 
     const laterSignIn = await request(fixture, '/api/auth/sign-in/email', { body: { email, password } });
     assert.equal(laterSignIn.status, 200);
@@ -199,11 +200,11 @@ test('verification email can be resent without revealing account state', async (
   });
 });
 
-test('corrected-address signup creates a usable pending account and invalidates prior links', async () => {
+test('corrected-address signup invalidates prior links and signs in with the current workspace email', async () => {
   await withAuthFixture(async (fixture) => {
     const email = 'typo@example.test';
     const newEmail = 'correct@example.test';
-    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: 'Singer' } });
+    await request(fixture, '/api/auth/sign-up/email', { body: { email, password, name: email } });
     const oldLink = new URL(fixture.emailTransport.getLink('verification', email));
     const id = fixture.database.prepare('SELECT id FROM user WHERE email = ?').get(email).id;
     const denied = await request(fixture, '/api/auth/correct-pending-email', { body: { email, password: 'wrong-password', newEmail } });
@@ -223,6 +224,16 @@ test('corrected-address signup creates a usable pending account and invalidates 
     assert.ok([200, 302].includes((await request(fixture, link.pathname + link.search)).status));
     assert.equal(fixture.database.prepare('SELECT emailVerified FROM user WHERE id = ?').get(id).emailVerified, 1);
     assert.equal(fixture.database.prepare('SELECT COUNT(*) AS count FROM session').get().count, 0);
+    assert.equal((await request(fixture, '/api/me/workspace')).status, 401);
+
+    const signIn = await request(fixture, '/api/auth/sign-in/email', { body: { email: newEmail, password } });
+    assert.equal(signIn.status, 200);
+    const cookie = sessionCookie(signIn).split(';')[0];
+    const workspace = await request(fixture, '/api/me/workspace?identity=forged', { cookie });
+    assert.equal(workspace.status, 200);
+    assert.equal(workspace.headers.get('cache-control'), 'no-store');
+    assert.equal((await workspace.json()).identity, newEmail);
+    assert.equal(fixture.database.prepare('SELECT name FROM user WHERE id = ?').get(id).name, email);
   });
 });
 
