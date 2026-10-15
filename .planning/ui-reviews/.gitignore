@@ -1,0 +1,8 @@
+# Keep rendered UI captures out of Git history.
+*.png
+*.webp
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff

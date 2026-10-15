@@ -1,25 +1,28 @@
 ---
 phase: "02"
 slug: "private-practice-access"
-status: draft
+status: validated
 nyquist_compliant: false
-wave_0_complete: false
+wave_0_complete: true
+automated_gaps: 0
+human_acceptance: pending
+audited: "2026-10-15"
 created: "2026-09-28"
 ---
 
 # Phase 02 — Validation Strategy
 
-> Tests and browser checks required before Phase 2 can claim private practice access. Plan/task IDs are assigned below; Wave 0 and feature validation remain pending execution.
+> Automated validation is complete; browser acceptance remains pending. The existing sign-off contract requires the exit gate before nyquist_compliant can become true, so that field remains false until UAT passes.
 
 ## Test Infrastructure
 
 | Property | Value |
 |----------|-------|
 | Framework | Existing Node.js `node:test` plus HTTP integration tests against an ephemeral local server and isolated temporary SQLite database |
-| Config file | `package.json`; server/test harness and temporary database fixtures are Wave 0 work |
-| Quick run command | `node --test tests/auth-flow.test.cjs tests/ownership.test.cjs` after Wave 0 creates these files |
+| Config file | `package.json`; isolated HTTP, temporary SQLite and capture-mail fixtures are implemented |
+| Quick run command | `node --test tests/auth-flow.test.cjs tests/ownership.test.cjs` |
 | Full suite command | `npm.cmd test` plus real-browser account, expiry, and guest-practice checks |
-| Estimated runtime | Set after the first complete run; quick checks should remain practical after every task |
+| Measured runtime | Final full suite 12,788ms; owner/session focused 14,748ms; account UI focused 21,455ms in a prior run |
 
 ## Sampling Rate
 
@@ -32,19 +35,21 @@ created: "2026-09-28"
 
 | Task / plan assignment | Requirement | Threat Ref | Secure behavior | Test type | Automated command | File exists | Status |
 |------------------------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 02-03 Task 2: account tracer | AUTH-01, AUTH-02 | T-02-01 | Unverified signup has no private access; verified first sign-in reaches example and later sign-in reaches workspace | HTTP integration | `node --test tests/auth-flow.test.cjs` | No — Wave 0 | Pending |
-| 02-07 Tasks 1-2: ownership seam | AUTH-01, AUTH-02 | T-02-02 | A second account receives no private metadata or bytes through direct resource requests | HTTP integration | `node --test tests/ownership.test.cjs` | No — Wave 0 | Pending |
-| 02-04 Task 1 and 02-06 Task 1: recovery and sessions | AUTH-02 | T-02-03 | Reset link is one-use, requires fresh sign-in, and revokes all pre-reset cookies; sign-out and fixed expiry deny private reads | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | No — Wave 0 | Pending |
-| 02-03 Task 2 and 02-04 Tasks 1-2: session cookie policy | AUTH-02 | T-02-03/T-02-04 | Max-Age=604800 matches server expiry; HttpOnly and SameSite=Lax are always set; Secure is set whenever the origin is HTTPS, production requires HTTPS, and it is omitted only for loopback HTTP test/dev | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | No - Wave 0 | Pending |
-| 02-06 Tasks 1-3: public/private UI | AUTH-01, AUTH-02 | T-02-04 | Guest practice survives expired sign-in; workspace clears private content on 401; invite and navigation follow D-01–D-12 | DOM/browser contract | `node --test tests/auth-ui.test.cjs tests/page-startup.test.cjs` | No — Wave 0 for auth UI | Pending |
-| 02-04 Task 2: abuse controls | AUTH-01, AUTH-02 | T-02-05 | Cross-origin mutation rejected, auth routes rate-limited, account existence responses generic, no private caching | HTTP integration | `node --test tests/session-security.test.cjs` | No — Wave 0 | Pending |
-| 02-05 Tasks 1-2: email delivery | AUTH-01, AUTH-02 | T-02-06 | Local capture is deterministic; configured production transport sends through Resend without exposing server secrets | HTTP adapter tests | `node --test tests/email-transport.test.cjs tests/auth-flow.test.cjs` | Not yet; 02-05 creates | Pending |
+| 02-03 account tracer | AUTH-01, AUTH-02 | T-02-01 | Pending signup denied; verified first/later routing uses server identity | HTTP integration | `node --test tests/auth-flow.test.cjs` | Yes | Pass — 12 active tests |
+| 02-07 Tasks 1-2: ownership seam | AUTH-01, AUTH-02 | T-02-02 | Two accounts cannot cross-read metadata/bytes or forge owner identity | HTTP integration/repository | `node --test tests/ownership.test.cjs` | Yes | Pass — 10 active tests |
+| 02-04 Task 1 and 02-06 Task 1: recovery and sessions | AUTH-02 | T-02-03 | One-use reset, fresh sign-in, all-session revocation and fixed expiry | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | Yes | Pass |
+| 02-03/02-04 cookie policy | AUTH-02 | T-02-03/T-02-04 | Fixed Max-Age=604800, HttpOnly, SameSite=Lax, HTTPS Secure and remote HTTP rejection | HTTP integration | `node --test tests/auth-flow.test.cjs tests/session-security.test.cjs` | Yes | Pass — real-browser restart/HTTPS remains manual |
+| 02-06 Tasks 1-3 plus review fixes | AUTH-01, AUTH-02 | T-02-04 | Guest audio independence, private clearing, safe success states, focus and D-01–D-12 | DOM/server integration | `node --test tests/auth-ui.test.cjs tests/page-startup.test.cjs` | Yes | Pass — 22 active auth UI cases; physical/layout/speech manual |
+| 02-04 Task 2: abuse controls | AUTH-01, AUTH-02 | T-02-05 | Origin/Host rejection, bounded throttles, generic account outcomes, no-store | HTTP integration | `node --test tests/session-security.test.cjs` | Yes | Pass — 9 active tests |
+| 02-05 Tasks 1-2: email | AUTH-01, AUTH-02 | T-02-06 | Capture/stubbed HTTPS transport, sanitized errors and validated configuration | HTTP adapter/integration | `node --test tests/email-transport.test.cjs tests/auth-flow.test.cjs` | Yes | Pass — 10 active email tests; no live mail |
+| 02-01 harness | AUTH-01, AUTH-02 | 01:T-02-01/02 | Unique databases, private captured links and complete teardown | Integration | `node --test tests/harness.test.cjs` | Yes | Pass — 1 active test |
+| 02-02 provenance checkpoint | AUTH-01, AUTH-02 | T-02-SC | Human package approval precedes pinned install | Recorded checkpoint | `02-02-SUMMARY.md`; pinned package metadata | Yes | Previously approved; no new install |
 
 ## Wave 0 Requirements
 
-- [ ] Planned in 02-01 Tasks 1-3 create tests/auth-flow.test.cjs, tests/ownership.test.cjs, tests/session-security.test.cjs, and tests/auth-ui.test.cjs with runnable isolated-server, temporary SQLite, session, and DOM-contract scaffolds.
-- [ ] Planned in 02-01 creates the server factory and injectable local capture email transport; later plans expand the Wave 0 test.todo cases.
-- [ ] 02-05 adds tests/email-transport.test.cjs for local capture and stubbed production HTTP behavior.
+- [x] Account, ownership, session and UI test files exist and run against isolated fixtures.
+- [x] Server factory and private capture transport are implemented; all former TODO cases are active.
+- [x] Email adapter tests cover capture and stubbed production HTTP without live mail.
 ## Manual-Only Verifications
 
 | Behavior | Requirement | Why manual | Test instructions |
@@ -56,11 +61,24 @@ created: "2026-09-28"
 
 ## Validation Sign-Off
 
-- [ ] Every plan task has a focused automated check or an explicit Wave 0 dependency.
-- [ ] No three consecutive tasks lack automated verification.
-- [ ] Wave 0 creates all missing test files and fixtures.
-- [ ] No watch-mode command is used as a verification gate.
-- [ ] Run and record the actual feedback time.
+- [x] Every implementation task has a focused automated check; provenance remains a recorded human gate.
+- [x] No three consecutive tasks lack verification.
+- [x] Wave 0 fixtures exist; no missing test infrastructure remains.
+- [x] Final one-shot suite is bounded by a 120-second timeout.
+- [x] Actual final feedback time: 12,788ms; 96 passed, no failed/cancelled/skipped/TODO.
 - [ ] Set `nyquist_compliant: true` only after the Phase 2 tests and exit gate pass.
 
-**Approval:** pending execution and verification.
+**Approval:** automated coverage validated; manual exit-gate approval pending in 02-UAT.md. AUTH-01/AUTH-02 remain pending in REQUIREMENTS.
+
+## Validation Audit 2026-10-15
+
+| Metric | Count |
+| --- | --- |
+| Requirements with automated behavioral coverage | 2/2 |
+| Automated gaps found | 0 |
+| Missing/disabled/circular requirement tests | 0 |
+| Phase 2 active tests | 64 |
+| Prior-phase active tests in full regression | 32 |
+| Manual acceptance groups | 4, pending |
+
+The audit found no new automated gap, so the workflow's no-gap branch required no new Nyquist test generation. The two review regression tests were added to fix concrete defects, not to inflate coverage. Existing manual-only checks remain explicit; neither source checks nor a passing Node suite establish physical microphone, rendered layout, speech or browser persistence.
