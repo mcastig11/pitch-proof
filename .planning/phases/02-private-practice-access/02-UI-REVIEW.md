@@ -60,3 +60,7 @@ Not applicable: no components.json, shadcn initialization, third-party registry 
 ## Files Audited
 
 auth.html; welcome.html; workspace.html; client/auth.js; client/workspace.js; phase changes in index.html/script.js; auth UI and accessibility tests; approved UI-SPEC and CONTEXT. Review findings and final 96-test gate are recorded in 02-REVIEW.md.
+
+## Final acceptance addendum - 2026-10-15
+
+The user passed the keyboard/layout/zoom/spoken-feedback UAT checkpoint and corrected-identity recheck. Actual installed Chrome subsequently passed trusted HTTPS session acceptance. All fourteen UAT entries now pass; the canonical phase gate marked Phase 2 complete. The source score above remains provisional: no screenshot-based rescoring or independent screen-reader observation is claimed. See 02-UAT.md and quick task 261015-lp9 for evidence.

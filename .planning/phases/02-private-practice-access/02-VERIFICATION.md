@@ -1,10 +1,11 @@
 ---
 phase: 02-private-practice-access
-verified: 2026-10-15T20:31:31Z
-status: human_needed
-score: 19/20 must-haves verified
+verified: 2026-10-15T22:36:28.345Z
+status: passed
+score: 20/20 must-haves verified
 covered_files:
   - .gitignore
+  - .planning/PROJECT.md
   - .planning/REQUIREMENTS.md
   - .planning/ROADMAP.md
   - .planning/phases/02-private-practice-access/02-01-PLAN.md
@@ -24,6 +25,9 @@ covered_files:
   - .planning/phases/02-private-practice-access/02-08-PLAN.md
   - .planning/phases/02-private-practice-access/02-08-SUMMARY.md
   - .planning/phases/02-private-practice-access/02-UAT.md
+  - .planning/phases/02-private-practice-access/02-VALIDATION.md
+  - .planning/phases/02-private-practice-access/02-SECURITY.md
+  - .planning/phases/02-private-practice-access/02-UI-REVIEW.md
   - .planning/phases/02-private-practice-access/02-CONTEXT.md
   - .planning/phases/02-private-practice-access/02-UI-SPEC.md
   - README.md
@@ -34,6 +38,12 @@ covered_files:
   - package-lock.json
   - package.json
   - script.js
+  - scripts/local-https.mjs
+  - scripts/setup-local-https.ps1
+  - scripts/verify-local-https.mjs
+  - .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/HTTPS-EVIDENCE.json
+  - .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/PLAN.md
+  - .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/SUMMARY.md
   - scripts/push-verified-work.ps1
   - server/app.mjs
   - server/auth.mjs
@@ -52,29 +62,22 @@ covered_files:
   - tests/support/server-fixture.cjs
   - welcome.html
   - workspace.html
-covered_digest: "v1:sha256:96c26f3744224f5a35c6572403c5125e1149f1b22e53eaef58589451ab341e72"
-behavior_unverified: 1
+covered_digest: "v1:sha256:89b9dc11edb13896e72e005bf7e040c35aa3e0d508a2f29c6ad94af47bf3f2d4"
+behavior_unverified: 0
 overrides_applied: 0
 decision_coverage:
   honored: 12
   total: 12
   not_honored: []
-behavior_unverified_items:
-  - truth: Actual HTTPS Secure-cookie enforcement
-    test: UAT Test 13 on a configured trusted HTTPS origin
-    expected: Secure is set and enforced by the browser
-    why_human: The available HTTP localhost fixture cannot establish this observation
-human_verification:
-  - test: Actual HTTPS Secure-cookie enforcement
-    expected: UAT Test 13 passes on a configured trusted HTTPS origin
-    why_human: Trusted HTTPS setup is missing; keep this prerequisite blocked
+behavior_unverified_items: []
+human_verification: []
 ---
 
 # Phase 2: Private Practice Access Verification
 
 **Goal:** As a singer, I want to securely access my private practice space, so that my account stays private.
 
-**Status:** human_needed. All eight plans are implemented and summarized. The bounded full suite passes 97 tests and all thirteen available browser checkpoints pass. The user confirmed the repaired identity in Test 14; no unresolved implementation defect remains. Actual HTTPS cookie enforcement is the sole blocked acceptance item. Phase 2 and AUTH-01/AUTH-02 stay pending; no override is used.
+**Status:** passed. All eight plans are implemented and summarized. All 97 automated tests and fourteen UAT checkpoints pass. The user confirmed the repaired identity in Test 14, and installed Chrome independently verified the actual Secure cookie over trusted localhost HTTPS in Test 13. No unresolved required check or override remains.
 
 Verification ran inline using the skills' Codex fallback. No independent verifier/sub-agent was spawned. Evidence comes from current implementation, actual HTTP/SQLite and DOM tests, not summary claims alone.
 
@@ -89,7 +92,7 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 | Recover | One-use expiring reset, all devices signed out, fresh sign-in to workspace | Multi-cookie reset/expiry/concurrency tests and UI integration | VERIFIED automatically |
 | Protect resources | Only current account can read metadata or injected bytes | Mandatory SQL owner filters; two-account HTTP and forged-owner/provider-call tests | VERIFIED |
 | Sign out/expire | Server invalidation; clear private DOM; welcome or safe reauthentication | Session-security and account UI transition tests | VERIFIED automatically |
-| Real browser/device acceptance | Usable microphone, rendered/accessibility flows and persistent HTTPS session | Thirteen UAT passes, including repaired identity; only HTTPS remains | PARTIAL |
+| Real browser/device acceptance | Usable microphone, rendered/accessibility flows and persistent HTTPS session | Fourteen UAT passes, including repaired identity and actual trusted HTTPS Chrome acceptance | VERIFIED |
 
 ## Goal Achievement
 
@@ -114,11 +117,11 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 | 15 | Credentials and account links stay server-side; transport is private and bounded | VERIFIED | explicit static allowlist, negative browser storage test, capture/Resend timeout/sanitization tests |
 | 16 | Approved package checkpoint and isolated test lifecycle are preserved | VERIFIED | recorded provenance approval/pinned dependency metadata and unique-database/capture/teardown test |
 | 17 | No PDF byte persistence, private history or authoritative guest grade is introduced | VERIFIED | metadata-only schema/repository tests, no storage adapter, retained provisional practice contracts |
-| 18 | Browser restart and actual HTTPS enforcement meet D-10 | PARTIAL — human needed | UAT 12 restart/HTTP cookies passed; HTTPS UAT 13 blocked |
+| 18 | Browser restart and actual HTTPS enforcement meet D-10 | VERIFIED in actual Chrome | UAT 12 plus UAT 13: trusted TLS 1.3, actual Set-Cookie and stored Secure/HttpOnly/Lax, seven-day expiry, JavaScript exclusion and same session after browser restart |
 | 19 | Physical microphone practice remains uninterrupted through expiry, D-01/D-11 | VERIFIED by user | Staged UAT 10 confirmed expiry, continuity and reauthentication |
 | 20 | Keyboard, responsive/zoomed layout and spoken announcements meet the UI contract | VERIFIED by user | UAT 11 pass; no unperformed subchecks reported |
 
-**Score:** 19/20 implementation/behavior truths fully verified; only actual HTTPS enforcement remains open. No truth is marked passed by override.
+**Score:** 20/20 implementation/behavior truths fully verified. No truth is marked passed by override.
 
 ### Required Artifacts
 
@@ -134,7 +137,7 @@ Verification ran inline using the skills' Codex fallback. No independent verifie
 | Package provenance evidence | Yes | 02-02 recorded human checkpoint and pinned metadata; no new package installation |
 | 02-REVIEW/VALIDATION/SECURITY/UI-REVIEW | Yes | Required execute/verify audits persisted with explicit browser limits |
 
-The generic verify.artifacts query passes the object-style artifact declarations in Plans 01/03. Plan 02 is a checkpoint without an artifacts field. String-style lists in Plans 04–07 yield an empty CLI result, so these were checked directly for file content, imports/routes and tested behavior instead; an empty generic result is not treated as a successful artifact check.
+The generic verify.artifacts query passes the object-style artifact declarations in Plans 01/03. Plan 02 is a checkpoint without an artifacts field. String-style lists in Plans 04ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“07 yield an empty CLI result, so these were checked directly for file content, imports/routes and tested behavior instead; an empty generic result is not treated as a successful artifact check.
 
 ### Key Links and Data Flow
 
@@ -152,12 +155,12 @@ The generic verify.artifacts query passes the object-style artifact declarations
 
 - Focused owner/session suite: **19 passed**, zero fail/skip/TODO.
 - Focused Plan 02-08 account flow: **12 passed**; UI suite: **23 passed**, zero fail/skip/TODO.
-- Final bounded source regression: **97 passed**, zero failed/cancelled/skipped/TODO, exit 0, **14,865.9425ms**, under 120-second timeout. Includes all **32 prior-phase tests**; no cross-phase regression.
+- Final bounded source regression: **97 passed**, zero failed/cancelled/skipped/TODO, exit 0, **11,438.9159ms**, under 120-second timeout. Includes all **32 prior-phase tests**; no cross-phase regression.
 - Account RED run reproduced the incorrect display name/address with two expected assertion failures before the one-line repair.
 - Initial schema/UI gate invocations used a directory argument and failed phase lookup; both were rerun successfully with phase argument 02. The failed lookup outputs were not accepted as gate evidence.
 - Browser source syntax and whitespace checks pass. No additional build is required for the served classic scripts.
 - Schema drift: no blocking finding. UI safety gate: approved specification present, no block.
-- Codebase map drift: advisory warn, nine structural elements, spawn_mapper=false; older maps remain stale.
+- Codebase map drift: advisory warn, thirteen structural elements after adding the HTTPS helpers, spawn_mapper=false; older maps remain stale.
 - API coverage: 28 capabilities, one single-send integration, 27 reasoned opt-outs, passed.
 - Decision gate: **12/12 honored**, none missing.
 
@@ -167,7 +170,7 @@ The generic verify.artifacts query passes the object-style artifact declarations
 | --- | --- | --- | --- | --- | --- | --- |
 | auth-flow.test.cjs | AUTH-01/02 | 12 | 0 | 0 | Multi-step HTTP/SQLite/session/token values | Covered |
 | session-security.test.cjs | AUTH-01/02 | 9 | 0 | 0 | Old-cookie revocation, exact expiry, concurrency, hostile Origin/Host | Covered |
-| auth-ui.test.cjs | AUTH-01/02, D-01–12 | 23 | 0 | 0 | Events -> fetch -> DOM/focus/navigation, including actual corrected-account backend rendering | Covered with browser limits |
+| auth-ui.test.cjs | AUTH-01/02, D-01ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“12 | 23 | 0 | 0 | Events -> fetch -> DOM/focus/navigation, including actual corrected-account backend rendering | Covered with browser limits |
 | ownership.test.cjs | AUTH-01/02 | 10 | 0 | 0 | Two-owner lists, exact bytes/404/401, provider-call exclusion | Covered |
 | email-transport.test.cjs | AUTH-01/02 | 10 | 0 | 0 | Exact HTTPS request, failure sanitization and callback integration | Covered; provider stubbed |
 | harness.test.cjs | AUTH-01/02 foundation | 1 | 0 | 0 | Independent databases/mail and verified teardown | Covered |
@@ -178,19 +181,19 @@ Expected results are explicit independent account IDs, sentinel bytes, policy va
 
 | Requirement | Owning plans | Implementation evidence | Acceptance |
 | --- | --- | --- | --- |
-| AUTH-01 | 02-01 through 02-08 | Email/password signup, verification gate, correction/resend, repaired identity, UI and owner boundary | Available browser checks passed; full phase acceptance awaits HTTPS |
-| AUTH-02 | 02-01 through 02-08 | Sign-in/recovery, fixed sessions, reset revocation, current workspace identity and two-account isolation | Available browser checks and restart passed; HTTPS pending |
+| AUTH-01 | 02-01 through 02-08 | Email/password signup, verification gate, correction/resend, repaired identity, UI and owner boundary | Passed: UAT 1-14 and actual trusted HTTPS cookie check |
+| AUTH-02 | 02-01 through 02-08 | Sign-in/recovery, fixed sessions, reset revocation, current workspace identity and two-account isolation | Passed: recovery, expiry, isolation, restart and trusted HTTPS |
 
-REQUIREMENTS checkboxes remain open. Summary traceability fields do not override phase acceptance.
+AUTH-01/AUTH-02 passed their required acceptance checks. The canonical phase.complete operation marked both requirements and Phase 2 complete on 2026-10-15; Phase 3 is ready for discussion.
 
 ### Anti-Patterns and Review Resolution
 
 Review commit 0a97574 fixes URL-selected success states/inherited keys, error focus restoration and error color precedence. No production stub, client secret, disabled requirement test or known authorization bypass remains in the reviewed scope. The provider seam intentionally has no real storage adapter; tests inject inert bytes as the plan requires. The UI review notes a minor product-name line-height discrepancy and unobserved visuals; neither is silently represented as visual acceptance.
 
-### Human Verification Required
+### Browser Acceptance Completed
 
-The original acceptance groups are preserved as atomic checks in **02-UAT.md**. Thirteen checkpoints pass, including user-confirmed Test 14 after the fixture loaded Plan 02-08's repair. Test 7 retains the original defect report and its successful repair history. HTTPS Test 13 alone remains blocked on trusted HTTPS setup. A localhost HTTP cookie/header test is not substituted for that observation.
+The original acceptance groups are preserved as atomic checks in **02-UAT.md**. Fourteen checkpoints pass, including user-confirmed Test 14 after the fixture loaded Plan 02-08's repair. Test 7 retains the original defect report and successful repair history. Test 13 passed in installed Chrome over trusted TLS at https://localhost:31318, using the real client form and actual backend. See .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/HTTPS-EVIDENCE.json. No certificate-error bypass, token disclosure or HTTP-only substitute was used. The standalone test helper exits 0; an initial repeat exposed a form-initialization race in the helper, fixed by waiting for document.readyState=complete before submitting.
 
 ## Gaps Summary
 
-The stale-name root cause is fixed and user-confirmed: GET /api/me/workspace reads the verified user's current email, preserving user.name and all guards/no-store/owner-by-user.id boundaries. Actual lifecycle tests and browser Test 14 agree. The phase remains human-needed solely for HTTPS setup and observation. GitHub publication is authorized. No merge, deployment or next-phase transition occurred.
+The stale-name root cause is fixed and user-confirmed: GET /api/me/workspace reads the verified user's current email, preserving user.name and all guards/no-store/owner-by-user.id boundaries. Actual lifecycle tests and browser Test 14 agree. Trusted HTTPS setup and browser observation also pass. WINDOWS 22 is fixed, with no remaining required acceptance gap. GitHub publication is authorized. No merge or deployment occurred.

@@ -26,9 +26,11 @@ A singer can immediately see exactly which written notes they sang sharp or flat
 - ✓ Follow the fixture's audio-clock score position, see provisional pitch/onset observations, and recover an uncertain position without grading notes — Phase 1
 - ✓ Use the example-practice controls by keyboard with visible focus and non-color status text — Phase 1
 
+- Verified email/password account creation, recovery, fixed seven-day sessions and private workspace access - Phase 2
+- Session-derived ownership guards for private metadata and byte-provider access - Phase 2
+
 ### Active
 
-- [ ] Users can create accounts and securely access their private practice material and history
 - [ ] Users can upload PDF music scores to cloud storage
 - [ ] The app can recognize musical notation, measures, tempo information, staves, and vocal parts from a PDF score
 - [ ] Users can review and correct recognized notes, measures, tempo, and voice-part assignments before practice
@@ -79,9 +81,11 @@ A singer can immediately see exactly which written notes they sang sharp or flat
 | Require recognition review and manual correction before practice | Optical music recognition can misread complex or scanned scores | — Pending |
 | Evaluate one selected vocal part and one singer per session | Keeps feedback understandable and the initial signal-processing problem tractable | — Pending |
 | Show pitch and timing feedback on the score in real time | Immediate knowledge of sharp/flat and early/late notes is the product's core value | — Pending |
-| Include accounts, cloud storage, and practice history | Users need continuity across scores and repeated attempts | — Pending |
+| Include accounts, cloud storage, and practice history | Users need continuity across scores and repeated attempts; account foundation is verified in Phase 2, storage/history remain later phases | — Pending |
 | Make raw recording retention optional | Progress data is valuable without forcing storage of sensitive voice recordings | — Pending |
 | Start with a manually verified example score and keep microphone observations ungraded | This proves browser timing and transport before PDF recognition and measured per-note feedback | Phase 1 verified |
+| Identify the workspace by verified email and scope private resources by user.id | Avoid stale corrected addresses while preserving a stable authorization identity | Phase 2 verified |
+| Use fixed seven-day database sessions and Secure/HttpOnly/Lax HTTPS cookies | Predictable expiry, server revocation and persistent private access | Phase 2 verified, including actual trusted HTTPS Chrome test |
 
 ## Evolution
 
@@ -101,4 +105,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-27 after Phase 1*
+*Last updated: 2026-10-15 after Phase 2*

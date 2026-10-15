@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 1
+open_count: 0
 waived_count: 0
-fixed_count: 21
+fixed_count: 22
 total_count: 22
-last_updated: 2026-10-15T14:30:27.997Z
+last_updated: 2026-10-15T22:35:35.127Z
 ---
 
 # Broken Windows Ledger
@@ -36,7 +36,7 @@ last_updated: 2026-10-15T14:30:27.997Z
 | 19 | 02 | skipped-test | tests/ownership.test.cjs | 11 | Plan 02-07 pending acceptance test: forged owner identifiers cannot bypass server-side ownership checks. | fixed |  | 2026-10-09T00:33:50.228Z | 2026-10-15T14:30:25.009Z |
 | 20 | 02 | skipped-test | tests/ownership.test.cjs | 12 | Plan 02-07 pending acceptance test: resource metadata lists only the authenticated owner records. | fixed |  | 2026-10-09T00:33:50.969Z | 2026-10-15T14:30:26.429Z |
 | 21 | 02 | skipped-test | tests/ownership.test.cjs | 13 | Plan 02-07 pending acceptance test: resource bytes are available to their authenticated owner. | fixed |  | 2026-10-09T00:33:51.686Z | 2026-10-15T14:30:27.997Z |
-| 22 | 02 | unrun-verify | tests/auth-flow.test.cjs |  | Browser restart, HTTP cookie attributes and controlled expiry passed in UAT; production-like HTTPS Secure-cookie enforcement remains blocked on an HTTPS fixture. | open |  | 2026-10-09T00:33:52.711Z |  |
+| 22 | 02 | unrun-verify | tests/auth-flow.test.cjs |  | UAT 12 and controlled expiry passed; UAT 13 now also passes in actual Chrome over trusted TLS with Secure/HttpOnly/Lax, seven-day expiry and browser-restart persistence. See quick task 261015-lp9 HTTPS-EVIDENCE.json. | fixed |  | 2026-10-09T00:33:52.711Z | 2026-10-15T22:35:35.127Z |
 
 ````json
 [
@@ -319,11 +319,11 @@ last_updated: 2026-10-15T14:30:27.997Z
     "phase": "02",
     "file": "tests/auth-flow.test.cjs",
     "line": null,
-    "description": "Browser restart, HTTP cookie attributes and controlled expiry passed in UAT; production-like HTTPS Secure-cookie enforcement remains blocked on an HTTPS fixture.",
-    "status": "open",
+    "description": "UAT 12 and controlled expiry passed; UAT 13 now also passes in actual Chrome over trusted TLS with Secure/HttpOnly/Lax, seven-day expiry and browser-restart persistence. See quick task 261015-lp9 HTTPS-EVIDENCE.json.",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:52.711Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T22:35:35.127Z",
     "milestone": null
   }
 ]

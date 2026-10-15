@@ -71,4 +71,8 @@ Existing documented residuals: extensions/local screen capture can observe a use
 - [x] No new accepted risk was introduced.
 - [x] threats_open: 0 at the configured high threshold.
 - [x] status: verified applies to authored implementation mitigations.
-- [ ] Real-browser and deployment acceptance, tracked in 02-UAT.md / README.
+- [x] Phase 2 real-browser acceptance passed in 02-UAT.md; production deployment prerequisites remain documented separately in README.
+
+## Trusted HTTPS acceptance ? 2026-10-15
+
+UAT 13 now passes: installed isolated Chrome trusts the seven-day localhost leaf certificate and negotiates TLS 1.3 without bypass. Actual HTTPS sign-in emits a Secure/HttpOnly/SameSite=Lax persistent session cookie with Max-Age=604800; browser storage confirms the attributes, JavaScript cannot read the token and the identical session survives a full browser restart. Sanitized evidence: .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/HTTPS-EVIDENCE.json. Local TLS keys/secrets and profiles are outside Git with a user-only ACL. Both listeners bind loopback and the app retains exact HTTPS Origin/Host checks. No application auth/security policy was relaxed. Implementation threats_open remains zero. Real hosting and live-mail operator prerequisites remain as documented; local acceptance does not claim deployment readiness.

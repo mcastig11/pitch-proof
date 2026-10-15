@@ -1,6 +1,6 @@
 ---
 type: quick
-status: planned
+status: complete
 autonomous: true
 files_modified:
   - scripts/setup-local-https.ps1

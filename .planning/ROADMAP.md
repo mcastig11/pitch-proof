@@ -9,7 +9,7 @@ Deliver a single-singer, single-part practice loop in six vertical increments. F
 **Phase Numbering:** Integer phases are planned milestone work; decimal phases are reserved for urgent insertions.
 
 - [x] **Phase 1: Verified Example Practice** - A singer can complete a short, score-guided attempt from a chosen measure using a manually verified example. (completed 2026-09-27)
-- [ ] **Phase 2: Private Practice Access** - A singer can create, recover, and access a private practice workspace.
+- [x] **Phase 2: Private Practice Access** - A singer can create, recover, and access a private practice workspace. (completed 2026-10-15)
 - [ ] **Phase 3: Corrected PDF Score** - A singer can turn a supported PDF into a confirmed, correctable single-part score while keeping the source visible.
 - [ ] **Phase 4: Trustworthy Live Feedback** - A singer can see measured pitch and timing results on the corrected score during singing.
 - [ ] **Phase 5: Comparable Practice History** - A singer can review per-note results and compare equivalent attempts.
@@ -60,7 +60,7 @@ Plans:
   3. A second signed-in account cannot open the first account's private workspace or resources through the interface or a direct request.
 
 **Exit gate:** Exercise account creation, recovery, session expiry, and two-account authorization checks, including direct resource requests. Set owner-scoped data and object access rules before the PDF library is added.
-**Plans:** 8/8 plans executed; 97 automated tests and 13 browser checkpoints pass; only HTTPS acceptance remains blocked on setup
+**Plans:** 8/8 plans complete
 
 Plans:
 **Wave 1**
@@ -164,7 +164,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Verified Example Practice | 3/3 | Complete    | 2026-09-27 |
-| 2. Private Practice Access | 8/8 | In Progress|  |
+| 2. Private Practice Access | 8/8 | Complete    | 2026-10-15 |
 | 3. Corrected PDF Score | 0/TBD | Not started | - |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |
 | 5. Comparable Practice History | 0/TBD | Not started | - |

@@ -2,23 +2,27 @@
 phase: "02"
 slug: "private-practice-access"
 status: validated
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: true
 automated_gaps: 0
-human_acceptance: partial
+human_acceptance: passed
 audited: "2026-10-15"
 created: "2026-09-28"
 ---
 
 # Phase 02 — Validation Strategy
 
-> All 97 automated tests and thirteen available browser checkpoints pass. The identity defect is repaired and user-confirmed. HTTPS browser cookie enforcement is the only prerequisite block. The existing full exit-gate sign-off rule keeps nyquist_compliant false until that observation passes.
+> All 97 portable tests and fourteen UAT checkpoints pass, including actual Chrome Secure-cookie acceptance over trusted HTTPS. Automated gaps: zero; the full Phase 2 exit gate is satisfied.
 
 ## Post-UAT audit 2026-10-15
 
 All thirteen available browser checks now pass, including the repaired identity. AUTH-01/AUTH-02 have behavioral coverage in the existing 65 Phase 2 tests, plus 32 prior-phase tests; the latest full run passed all 97 with no skipped/TODO cases. Plan 02-08's two tasks have passing HTTP and actual-backend DOM commands. No new automated coverage gap was found and no test generation or repeat run is needed for this documentation-only acceptance update. The earlier audit entries below remain historical.
 
-The sole manual-only item is HTTPS browser cookie enforcement, blocked on a trusted HTTPS origin. human_acceptance remains partial and nyquist_compliant remains false under the project's existing full exit-gate sign-off rule.
+Final acceptance 2026-10-15T22:36:28.345Z: actual Chrome 154 accepted trusted TLS 1.3 at https://localhost:31318, stored the Secure/HttpOnly/Lax session with seven-day expiry, excluded it from JavaScript and retained the identical session through browser restart. All fourteen UAT checkpoints pass. The full portable suite was rerun: 97 passed, no failed/cancelled/skipped/TODO, 11,438.9159ms. The standalone HTTPS helper also exited 0. human_acceptance=passed and nyquist_compliant=true now satisfy the exit-gate rule. Earlier audit statements below retain their historical context.
+
+## Historical implementation and pre-HTTPS records
+
+The sections below preserve earlier implementation/audit checkpoints. Current completion and acceptance are stated above.
 
 ## Test Infrastructure
 
@@ -72,9 +76,9 @@ The sole manual-only item is HTTPS browser cookie enforcement, blocked on a trus
 - [x] Wave 0 fixtures exist; no missing test infrastructure remains.
 - [x] Final one-shot suite is bounded by a 120-second timeout.
 - [x] Actual final feedback time: 12,788ms; 96 passed, no failed/cancelled/skipped/TODO.
-- [ ] Set `nyquist_compliant: true` only after the Phase 2 tests and exit gate pass.
+- [x] Set `nyquist_compliant: true` after the Phase 2 tests and exit gate passed.
 
-**Approval:** automated coverage validated; manual exit-gate approval pending in 02-UAT.md. AUTH-01/AUTH-02 remain pending in REQUIREMENTS.
+**Approval:** automated coverage and all required UAT checks passed; AUTH-01/AUTH-02 are eligible for canonical completion.
 
 **UAT update:** Browser restart and HTTP cookie settings passed. G-02-7 requires the corrected-email regression and repair in Plan 02-08. HTTPS Secure-cookie enforcement still needs a configured HTTPS fixture. The measurements in the audit below describe the pre-UAT suite, not a regression for this newly discovered defect.
 

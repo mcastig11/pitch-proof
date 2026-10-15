@@ -1,15 +1,15 @@
 ---
-status: partial
+status: complete
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T20:31:31Z
+updated: 2026-10-15T22:36:28.345Z
 diagnosis: complete
 ---
 
 ## Current Test
 
-[available browser checks complete; Test 13 remains blocked on HTTPS setup]
+[testing complete: fourteen passing checkpoints, zero unresolved issues or blocks]
 
 ## Test Setup
 
@@ -17,11 +17,11 @@ Browser-test fixture started on 2026-10-15 at http://localhost:31317, bound to 1
 
 The original four acceptance groups are preserved below. The account lifecycle group is split into nine observable checks. Microphone, accessibility, browser restart/cookies and HTTPS enforcement give thirteen checkpoints in total. Second-account signup/confirmation and reset request/completion were separated so captured links could be prepared between them. The original final group is split into the observed HTTP restart/cookie check and the blocked HTTPS check; no result was inferred during restructuring.
 
-Test 14 was added as the targeted post-repair identity recheck. It and the repaired original checkpoint now pass, giving thirteen passing results and one blocked HTTPS result across fourteen entries.
+Test 14 was added as the targeted post-repair identity recheck. It and the repaired original checkpoint pass. Test 13 subsequently passed in actual installed Chrome over trusted local HTTPS; all fourteen entries now pass.
 
 Run through `$gsd-verify-work 2` with a connected real browser and microphone. Use disposable local accounts and an injected capture-email fixture to open confirmation/reset links privately. The ordinary `node server/index.mjs` process intentionally has no captured-mail inspector and does not print links; it cannot by itself complete this test's email steps. Do not add a public token endpoint or send real mail as a workaround.
 
-For controlled expiry, the fixture can inject createApp's clock and advance it while the browser remains open; do not wait seven days or change the production lifetime. For the restart test, use a private persistent SQLite path and stable server secret, plus a persistent browser profile. The default CLI database is in memory and is unsuitable for persistence acceptance. HTTPS acceptance requires a configured production-like HTTPS origin; none was provisioned during implementation.
+For controlled expiry, the fixture can inject createApp's clock and advance it while the browser remains open; do not wait seven days or change the production lifetime. For the restart test, use a private persistent SQLite path and stable server secret, plus a persistent browser profile. The default CLI database is in memory and is unsuitable for persistence acceptance. HTTPS acceptance was completed at https://localhost:31318 using a current-user-trusted, seven-day localhost certificate and the same private database. TLS files and the stable HTTPS secret remain outside the repository.
 
 Automated evidence is already recorded: 97 passing tests, no skipped/TODO tests; two-account metadata/byte requests, old-cookie reset revocation and the corrected-email HTTP/backend-to-DOM regressions pass. This UAT covers remaining real-browser observations, not a replay of completed source tasks.
 
@@ -90,9 +90,11 @@ notes: "User reported pass to the explicitly limited HTTP restart/cookie checkpo
 
 ### 13. Real HTTPS Secure-cookie enforcement
 expected: On a configured production-like HTTPS origin, confirm the session cookie has Secure enabled and the browser enforces secure transport. Production-like HTTPS setup is a prerequisite; this closes the remaining portion of WINDOWS item 22 only after actual observations.
-result: blocked
-blocked_by: server
-reason: "The available fixture is http://localhost:31317; no trusted production-like HTTPS origin is configured. Browser Secure-cookie enforcement cannot be established from that HTTP fixture."
+result: pass
+verified_at: 2026-10-15T22:36:28.345Z
+method: installed Chrome automation in an isolated persistent profile
+evidence: .planning/quick/261015-lp9-set-up-trusted-local-https-and-verify-se/HTTPS-EVIDENCE.json
+notes: "Chrome 154.0.8037.98 accepted TLS 1.3 at https://localhost:31318 with securityState=secure and no certificate-error bypass. Real form sign-in returned __Secure-better-auth.session_token with Secure, HttpOnly, SameSite=Lax, Path=/ and Max-Age=604800. Chrome stored those attributes and a persistent seven-day expiry. JavaScript could not read the session token; authenticated workspace access and the identical session survived full browser shutdown/relaunch. The standalone helper exited 0. No raw cookie, password or captured link is recorded. This observes trusted HTTPS and the browser Secure flag; it does not claim a separate non-localhost HTTP negative test."
 
 ### 14. Corrected email in My space after the repair
 expected: After the fixed server is loaded and Alice signs in freshly with alice.corrected@example.test, My space shows that corrected verified address under Signed in as. The retained display name must not substitute the abandoned signup address.
@@ -102,11 +104,11 @@ notes: "User reported pass after the fixed app was reloaded with Alice's same pr
 ## Summary
 
 total: 14
-passed: 13
+passed: 14
 issues: 0
 pending: 0
 skipped: 0
-blocked: 1
+blocked: 0
 
 ## Gaps
 
@@ -139,6 +141,6 @@ blocked: 1
 
 ## Session Notes
 
-- G-02-7 is resolved by executed Plan 02-08 and user-confirmed Test 14. Test 7 retains the original report and is now passing after repair. All thirteen available checkpoints pass; there are no unresolved implementation issues or pending tests. Test 13 alone remains blocked by missing HTTPS setup.
-- Phase 2 and AUTH-01/AUTH-02 remain pending until the HTTPS acceptance check is observed. WINDOWS item 22 remains open for that portion. Publication is authorized and noon/8 PM Central pushes are scheduled. No merge, deployment or next-phase transition occurred.
+- G-02-7 is resolved by executed Plan 02-08 and user-confirmed Test 14. Test 7 retains the original report and is now passing after repair. All fourteen checkpoints pass, including actual HTTPS Test 13. There are no unresolved implementation issues, pending tests or acceptance blocks.
+- Trusted HTTPS acceptance is observed and WINDOWS item 22 is fixed. The canonical UAT gate passed all fourteen entries, then phase.complete marked Phase 2 and AUTH-01/AUTH-02 complete on 2026-10-15. Publication is authorized and noon/8 PM Central pushes are scheduled. No merge or deployment occurred.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.

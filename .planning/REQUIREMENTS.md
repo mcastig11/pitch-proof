@@ -7,8 +7,8 @@
 
 ### Accounts and Private Library
 
-- [ ] **AUTH-01**: A singer can create an account with email and password.
-- [ ] **AUTH-02**: A singer can sign in and reset a forgotten password.
+- [x] **AUTH-01**: A singer can create an account with email and password.
+- [x] **AUTH-02**: A singer can sign in and reset a forgotten password.
 - [ ] **LIB-01**: A singer can upload a PDF to a private score library and see processing status or a clear error.
 
 ### Score Recognition and Review
@@ -78,8 +78,8 @@ Each v1 requirement has exactly one owning phase. Later phases may strengthen an
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
 | LIB-01 | Phase 3 | Pending |
 | SCORE-01 | Phase 3 | Pending |
 | SCORE-02 | Phase 3 | Pending |
