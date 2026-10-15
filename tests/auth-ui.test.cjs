@@ -259,6 +259,52 @@ test('real server completes UI confirmation, first and later landing, reset and 
     assert.equal((await request('/api/me/workspace', { cookie })).status, 401);
   });
 });
+test('real corrected-email signup renders the current verified email in My space', async () => {
+  await withUiServer(async (fixture, request) => {
+    const originalEmail = 'alice.typo@example.test';
+    const correctedEmail = 'alice.corrected@example.test';
+    const password = 'strong-corrected-password';
+    let cookie = '';
+    const backend = async (url, options = {}) => {
+      const response = await request(url, { ...(options.body ? { body: JSON.parse(options.body) } : {}), cookie });
+      const session = response.headers.getSetCookie().find((header) => /session_token=/.test(header));
+      if (session) cookie = session.split(';')[0];
+      return response;
+    };
+
+    const signup = auth({ search: '?mode=signup', fetchImpl: backend });
+    fill(signup, { email: originalEmail, password });
+    await signup.get('auth-form').emit('submit');
+    assert.equal(signup.get('auth-heading').textContent, 'Check your email');
+    await signup.get('correct-email').emit('click');
+    fill(signup, { email: originalEmail, password, newEmail: correctedEmail });
+    await signup.get('auth-form').emit('submit');
+    assert.equal(signup.get('auth-heading').textContent, 'Check your email');
+    assert.equal(cookie, '');
+
+    const verification = new URL(fixture.emailTransport.getLink('verification', correctedEmail));
+    assert.equal((await request(verification.pathname + verification.search)).status, 302);
+    assert.equal((await request('/api/me/workspace')).status, 401);
+    const signin = auth({ search: '?returnTo=%2Fworkspace', fetchImpl: backend });
+    fill(signin, { email: correctedEmail, password });
+    await signin.get('auth-form').emit('submit');
+    assert.equal(signin.window.location.assigned, '/workspace');
+    assert.ok(cookie);
+
+    const workspaceUi = workspace({ fetchImpl: backend });
+    // Loading starts on script evaluation; wait for actual HTTP-backed rendering.
+    for (let attempt = 0; attempt < 200 && workspaceUi.get('private-content').hidden; attempt += 1) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    assert.equal(workspaceUi.get('private-content').hidden, false);
+    assert.equal(workspaceUi.get('private-content').children[0].textContent, 'Signed in as');
+    assert.equal(workspaceUi.get('private-content').children[1].textContent, correctedEmail);
+    assert.equal(workspaceUi.get('private-content').textContent.includes(originalEmail), false);
+    assert.equal(workspaceUi.get('account-nav').hidden, false);
+    assert.equal(fixture.database.prepare('SELECT name FROM user WHERE email = ?').get(correctedEmail).name, originalEmail);
+  });
+});
+
 function example(fetchImpl) {
   let callbacks; let stops = 0;
   const h = browserHarness('script.js', { page: 'example', fetchImpl, windowExtras: {
