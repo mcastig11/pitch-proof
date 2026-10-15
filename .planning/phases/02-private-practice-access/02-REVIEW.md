@@ -34,10 +34,19 @@ findings:
   info: 0
   total: 0
 resolved_findings: 3
+gap_reviewed: 2026-10-15
+gap_scope: [server/app.mjs, tests/auth-flow.test.cjs, tests/auth-ui.test.cjs]
+gap_findings: 0
 status: clean
 ---
 
 # Phase 2: Code Review Report
+
+## Plan 02-08 review addendum
+
+Reviewed the complete diff from d68f2a8 through 1ec83f8 inline under the gsd-code-review fallback. The verified-session guard and no-store middleware still precede the workspace response; only the identity source changes from name to email. Ownership remains based on user.id, and the client retains textContent rendering. Existing corrected accounts are covered without overwriting legitimate display names. The HTTP regression reproduces the stale-address defect before the repair, and the actual-backend UI test exercises signup, correction, confirmation, fresh sign-in and the rendered value. No unresolved correctness, privacy or security finding was identified in these three changed files.
+
+Validation for this addendum: 12 account-flow tests, 23 UI tests and the bounded full suite of 97 tests passed, with no skipped or TODO cases. The original review below describes the earlier 96-test snapshot; its measurements are historical. A targeted physical-browser recheck and HTTPS enforcement remain acceptance items.
 
 ## Summary
 

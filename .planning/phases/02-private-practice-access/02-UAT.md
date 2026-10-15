@@ -3,13 +3,19 @@ status: partial
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T19:27:31Z
+updated: 2026-10-15T20:10:31Z
 diagnosis: complete
 ---
 
 ## Current Test
 
-[testing complete for the available HTTP fixture; HTTPS prerequisite remains blocked]
+number: 14
+name: Corrected email in My space after the repair
+expected: |
+  The local fixture has been reloaded with the fix while retaining Alice's private test database and account.
+  Open http://localhost:31317/workspace. If needed, sign out and sign in again as alice.corrected@example.test using the new password.
+  Under Signed in as, My space should now show alice.corrected@example.test rather than alice@example.test.
+awaiting: user response
 
 ## Test Setup
 
@@ -91,12 +97,17 @@ result: blocked
 blocked_by: server
 reason: "The available fixture is http://localhost:31317; no trusted production-like HTTPS origin is configured. Browser Secure-cookie enforcement cannot be established from that HTTP fixture."
 
+### 14. Corrected email in My space after the repair
+expected: After the fixed server is loaded and Alice signs in freshly with alice.corrected@example.test, My space shows that corrected verified address under Signed in as. The retained display name must not substitute the abandoned signup address.
+result: [pending]
+notes: "Plan 02-08 implemented; HTTP and actual-backend DOM regressions pass in the 97-test full suite. The fixture now uses a freshly imported current app module with the same private database, secret and capture transport and the original eleven public asset handlers. This is readiness for a new browser observation, not a recorded pass."
+
 ## Summary
 
-total: 13
+total: 14
 passed: 11
 issues: 1
-pending: 0
+pending: 1
 skipped: 0
 blocked: 1
 
@@ -122,8 +133,11 @@ blocked: 1
     - "Use the current verified account email in the Signed in as identity while preserving any separate display-name field."
     - "Add a corrected-address sign-in/workspace regression that verifies the displayed identity after correction and fresh login."
   debug_session: .planning/debug/corrected-email-workspace-identity.md
+  implementation_fixed_by: 02-08-PLAN.md
+  implementation_commit: 5ece2db
+  browser_recheck: 14
 
 ## Session Notes
 
-- Tests 1–6 and 8–12 passed (eleven passes). Test 7 has the diagnosed identity display defect G-02-7. Test 13 is blocked by the missing HTTPS prerequisite, not a demonstrated implementation defect. No tests remain pending in the available fixture. Phase 2 and AUTH-01/AUTH-02 remain pending until gap closure and acceptance; WINDOWS item 22 remains open for HTTPS. No push, merge or deployment occurred.
+- Tests 1–6 and 8–12 passed (eleven passes). Test 7 preserves the original identity defect report; Plan 02-08 now fixes it with passing automated regressions, and Test 14 awaits the targeted browser recheck. Test 13 remains blocked by missing HTTPS setup. Phase 2 and AUTH-01/AUTH-02 remain pending. The user subsequently authorized GitHub publication; the verified branch has been pushed. No merge or deployment occurred.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.

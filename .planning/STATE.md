@@ -3,17 +3,17 @@ gsd_state_version: "1.0"
 current_phase: 02
 current_phase_name: Private Practice Access
 current_plan: 8 of 8
-status: Phase 02 UAT partial; identity gap plan ready; HTTPS acceptance blocked
-stopped_at: "UAT partial: eleven passes, G-02-7 Plan 02-08 verified and ready; HTTPS setup blocked"
-last_updated: "2026-10-15T19:30:52.409Z"
+status: Phase 02 gap implemented; targeted browser recheck and HTTPS acceptance pending
+stopped_at: Plan 02-08 complete, 97 tests pass; UAT 14 identity recheck and HTTPS setup pending; noon/8 PM pushes scheduled
+last_updated: "2026-10-15T20:10:31.512Z"
 last_activity: 2026-10-15
-last_activity_desc: Eleven browser checks passed; G-02-7 diagnosed and Plan 02-08 verified; HTTPS prerequisite remains
-state_head: b8b3659c1ab1846dd942b4b63a47467a26b06cdf
+last_activity_desc: Eight plans complete; 97 tests pass; identity browser recheck pending; noon/8 PM GitHub pushes configured
+state_head: 050e88acbc5e320730bb85cb5b93f694aace82a5
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
   percent: 17
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-27)
 
 ## Current Position
 
-Phase: 02 (Private Practice Access) — GAP CLOSURE READY; HTTPS ACCEPTANCE BLOCKED
+Phase: 02 (Private Practice Access) — HUMAN VERIFICATION PENDING
 Current Plan: 8 of 8
 Total Plans in Phase: 8
-Status: Phase 02 UAT partial; identity gap plan ready; HTTPS acceptance blocked
-Last activity: 2026-10-15 — Eleven browser checks passed; G-02-7 diagnosed and Plan 02-08 verified; HTTPS prerequisite remains
+Status: Phase 02 gap implemented; targeted browser recheck and HTTPS acceptance pending
+Last activity: 2026-10-15 — Eight plans complete; 97 tests pass; identity browser recheck pending; noon/8 PM GitHub pushes configured
 
 Progress: [██░░░░░░░░] 17%
 
@@ -40,7 +40,7 @@ Progress: [██░░░░░░░░] 17%
 
 **Velocity:**
 
-- Total plans completed: 10 (3 in Phase 1; 7 in Phase 2)
+- Total plans completed: 11 (3 in Phase 1; 8 in Phase 2)
 - Average duration: N/A
 - Total execution time: 0 hours
 
@@ -49,7 +49,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 3 | - | - |
-| 2 | 7 | Elapsed metrics include inactive approval intervals | - |
+| 2 | 8 | Elapsed metrics include inactive approval intervals | - |
 
 **Recent Trend:**
 
@@ -97,7 +97,9 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 02]: Production mail requires HTTPS, private durable SQLite, stable auth secret, and server-only Resend settings; local capture has no public inspector.
 - [Phase 02]: Owner metadata/bytes derive identity only from session.user.id; authorize before an injected inert provider. No PDF bytes are persisted.
 - [Phase 02]: Crafted URL completion states are rejected; review fixes preserve actionable error focus and color. Full regression: 96 pass, no skips/TODOs.
-- [Phase 02]: AUTH-01/AUTH-02 and phase completion await browser UAT; no phase advance, push, merge or deployment occurred.
+- [Phase 02, pre-UAT execution]: AUTH-01/AUTH-02 and phase completion awaited browser UAT; no phase advance, push, merge or deployment had occurred at that checkpoint.
+- [Phase 02, Plan 08]: Workspace identity uses the current verified email while retaining a separate display name. Full regression: 97 passing tests; targeted browser recheck and HTTPS remain.
+- [Publication]: User authorized GitHub pushes and selected noon and 8 PM Central. Windows task PitchProof-Verified-GitHub-Push publishes the exact tested commit on the current GSD branch only after clean-worktree and test checks. No auto-commit, force push, merge or deployment.
 
 ### Pending Todos
 
@@ -105,7 +107,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 2 acceptance: eleven browser checkpoints passed. G-02-7 (stale email in My space) has verified gap plan 02-08 ready for execution. HTTPS Secure-cookie enforcement remains blocked on a configured trusted HTTPS origin; WINDOWS 22 remains open for that portion. Phase 2 and AUTH-01/AUTH-02 are not complete.
+- Phase 2 acceptance: eleven browser checkpoints passed. G-02-7 is implemented in Plan 02-08, with HTTP and actual-backend DOM regressions passing; targeted browser recheck is pending. HTTPS Secure-cookie enforcement remains blocked on a configured trusted HTTPS origin; WINDOWS 22 remains open for that portion. Phase 2 and AUTH-01/AUTH-02 are not complete.
 - Phase 3: Obtain a permissioned PDF corpus, set the supported-score boundary, and resolve OMR source mapping and deployment license.
 - Phase 4: Obtain annotated solo singing and set evidence-based follower, device-timing, pitch, uncertainty, and latency limits before authoritative feedback.
 - Phase 6: Define raw-audio retention and deletion behavior before pilot release.
@@ -116,6 +118,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260927-wk5 | Publish all outstanding Pitch Proof work to GitHub | 2026-09-27 | 9e77e1e | [260927-wk5-publish-all-outstanding-pitch-proof-work](./quick/260927-wk5-publish-all-outstanding-pitch-proof-work/) |
+| 261015-ku4 | Schedule verified GitHub pushes at noon and 8 PM Central | 2026-10-15 | 050e88a | [261015-ku4-schedule-twice-daily-verified-github-pus](./quick/261015-ku4-schedule-twice-daily-verified-github-pus/) |
 
 ## Deferred Items
 
@@ -125,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-15T19:30:52.265Z
-Stopped at: UAT partial: eleven passes, G-02-7 Plan 02-08 verified and ready; HTTPS setup blocked
-Resume file: .planning/phases/02-private-practice-access/02-08-PLAN.md
+Last session: 2026-10-15T20:10:31.432Z
+Stopped at: Plan 02-08 complete, 97 tests pass; UAT 14 identity recheck and HTTPS setup pending; noon/8 PM pushes scheduled
+Resume file: .planning/phases/02-private-practice-access/02-UAT.md

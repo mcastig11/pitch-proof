@@ -12,6 +12,10 @@ created: "2026-10-15"
 
 # Phase 02 — Security
 
+## Plan 02-08 addendum
+
+Reviewed the repaired workspace identity and both new regression paths. The response still requires a fresh verified session and no-store; caller fields do not select identity, resource owner checks still use user.id, and the client still uses textContent. The plan's reused T-02-11/T-02-12 mitigations remain enforced. No new open threat was identified. This does not establish browser Secure-cookie enforcement on the unconfigured HTTPS origin.
+
 Authored threat mitigations were checked at ASVS Level 1 depth against source and passing tests. This is a repository mitigation audit, not ASVS certification or production acceptance. The 22 plan-register occurrences collapse to 16 distinct controls when the repeated package checkpoint is counted once. Reused IDs with different meanings retain their plan namespace below.
 
 ## Trust Boundaries

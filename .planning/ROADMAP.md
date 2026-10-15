@@ -60,7 +60,7 @@ Plans:
   3. A second signed-in account cannot open the first account's private workspace or resources through the interface or a direct request.
 
 **Exit gate:** Exercise account creation, recovery, session expiry, and two-account authorization checks, including direct resource requests. Set owner-scoped data and object access rules before the PDF library is added.
-**Plans:** 7/8 plans executed; 11 browser checks passed, one identity defect has a verified gap plan, and HTTPS acceptance remains blocked on setup
+**Plans:** 8/8 plans executed; 97 automated tests pass; corrected-email browser recheck and HTTPS acceptance remain outstanding
 
 Plans:
 **Wave 1**
@@ -87,7 +87,7 @@ Plans:
 
 **Wave 6** *(gap closure after browser UAT)*
 
-- [ ] 02-08-PLAN.md — Correct workspace identity after email correction (G-02-7)
+- [x] 02-08-PLAN.md — Correct workspace identity after email correction (G-02-7)
 
 **UI hint**: yes
 
@@ -164,7 +164,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Verified Example Practice | 3/3 | Complete    | 2026-09-27 |
-| 2. Private Practice Access | 7/8 | In Progress|  |
+| 2. Private Practice Access | 8/8 | In Progress|  |
 | 3. Corrected PDF Score | 0/TBD | Not started | - |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |
 | 5. Comparable Practice History | 0/TBD | Not started | - |
