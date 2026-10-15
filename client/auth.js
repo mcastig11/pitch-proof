@@ -126,7 +126,7 @@
         get('auth-status').classList.add('error'); get('auth-status').focus();
       }
     } finally {
-      if (generation === version) { busy = false; clearSecrets(); button.disabled = false; get('correct-email').disabled = false; if (focused) button.focus(); }
+      if (generation === version) { busy = false; clearSecrets(); button.disabled = false; get('correct-email').disabled = false; if (focused && document.activeElement !== get('auth-status')) button.focus(); }
     }
   }
   get('auth-form').addEventListener('submit', submit);
@@ -143,5 +143,10 @@
         const data = await response.json(); if (version === generation) state(response.ok && data.confirmed === true ? 'verified' : 'invalid-verify');
       }).catch(() => { if (version === generation) state('invalid-verify'); });
     }
-  } else state(requested === 'reset' && (!token || params.has('error')) ? 'invalid-reset' : definitions[requested] ? requested : 'signin');
+  } else {
+    // Completion states require a server result in this page lifecycle. A URL
+    // must neither claim success nor index inherited object properties.
+    const entry = ['signin', 'signup', 'pending', 'resend', 'correction', 'reset-request', 'reset'].includes(requested) ? requested : 'signin';
+    state(entry === 'reset' && (!token || params.has('error')) ? 'invalid-reset' : entry);
+  }
 })();

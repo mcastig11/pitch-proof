@@ -13,7 +13,7 @@
     button, .action, summary { padding: 8px 16px; border: 1px solid #aab9ba; border-radius: 8px; background: #fff; }
     button, summary { cursor: pointer; } button:disabled { opacity: .55; cursor: not-allowed; } a { display: inline-block; padding: 8px 0; text-decoration: underline; }
     .action { text-align: center; } :is(button, a, summary):focus-visible { outline: 2px solid #135e63; outline-offset: 2px; }
-    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; } .error { color: #a32929; } .muted { color: #506063; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0; } .muted { color: #506063; } .error { color: #a32929; }
     details { max-width: 100%; } details button { margin-top: 8px; } #account-status { max-width: 560px; overflow-wrap: anywhere; } [hidden] { display: none !important; }
     @media (max-width: 959px) { .page { padding: 24px; } }
     @media (max-width: 599px) { .page { padding: 16px; } .panel { padding: 16px; } header { flex-direction: column; } .actions > * { width: 100%; } }
@@ -27,7 +27,7 @@
       <p id="workspace-status" class="muted" role="status" aria-live="polite">Opening your private space…</p>
       <div id="private-content" hidden></div>
       <div class="actions"><a id="workspace-signin" class="action" href="/auth?mode=signin&amp;returnTo=%2Fworkspace" hidden>Sign in</a><button id="workspace-retry" type="button" hidden>Try again</button><a id="workspace-example" class="action" href="/" hidden>Try the example</a></div>
-      <p id="account-status" class="muted" role="status" aria-live="polite"></p>
+      <p id="account-status" class="muted" role="status" aria-live="polite" tabindex="-1"></p>
     </section>
   </main>
   <script src="/client/workspace.js"></script>

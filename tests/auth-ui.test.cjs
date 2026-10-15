@@ -101,6 +101,24 @@ test('verification and reset links never fabricate success and reset requires fr
 });
 test('browser auth source never persists passwords or bearer tokens', () => { assert.doesNotMatch(read('client/auth.js'), /localStorage|sessionStorage|document\.cookie/); });
 
+test('URL modes cannot fabricate account success or select inherited object properties', () => {
+  for (const mode of ['verified', 'updated', 'reset-sent', 'verifying', '__proto__', 'constructor', 'toString']) {
+    const h = auth({ search: '?mode=' + mode + '&confirmed=1&token=forged' });
+    assert.equal(h.get('auth-heading').textContent, 'Sign in', 'only public entry states may come from the URL');
+    assert.equal(h.get('auth-form').hidden, false);
+    assert.equal(h.calls.length, 0);
+  }
+});
+
+test('submitted credential errors retain focus on the actionable status', async () => {
+  const h = auth({ fetchImpl: async () => reply({}, 401) });
+  fill(h); h.get('auth-submit').focus();
+  await h.get('auth-form').emit('submit');
+  assert.equal(h.document.activeElement, h.get('auth-status'));
+  assert.equal(h.get('auth-submit').disabled, false);
+  assert.equal(h.get('password').value, '');
+});
+
 async function withUiServer(callback) {
   const { createApp } = await import('../server/app.mjs'); let app;
   return withServerFixture(async (fixture) => {
