@@ -37,7 +37,48 @@ export function createOwnerResourceRepository(database) {
       if (typeof mimeType !== 'string' || !MIME_TYPE.test(mimeType)) throw new Error('A valid MIME type is required.');
       if (!Number.isSafeInteger(byteLength) || byteLength < 0) throw new Error('A valid byte length is required.');
       create.run(id, ownerUserId, mimeType, byteLength, providerKey);
-      return this.get(ownerUserId, id);
+      return metadata(get.get(ownerUserId, id));
     },
   };
+}
+import { Router } from 'express';
+
+
+function publicMetadata({ id, mimeType, byteLength }) {
+  // Provider keys and owner identifiers are internal server data.
+  return { id, mimeType, byteLength };
+}
+
+export function createOwnerResourceRouter({ repository, byteProvider }) {
+  if (byteProvider !== undefined && typeof byteProvider !== 'function') throw new Error('A byte provider must be a function.');
+  const router = Router();
+  const missing = (response) => response.status(404).json({ error: 'Resource not found.' });
+  router.get('/', (_request, response) => {
+    const ownerUserId = response.locals.session.user.id;
+    return response.json({ resources: repository.list(ownerUserId).map(publicMetadata) });
+  });
+  router.get('/:resourceId', (request, response) => {
+    const resource = repository.get(response.locals.session.user.id, request.params.resourceId);
+    if (!resource) return missing(response);
+    return response.json(publicMetadata(resource));
+  });
+  router.get('/:resourceId/bytes', async (request, response) => {
+    const resource = repository.get(response.locals.session.user.id, request.params.resourceId);
+    if (!resource || !byteProvider) return missing(response);
+    // Authorization completes before the injected provider is invoked. There
+    // is deliberately no filesystem, public URL or score persistence adapter.
+    let bytes;
+    try { bytes = await byteProvider(resource.providerKey); }
+    catch { return response.status(502).json({ error: 'Resource is temporarily unavailable.' }); }
+    if (bytes === null || bytes === undefined) return missing(response);
+    if (!(bytes instanceof Uint8Array) || bytes.byteLength !== resource.byteLength) {
+      return response.status(502).json({ error: 'Resource is temporarily unavailable.' });
+    }
+    response.set('Content-Type', resource.mimeType);
+    response.set('X-Content-Type-Options', 'nosniff');
+    response.set('Content-Disposition', 'attachment');
+    return response.send(Buffer.from(bytes));
+  });
+  router.use((_request, response) => missing(response));
+  return router;
 }

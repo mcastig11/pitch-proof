@@ -5,7 +5,8 @@ import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
 import { hashPassword, verifyPassword } from 'better-auth/crypto';
 import { z } from 'zod';
 import { createAuth, createAuthOptions, validateAuthOrigin } from './auth.mjs';
-import { claimFirstSignIn, cleanupPendingAccounts, consumeEmailVerification, correctPendingEmail, expireAuthRecords, migrateAuthDatabase, openDatabase } from './db.mjs';
+import { claimFirstSignIn, cleanupPendingAccounts, consumeEmailVerification, correctPendingEmail, expireAuthRecords, migrateAuthDatabase, migratePrivateResources, openDatabase } from './db.mjs';
+import { createOwnerResourceRepository, createOwnerResourceRouter } from './owner-resources.mjs';
 
 // Bounds memory as well as traffic. At capacity, reject new buckets rather
 // than evicting live counters and letting an attacker reset their allowance.
@@ -49,13 +50,14 @@ function sendAuthResponse(response, result) {
   return result.text().then((body) => response.send(body));
 }
 
-export async function createApp({ databasePath, emailTransport, allowedOrigins, clock = Date.now, publicBaseURL, secret, rateLimits } = {}) {
+export async function createApp({ databasePath, emailTransport, allowedOrigins, clock = Date.now, publicBaseURL, secret, rateLimits, byteProvider } = {}) {
   // Reject insecure configuration before opening or migrating private storage.
   validateAuthOrigin(publicBaseURL);
   const database = openDatabase(databasePath);
   try {
     const authOptions = createAuthOptions({ database, emailTransport, allowedOrigins, publicBaseURL, secret, clock });
     await migrateAuthDatabase(authOptions);
+    migratePrivateResources(database);
     // SQLite remains the creation gate even when separate HTTP requests race.
     database.exec('CREATE UNIQUE INDEX IF NOT EXISTS user_email_normalized_unique ON user (lower(trim(email)))');
     cleanupPendingAccounts(database, clock());
@@ -197,6 +199,9 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
     app.get('/api/me/workspace', requireVerifiedSession, (_request, response) => {
       return response.json({ identity: response.locals.session.user.name });
     });
+    app.use('/api/me/resources', requireVerifiedSession, createOwnerResourceRouter({
+      repository: createOwnerResourceRepository(database), byteProvider,
+    }));
     app.use((error, _request, response, _next) => {
       // Keep credentials, email links, and private content out of logs/errors.
       console.error('Account request failed.', { code: error.code || 'REQUEST_FAILED' });
