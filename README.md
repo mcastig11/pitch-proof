@@ -30,7 +30,7 @@ node server/index.mjs
 
 Open http://localhost:3000 for the guest example. The auth API requires email confirmation before private access. Local mode stores accounts in an in-memory database by default, so restarting clears them. For local persistence, set `DATABASE_PATH` to a private SQLite file outside the public repository and set a stable `BETTER_AUTH_SECRET` of at least 32 characters in the server environment. The parent directory must exist. `PORT` defaults to 3000; `PUBLIC_BASE_URL` defaults to http://localhost on that port. `HOST` defaults to 127.0.0.1.
 
-Development and test modes capture verification and password-reset mail in process memory. They send no network requests and require no Resend account. Tests access messages only through their injected transport instance; there is no public mail inspector, token URL log, or captured-mail endpoint. An ordinary local CLI process does not print confirmation links. Account UI and ownership acceptance are still Phase 2 work.
+Development and test modes capture verification and password-reset mail in process memory. They send no network requests and require no Resend account. Tests access messages only through their injected transport instance; there is no public mail inspector, token URL log, or captured-mail endpoint. An ordinary local CLI process does not print confirmation links. Account UI and ownership acceptance are covered by Phase 2.
 
 Focused mail and account checks:
 
@@ -39,6 +39,29 @@ node --test tests/email-transport.test.cjs tests/auth-flow.test.cjs
 ```
 
 These checks use isolated databases, captured messages, and stubbed fetch. They never send real mail.
+
+## Trusted local HTTPS on this Windows workstation
+
+The local test address is **https://localhost:31318**. Set it up and start it from the repository root:
+
+```powershell
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/setup-local-https.ps1
+node scripts/local-https.mjs
+```
+
+Setup creates a seven-day localhost server certificate and trusts its public certificate in the current Windows user's Root store. Keys, certificate password, stable auth secret, browser test profiles and configuration stay in a user-only directory at `%LOCALAPPDATA%\PitchProof\local-https`, outside Git. Both the TLS listener and its ephemeral HTTP backend bind to loopback. The application uses the exact HTTPS origin, and its actual session response carries Secure. No certificate-error bypass is used.
+
+The current fixture preserves the private SQLite database used during browser UAT, so existing local test accounts remain available. On first setup elsewhere, `-DatabasePath 'C:\private\accounts.sqlite'` selects a persistent database whose parent directory exists; otherwise one is created in the private configuration directory. Later setup runs preserve that selection and the auth secret, recheck trust and renew a certificate near expiry. This workstation's current certificate expires **October 22, 2026 at 20:45 UTC**; restart the HTTPS server after renewal. HTTP and HTTPS cookies use different names; sign in once at the HTTPS address.
+
+To rerun the actual installed-Chrome cookie acceptance check, stop the HTTPS server first, then run:
+
+```powershell
+node scripts/verify-local-https.mjs
+```
+
+This opt-in check starts and closes its own HTTPS server, creates a disposable local account through private captured confirmation, and uses a separate Chrome profile. It verifies trusted TLS, the actual sign-in Set-Cookie and stored Secure/HttpOnly/SameSite=Lax cookie, seven-day persistence, exclusion from JavaScript and private access after a full browser restart. Output contains attributes only. It requires installed Chrome at the script's default Windows path and is separate from portable `npm test`. Restart `node scripts/local-https.mjs` afterward for interactive testing.
+
+To remove this test certificate's trust, stop the HTTPS server, read `thumbprint` in the private `config.json`, and remove exactly that thumbprint from `Cert:\CurrentUser\Root` and `Cert:\CurrentUser\My` in PowerShell (or Certificate Manager). For the current certificate the thumbprint is `F428B6DD415938184E83FD9359A5A2BCEAE1D95A`. Preserve the SQLite file if keeping test accounts; private configuration can be retained for renewal. This setup is local capture mode; real hosting and email prerequisites follow below.
 
 ## Production account email prerequisites
 

@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-15T22:36:28.345Z",
+  "origin": "https://localhost:31318",
+  "browser": "Chrome/154.0.8037.98",
+  "isolatedProfile": true,
+  "certificateErrorBypass": false,
+  "certificate": {
+    "subject": "CN=localhost",
+    "sha1Fingerprint": "F4:28:B6:DD:41:59:38:18:4E:83:FD:93:59:A5:A2:BC:EA:E1:D9:5A",
+    "expires": "Oct 22 20:45:01 2026 GMT",
+    "browserTrusted": true
+  },
+  "tlsProtocol": "TLS 1.3",
+  "securityState": "secure",
+  "secureContext": true,
+  "cookie": {
+    "name": "__Secure-better-auth.session_token",
+    "secure": true,
+    "httpOnly": true,
+    "sameSite": "Lax",
+    "path": "/",
+    "persistent": true,
+    "maxAgeSeconds": 604800,
+    "expires": "2026-10-22T22:36:27.258Z"
+  },
+  "actualHttpsSetCookieObserved": true,
+  "javascriptCannotReadSession": true,
+  "privateWorkspaceAccessible": true,
+  "sameSessionAfterBrowserRestart": true
+}
