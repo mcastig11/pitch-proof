@@ -3,29 +3,28 @@ status: testing
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T16:46:40Z
+updated: 2026-10-15T17:01:08Z
 ---
 
 ## Current Test
 
-number: 6
-name: Confirm the second account and check separate workspace identities
+number: 8
+name: Send Alice's password-reset request
 expected: |
-  Open [Confirm Bob's email](C:/Users/casti/AppData/Local/Temp/pitch-proof-browser-uat-1xCAgs/confirm-bob-email.url).
-  You should see Email confirmed without automatic sign-in.
-  The shortcut may open in your default profile; confirmation alone should leave Alice's session unchanged.
-  Switch back to Bob's SECOND profile or private window for the sign-in step.
-  Open http://localhost:31317/auth?mode=signin and sign in as bob@example.test with Bob's local-test password.
-  Bob's first sign-in should open the example. Select My space; it should show Bob's identity.
-  In Alice's original profile, open http://localhost:31317/workspace; it should still show Alice's identity.
-  Each profile should retain its own account without switching the other profile's identity.
+  The stale address in My space is recorded as a display bug; Alice's verified login is alice.corrected@example.test.
+  Keep Alice signed in in both profiles.
+  In a new tab, open http://localhost:31317/auth?mode=reset-request.
+  Enter alice.corrected@example.test and select Send reset email.
+  You should see Check your email with the generic check-email response.
+  Refresh the workspace in both profiles; requesting recovery alone should leave both signed in.
+  Keep both profiles open. I will prepare the privately captured reset link next.
 awaiting: user response
 
 ## Test Setup
 
 Browser-test fixture started on 2026-10-15 at http://localhost:31317, bound to 127.0.0.1. It uses the unchanged standalone server, a separate private temporary SQLite database and a stable in-memory test secret. Account messages stay in the fixture's private capture transport; no real mail or public token inspector is used. The controlling agent holds the Node session for confirmation/reset links and controlled stored-session expiry. Check server health before resuming after an interruption. No connected browser was exposed to automation; the user performs the browser actions.
 
-The original four acceptance groups are preserved below. The account lifecycle group is split into seven observable checks, giving ten checkpoints in total. Second-account signup and confirmation are separate so a captured link can be prepared between them. No result was inferred during restructuring.
+The original four acceptance groups are preserved below. The account lifecycle group is split into nine observable checks, giving twelve checkpoints in total. Second-account signup/confirmation and reset request/completion are separated so captured links can be prepared between them. The reset request remains a separate pending check after the identity defect reported in Test 7. No result was inferred during restructuring.
 
 Run through `$gsd-verify-work 2` with a connected real browser and microphone. Use disposable local accounts and an injected capture-email fixture to open confirmation/reset links privately. The ordinary `node server/index.mjs` process intentionally has no captured-mail inspector and does not print links; it cannot by itself complete this test's email steps. Do not add a public token endpoint or send real mail as a workaround.
 
@@ -57,37 +56,68 @@ result: pass
 
 ### 6. Confirm the second account and check separate workspace identities
 expected: Open Bob's captured confirmation in the second profile and sign in as bob@example.test. First sign-in opens the example; My space shows Bob's identity. In the original profile, Alice's My space continues to show Alice's identity. Neither profile's identity changes to the other's; no private metadata or bytes from the other account are exposed. Direct resource isolation is additionally covered by the automated two-account tests.
+result: pass
+
+### 7. Request password recovery with two active Alice sessions
+expected: Keep Alice signed in in the original profile. Sign Bob out in the second profile, then sign Alice in there too. Both profiles open Alice's private workspace. From /auth?mode=reset-request request recovery for alice.corrected@example.test. See Check your email with the generic response; requesting recovery alone leaves both existing sessions usable. The agent prepares the captured reset link next.
+result: issue
+reported: "when i sign into alice.corrected, the my space says i am signed in as alice@example.test. other than that tests pass"
+severity: minor
+notes: "User reports other observed behavior passing. The fixture independently confirms two active Alice sessions and the corrected verified email, but no captured reset message yet; request submission remains pending as Test 8."
+
+### 8. Send Alice's password-reset request
+expected: With Alice signed in in both profiles, open /auth?mode=reset-request, submit alice.corrected@example.test through Send reset email and see Check your email with the generic result. Refreshing both workspaces still permits access because requesting recovery alone does not revoke sessions. The agent retrieves the privately captured reset link for completion next.
 result: [pending]
 
-### 7. Recover a forgotten password and end old sessions
+### 9. Recover a forgotten password and end old sessions
 expected: With the same account signed in in two browser profiles, request recovery and open its private captured reset link. Set a new local-test-only password yourself. See Password updated and a fresh Sign in step; both old browser sessions lose private access. The old password no longer works. Fresh sign-in with the new password opens My space, and a used reset link cannot reset again. Do not share either password in chat.
 result: [pending]
 
-### 8. Real microphone practice through controlled account expiry
+### 10. Real microphone practice through controlled account expiry
 expected: Grant microphone permission and complete the public example without an account, singing different notes to change provisional observations. Repeat while signed in, advance the fixture clock past expiry during an attempt, and confirm capture, count-in/position and provisional observations continue without popup, redirect or focus theft. My space next requires sign-in. In an open workspace, expiry removes identity/content and shows the explicit session-ended prompt; signing in returns to My space. The exact quiet invitation appears near the example and once after an actual attempt, with no popup or repeated retry prompt.
 result: [pending]
 
-### 9. Keyboard, layout, zoom and spoken feedback
+### 11. Keyboard, layout, zoom and spoken feedback
 expected: Traverse signup, sign-in, pending/resend/correction, reset, workspace and welcome by keyboard. All labels, focus rings and recovery controls work; validation focuses the first invalid input, server errors retain error focus, Account Escape restores its trigger, and sign-out failure is focusable/retryable. At 320px, 600px, desktop and 200% zoom, long identity/errors/actions wrap without clipping or page overflow. With a screen reader, hear useful progress/error/expiry changes without credentials, redundant account identity, per-pitch or per-beat chatter. State remains understandable without color.
 result: [pending]
 
-### 10. Persistent restart and real HTTPS cookie enforcement
+### 12. Persistent restart and real HTTPS cookie enforcement
 expected: With durable private SQLite and a stable server secret, sign in in a persistent browser profile, inspect the cookie's Max-Age=604800, HttpOnly and SameSite=Lax, restart the browser, and return to the same private workspace before expiry. On a configured HTTPS origin, confirm Secure is set and enforced by the browser. At controlled exact expiry, private requests fail and the visible workspace clears. Production-like storage/HTTPS setup is a prerequisite, not an observed result. This closes WINDOWS item 22 only after actual observations are recorded.
 result: [pending]
 
 ## Summary
 
-total: 10
-passed: 5
-issues: 0
+total: 12
+passed: 6
+issues: 1
 pending: 5
 skipped: 0
 blocked: 0
 
 ## Gaps
 
-No demonstrated implementation gap remains after the review fixes. Tests 1–5 passed on the user's browser reports; five checkpoints remain pending. Test 4 includes shared sign-in across tabs and later landing; Test 5 confirms that a separate profile does not inherit Alice's session and that Bob remains blocked before confirmation. The fixture independently confirmed Bob is unverified and has a captured confirmation link. The five-pass checkpoint is saved before continuing. Phase 2 and AUTH-01/AUTH-02 stay pending until the remaining acceptance is recorded.
+- gap_id: G-02-7
+  truth: "My space identifies the current verified account without displaying an abandoned signup address as the signed-in email."
+  status: failed
+  reason: "User reported: when i sign into alice.corrected, the my space says i am signed in as alice@example.test. other than that tests pass"
+  severity: minor
+  test: 7
+  root_cause: "Signup initializes user.name from the submitted email. Address correction updates user.email without changing user.name, while /api/me/workspace supplies session.user.name as the Signed in as identity. The live fixture confirms email=alice.corrected@example.test and name=alice@example.test on the same verified account."
+  artifacts:
+    - path: client/auth.js
+      issue: "Signup sets name to the email address, so it can become stale after correction."
+    - path: server/db.mjs
+      issue: "Correction correctly changes the account email while retaining the old display name."
+    - path: server/app.mjs
+      issue: "Workspace returns user.name for a Signed in as identity instead of the current verified account email."
+    - path: client/workspace.js
+      issue: "Labels that stale display value Signed in as."
+  missing:
+    - "Use the current verified account email in the Signed in as identity while preserving any separate display-name field."
+    - "Add a corrected-address sign-in/workspace regression that verifies the displayed identity after correction and fresh login."
+  debug_session: ""
 
 ## Session Notes
 
+- Tests 1–6 passed; Test 7 has one reported display defect and five remaining checkpoints await observation. The five-pass checkpoint was committed as 72baf2f. This issue was preserved immediately; implementation fixes remain for the workflow's gap-closure stage. Phase 2 and AUTH-01/AUTH-02 remain pending.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.
