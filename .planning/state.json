@@ -35,9 +35,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress",
-    "label": "Show progress",
-    "reason": "Unsure of state — showing progress"
+    "command": "/gsd:verify-work 2",
+    "label": "Run Phase 2 browser acceptance",
+    "reason": "All seven plans are implemented; four real-browser acceptance groups remain pending"
   },
-  "updated_at": "2026-10-13T20:26:38.619Z"
+  "updated_at": "2026-10-15T15:41:44Z"
 }

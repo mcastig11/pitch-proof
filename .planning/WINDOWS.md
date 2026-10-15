@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 7
+open_count: 1
 waived_count: 0
-fixed_count: 15
+fixed_count: 21
 total_count: 22
-last_updated: 2026-10-13T20:26:37.276Z
+last_updated: 2026-10-15T14:30:27.997Z
 ---
 
 # Broken Windows Ledger
@@ -30,12 +30,12 @@ last_updated: 2026-10-13T20:26:37.276Z
 | 13 | 02 | skipped-test | tests/auth-ui.test.cjs | 13 | Plan 02-06 pending acceptance test: signed-in example shows My space and keeps sign-out in the account menu. | fixed |  | 2026-10-09T00:33:45.845Z | 2026-10-13T20:26:35.249Z |
 | 14 | 02 | skipped-test | tests/auth-ui.test.cjs | 14 | Plan 02-06 pending acceptance test: D-03 invitation appears near practice and once after an attempt with exact copy. | fixed |  | 2026-10-09T00:33:46.587Z | 2026-10-13T20:26:36.184Z |
 | 15 | 02 | skipped-test | tests/auth-ui.test.cjs | 15 | Plan 02-06 pending acceptance test: guest example practice continues uninterrupted after session expiry. | fixed |  | 2026-10-09T00:33:47.280Z | 2026-10-13T20:26:37.276Z |
-| 16 | 02 | skipped-test | tests/ownership.test.cjs | 8 | Plan 02-07 pending acceptance test: unauthenticated requests cannot read private resource metadata or bytes. | open |  | 2026-10-09T00:33:48.068Z |  |
-| 17 | 02 | skipped-test | tests/ownership.test.cjs | 9 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource metadata. | open |  | 2026-10-09T00:33:48.787Z |  |
-| 18 | 02 | skipped-test | tests/ownership.test.cjs | 10 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource bytes. | open |  | 2026-10-09T00:33:49.498Z |  |
-| 19 | 02 | skipped-test | tests/ownership.test.cjs | 11 | Plan 02-07 pending acceptance test: forged owner identifiers cannot bypass server-side ownership checks. | open |  | 2026-10-09T00:33:50.228Z |  |
-| 20 | 02 | skipped-test | tests/ownership.test.cjs | 12 | Plan 02-07 pending acceptance test: resource metadata lists only the authenticated owner records. | open |  | 2026-10-09T00:33:50.969Z |  |
-| 21 | 02 | skipped-test | tests/ownership.test.cjs | 13 | Plan 02-07 pending acceptance test: resource bytes are available to their authenticated owner. | open |  | 2026-10-09T00:33:51.686Z |  |
+| 16 | 02 | skipped-test | tests/ownership.test.cjs | 8 | Plan 02-07 pending acceptance test: unauthenticated requests cannot read private resource metadata or bytes. | fixed |  | 2026-10-09T00:33:48.068Z | 2026-10-15T14:30:20.363Z |
+| 17 | 02 | skipped-test | tests/ownership.test.cjs | 9 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource metadata. | fixed |  | 2026-10-09T00:33:48.787Z | 2026-10-15T14:30:22.111Z |
+| 18 | 02 | skipped-test | tests/ownership.test.cjs | 10 | Plan 02-07 pending acceptance test: Alice cannot read Bob resource bytes. | fixed |  | 2026-10-09T00:33:49.498Z | 2026-10-15T14:30:23.624Z |
+| 19 | 02 | skipped-test | tests/ownership.test.cjs | 11 | Plan 02-07 pending acceptance test: forged owner identifiers cannot bypass server-side ownership checks. | fixed |  | 2026-10-09T00:33:50.228Z | 2026-10-15T14:30:25.009Z |
+| 20 | 02 | skipped-test | tests/ownership.test.cjs | 12 | Plan 02-07 pending acceptance test: resource metadata lists only the authenticated owner records. | fixed |  | 2026-10-09T00:33:50.969Z | 2026-10-15T14:30:26.429Z |
+| 21 | 02 | skipped-test | tests/ownership.test.cjs | 13 | Plan 02-07 pending acceptance test: resource bytes are available to their authenticated owner. | fixed |  | 2026-10-09T00:33:51.686Z | 2026-10-15T14:30:27.997Z |
 | 22 | 02 | unrun-verify | tests/auth-flow.test.cjs |  | Persistent browser restart on localhost and production-like HTTPS Secure cookie checks remain human-needed at Phase 2 acceptance; HTTP cookie output and seven-day server expiry passed. | open |  | 2026-10-09T00:33:52.711Z |  |
 
 ````json
@@ -242,10 +242,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 8,
     "description": "Plan 02-07 pending acceptance test: unauthenticated requests cannot read private resource metadata or bytes.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:48.068Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:20.363Z",
     "milestone": null
   },
   {
@@ -255,10 +255,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 9,
     "description": "Plan 02-07 pending acceptance test: Alice cannot read Bob resource metadata.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:48.787Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:22.111Z",
     "milestone": null
   },
   {
@@ -268,10 +268,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 10,
     "description": "Plan 02-07 pending acceptance test: Alice cannot read Bob resource bytes.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:49.498Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:23.624Z",
     "milestone": null
   },
   {
@@ -281,10 +281,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 11,
     "description": "Plan 02-07 pending acceptance test: forged owner identifiers cannot bypass server-side ownership checks.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:50.228Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:25.009Z",
     "milestone": null
   },
   {
@@ -294,10 +294,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 12,
     "description": "Plan 02-07 pending acceptance test: resource metadata lists only the authenticated owner records.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:50.969Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:26.429Z",
     "milestone": null
   },
   {
@@ -307,10 +307,10 @@ last_updated: 2026-10-13T20:26:37.276Z
     "file": "tests/ownership.test.cjs",
     "line": 13,
     "description": "Plan 02-07 pending acceptance test: resource bytes are available to their authenticated owner.",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-09T00:33:51.686Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-15T14:30:27.997Z",
     "milestone": null
   },
   {
