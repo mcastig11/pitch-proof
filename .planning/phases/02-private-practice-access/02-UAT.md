@@ -3,21 +3,19 @@ status: testing
 phase: 02-private-practice-access
 source: [02-VERIFICATION.md]
 started: 2026-10-15T15:41:44Z
-updated: 2026-10-15T17:01:08Z
+updated: 2026-10-15T19:01:13Z
 ---
 
 ## Current Test
 
-number: 8
-name: Send Alice's password-reset request
+number: 12
+name: Browser restart and cookie settings
 expected: |
-  The stale address in My space is recorded as a display bug; Alice's verified login is alice.corrected@example.test.
-  Keep Alice signed in in both profiles.
-  In a new tab, open http://localhost:31317/auth?mode=reset-request.
-  Enter alice.corrected@example.test and select Send reset email.
-  You should see Check your email with the generic check-email response.
-  Refresh the workspace in both profiles; requesting recovery alone should leave both signed in.
-  Keep both profiles open. I will prepare the privately captured reset link next.
+  Use your normal browser profile, rather than a private window. Sign in as Alice and open http://localhost:31317/workspace.
+  In browser developer tools, inspect the session cookie under Application or Storage. It should have HttpOnly enabled, SameSite=Lax, and an expiry about seven days after sign-in. The sign-in response's Set-Cookie header should contain Max-Age=604800. Do not copy the cookie value into chat.
+  Fully close that browser, reopen the same profile, and return to http://localhost:31317/workspace. My space should open without another sign-in.
+  This fixture uses HTTP localhost, so the separate HTTPS Secure-cookie check remains unverified. Passing these restart checks will not mark HTTPS as tested.
+  Reply pass if the restart and cookie checks work, or describe any check you could not perform.
 awaiting: user response
 
 ## Test Setup
@@ -67,30 +65,45 @@ notes: "User reports other observed behavior passing. The fixture independently 
 
 ### 8. Send Alice's password-reset request
 expected: With Alice signed in in both profiles, open /auth?mode=reset-request, submit alice.corrected@example.test through Send reset email and see Check your email with the generic result. Refreshing both workspaces still permits access because requesting recovery alone does not revoke sessions. The agent retrieves the privately captured reset link for completion next.
-result: [pending]
+result: pass
+notes: "User reported pass. No reset message or reset verification row was present in the fixture when checked. The agent then submitted one local HTTP reset request for the known corrected test account: HTTP 200 and one captured reset message. The private shortcut is ready; three stored Alice sessions remain before completion. The original browser request's missing capture is unexplained; browser submission-to-delivery is not independently confirmed."
 
 ### 9. Recover a forgotten password and end old sessions
 expected: With the same account signed in in two browser profiles, request recovery and open its private captured reset link. Set a new local-test-only password yourself. See Password updated and a fresh Sign in step; both old browser sessions lose private access. The old password no longer works. Fresh sign-in with the new password opens My space, and a used reset link cannot reset again. Do not share either password in chat.
-result: [pending]
+result: pass
+notes: "User reported pass. The fixture independently confirms the reset verification was consumed, all three retained pre-reset session IDs are absent, and one fresh Alice session exists."
 
 ### 10. Real microphone practice through controlled account expiry
 expected: Grant microphone permission and complete the public example without an account, singing different notes to change provisional observations. Repeat while signed in, advance the fixture clock past expiry during an attempt, and confirm capture, count-in/position and provisional observations continue without popup, redirect or focus theft. My space next requires sign-in. In an open workspace, expiry removes identity/content and shows the explicit session-ended prompt; signing in returns to My space. The exact quiet invitation appears near the example and once after an actual attempt, with no popup or repeated retry prompt.
-result: [pending]
+result: pass
+stage: complete
+notes: "User passed guest microphone/invitation observations and signed-in microphone preparation. Two existing Alice fixture sessions now have stored expiry 2026-10-15T17:40:05.000Z, five seconds after the requested practice start. No production lifetime or source changes. The full test remains pending until the user observes an attempt spanning that expiry, workspace clearing and fresh sign-in."
+observation: 'User reported: it shows both create your private space and below it it shows what it would show if i were signed in, it says "attempt ended. can retry."'
+clarification: "The reported attempt-ended text is unconditional public practice status in script.js, not private account content. Coexistence with the guest invitation is expected. At 17:42:57Z the fixture confirms both scheduled old session IDs are absent and no Alice sessions remain. Practice continuity, visible workspace clearing and fresh sign-in still await confirmation; no additional implementation gap inferred from this observation."
+completion: "User subsequently reported pass for practice continuity across scheduled expiry, cleared private identity/session-ended prompt and fresh sign-in returning to My space. Prior pending wording in notes and clarification describes the intermediate checkpoint."
 
 ### 11. Keyboard, layout, zoom and spoken feedback
 expected: Traverse signup, sign-in, pending/resend/correction, reset, workspace and welcome by keyboard. All labels, focus rings and recovery controls work; validation focuses the first invalid input, server errors retain error focus, Account Escape restores its trigger, and sign-out failure is focusable/retryable. At 320px, 600px, desktop and 200% zoom, long identity/errors/actions wrap without clipping or page overflow. With a screen reader, hear useful progress/error/expiry changes without credentials, redundant account identity, per-pitch or per-beat chatter. State remains understandable without color.
-result: [pending]
+result: pass
+notes: "User reported pass to the full keyboard/layout/spoken-feedback checkpoint and did not identify unperformed checks."
 
 ### 12. Persistent restart and real HTTPS cookie enforcement
 expected: With durable private SQLite and a stable server secret, sign in in a persistent browser profile, inspect the cookie's Max-Age=604800, HttpOnly and SameSite=Lax, restart the browser, and return to the same private workspace before expiry. On a configured HTTPS origin, confirm Secure is set and enforced by the browser. At controlled exact expiry, private requests fail and the visible workspace clears. Production-like storage/HTTPS setup is a prerequisite, not an observed result. This closes WINDOWS item 22 only after actual observations are recorded.
 result: [pending]
+stage: restart-and-http-cookie-observation
+subchecks:
+  browser_restart: pending
+  http_cookie_attributes: pending
+  controlled_expiry: passed-in-test-10
+  https_secure_enforcement: blocked
+notes: "The existing fixture is listening, uses durable private SQLite and a stable secret, and has one fresh Alice session. HTTPS is not provisioned at the HTTP localhost origin; the current checkpoint covers restart and HTTP cookie attributes only. A pass here must not be inferred to establish HTTPS Secure-cookie enforcement or close WINDOWS item 22."
 
 ## Summary
 
 total: 12
-passed: 6
+passed: 10
 issues: 1
-pending: 5
+pending: 1
 skipped: 0
 blocked: 0
 
@@ -119,5 +132,5 @@ blocked: 0
 
 ## Session Notes
 
-- Tests 1–6 passed; Test 7 has one reported display defect and five remaining checkpoints await observation. The five-pass checkpoint was committed as 72baf2f. This issue was preserved immediately; implementation fixes remain for the workflow's gap-closure stage. Phase 2 and AUTH-01/AUTH-02 remain pending.
+- Tests 1–6 and 8–11 passed; Test 7 has one reported display defect and the final restart/cookie checkpoint awaits observation. Test 10 completed after staged real-microphone expiry and recovery observations. The five-pass checkpoint was committed as 72baf2f. The identity issue was preserved immediately; implementation fixes remain for the workflow's gap-closure stage. Phase 2 and AUTH-01/AUTH-02 remain pending. HTTPS enforcement remains a prerequisite block within Test 12.
 - After passing Test 3, the user asked whether each newly opened tab requires sign-in. Clarified that tabs in the same browser profile share the valid cookie session; separate profiles/private browsing have separate cookie stores. Explicit crafted auth URLs display sign-in forms to test safe state selection and do not sign the user out. This was a question, not a reported failure. Test 4 now observes shared sign-in across tabs directly.
