@@ -197,7 +197,7 @@ export async function createApp({ databasePath, emailTransport, allowedOrigins, 
       return response.json({ destination: firstSignIn && request.body?.returnTo !== '/workspace' ? '/' : '/workspace', firstSignIn });
     });
     app.get('/api/me/workspace', requireVerifiedSession, (_request, response) => {
-      return response.json({ identity: response.locals.session.user.name });
+      return response.json({ identity: response.locals.session.user.email });
     });
     app.use('/api/me/resources', requireVerifiedSession, createOwnerResourceRouter({
       repository: createOwnerResourceRepository(database), byteProvider,
