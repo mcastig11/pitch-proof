@@ -98,4 +98,3 @@ The deterministic API detector returned `detected:true` against nonempty phase s
 | ZIP extraction to caller paths/write/archive creation | OPT-OUT | Import consumes bounded entries; it does not extract untrusted paths or create user archives. |
 
 Required recognition, correction, source mapping, partial results, explicit saves, review, immutable confirmation and actual cloud bytes are INTEGRATE scope. None is opted out. The API coverage seal checks this matrix; native containment and cloud provisioning remain explicit execution prerequisites rather than inferred configuration.
-

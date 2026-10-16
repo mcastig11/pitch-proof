@@ -117,4 +117,3 @@ estimate-calibration returned factor=1, sample_count=0, confidence=low; emitted 
 ## Gates still pending execution
 
 Exact flagged package/native approval; approved deployment/license/provider/cost/retention; UI contract approval; corpus rights/independent gold/effort budget; native containment; real staff/reflow/ID/undo proof; actual .omr-to-original join; actual private cloud bytes/isolation/cleanup; actual correction effort/support report; end-of-phase human review. Missing setup blocks consumers and phase completion. Nothing here authorizes deployment or marks a requirement complete.
-
