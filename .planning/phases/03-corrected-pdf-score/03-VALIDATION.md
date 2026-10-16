@@ -9,7 +9,7 @@ created: "2026-10-15"
 
 # Phase 03 - Validation Strategy
 
-This is a planned validation contract, not executed evidence. Research documents capabilities and uncertainties; it does not prove recognition accuracy, editor behavior, cloud privacy or source alignment. The planner must refine the task map against the final plans.
+This is the final planned validation contract, not executed evidence. Research and planning do not prove recognition accuracy, editor behavior, cloud privacy or source alignment. Status remains draft, nyquist_compliant=false and wave_0_complete=false until execution.
 
 ## Test Infrastructure
 
@@ -31,16 +31,54 @@ This is a planned validation contract, not executed evidence. Research documents
 
 ## Planned Verification Map
 
-The following proposed files do not exist yet. Final task IDs, waves and threat references must be filled from the plans before execution; every new command target must have an earlier or same-task authoring dependency.
+Final planned IDs/waves match the 15 plans. All entries are pending execution. Every automated element is followed by an observable fails_when. Host checks fail as blocked when setup is absent; they never green-skip.
 
-| Area | Requirement / decisions | Threat / secure behavior | Proposed command | Status |
-| --- | --- | --- | --- | --- |
-| Upload, private bytes, job states and recovery | LIB-01 | Owner checked before bytes; MIME/parser and expansion limits; late worker results rejected | node --test tests/score-library.test.cjs tests/object-store.test.cjs tests/recognition-jobs.test.cjs | Missing, author in plans |
-| OMR normalization and rational model | SCORE-01 | No DTD/external resolution; bounded archives; unsupported symbols/gaps retained explicitly | node --test tests/recognition-import.test.cjs tests/score-model.test.cjs | Missing, author in plans |
-| Source transforms and linked review | SCORE-02, D-05/D-06/D-07 | Unknown provenance cannot silently claim an exact highlight or become confirmed | node --test tests/score-source-map.test.cjs tests/score-review-ui.test.cjs | Missing, author in plans |
-| Staff editing and redistribution | SCORE-03, D-01/D-02/D-03/D-04 | One app-owned command boundary; no upstream hidden persistence; all affected measures reported | node --test tests/score-commands.test.cjs tests/score-review-ui.test.cjs | Missing, author in plans |
-| Explicit draft save and confirmation | SCORE-04, D-08/D-09/D-10/D-11/D-12 | Expected revision and server-recomputed eligibility; immutable confirmed snapshot; all affected review invalidated | node --test tests/score-revisions.test.cjs tests/score-timeline.test.cjs | Missing, author in plans |
-| Prior account/guest compatibility | All Phase 3 requirements | Ownership and expiry still hold; public audio remains provisional and usable | npm.cmd test | Existing suite, not run during planning |
+| Task | Wave | Requirements | Threats | Automated command | Authoring dependency |
+| --- | --- | --- | --- | --- | --- |
+| 03-01-01 | 1 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-SC, T-03-DEP | `node --test tests/score-prerequisites.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-01-02 | 1 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-SC, T-03-DEP | `node scripts/check-score-prerequisites.mjs --stage packages` | 03-01-01 checker; model contract 03-04-02 for model gate |
+| 03-01-03 | 1 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-SC, T-03-DEP | `node scripts/check-score-prerequisites.mjs --stage deployment` | 03-01-01 checker; model contract 03-04-02 for model gate |
+| 03-02-01 | 1 | SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-RIGHTS, T-03-TRUST | `node scripts/create-score-fixtures.mjs --verify` | 03-02-01 generator |
+| 03-02-02 | 1 | SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-RIGHTS, T-03-TRUST | `node scripts/create-score-fixtures.mjs --verify-protocol` | 03-02-01 generator |
+| 03-02-03 | 1 | SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-RIGHTS, T-03-TRUST | `node scripts/create-score-fixtures.mjs --verify-design` | 03-02-01 generator |
+| 03-03-01 | 2 | LIB-01, SCORE-01, SCORE-02, SCORE-03 | T-03-SC, T-03-XML, T-03-HARNESS | `node --test tests/score-dependencies.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-03-02 | 2 | LIB-01, SCORE-01, SCORE-02, SCORE-03 | T-03-SC, T-03-XML, T-03-HARNESS | `node --test tests/score-harness.test.cjs tests/score-gates.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-04-01 | 3 | SCORE-02, SCORE-03, SCORE-04 | T-03-CMD, T-03-BROWSER | `node scripts/verify-score-editor.mjs --stage editing` | 03-04-01 runner; current task expansion |
+| 03-04-02 | 3 | SCORE-02, SCORE-03, SCORE-04 | T-03-CMD, T-03-BROWSER | `node --test tests/score-model.test.cjs tests/score-commands.test.cjs tests/score-editor-ui.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-05-01 | 4 | SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE | `node scripts/verify-score-recognition.mjs --stage tracer` | current task; 03-03-02 host harness |
+| 03-05-02 | 4 | SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE | `node --test tests/recognition-import.test.cjs tests/score-source-map.test.cjs tests/recognition-worker.test.cjs tests/recognition-security.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-06-01 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node scripts/check-score-prerequisites.mjs --stage model` | 03-01-01 checker; model contract 03-04-02 for model gate |
+| 03-06-02 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node --test tests/score-library.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-06-03 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node scripts/verify-score-cloud.mjs --stage upload` | 03-03-02 runner; current task expansion |
+| 03-07-01 | 6 | LIB-01, SCORE-01, SCORE-02 | T-03-JOB, T-03-WORKER, T-03-OWNER | `node --test tests/recognition-jobs.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-07-02 | 6 | LIB-01, SCORE-01, SCORE-02 | T-03-JOB, T-03-WORKER, T-03-OWNER | `node --test tests/score-library-ui.test.cjs tests/recognition-jobs.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-08-01 | 6 | SCORE-01, SCORE-02, SCORE-03 | T-03-SOURCE, T-03-BROWSER, T-03-XML | `node --test tests/recognition-import.test.cjs tests/score-source-map.test.cjs tests/score-model.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-08-02 | 6 | SCORE-01, SCORE-02, SCORE-03 | T-03-SOURCE, T-03-BROWSER, T-03-XML | `node scripts/verify-score-editor.mjs --stage source` | 03-04-01 runner; current task expansion |
+| 03-09-01 | 7 | SCORE-03, SCORE-04 | T-03-CMD, T-03-TRUST | `node --test tests/score-commands.test.cjs tests/score-model.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-09-02 | 7 | SCORE-03, SCORE-04 | T-03-CMD, T-03-TRUST | `node scripts/verify-score-editor.mjs --stage complete-editing` | 03-04-01 runner; current task expansion |
+| 03-10-01 | 8 | SCORE-02, SCORE-04 | T-03-REV, T-03-OWNER, T-03-TRUST | `node --test tests/score-revisions.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-10-02 | 8 | SCORE-02, SCORE-04 | T-03-REV, T-03-OWNER, T-03-TRUST | `node scripts/verify-score-editor.mjs --stage save-review` | 03-04-01 runner; current task expansion |
+| 03-11-01 | 9 | SCORE-04, SCORE-02 | T-03-CONFIRM, T-03-OWNER, T-03-REV | `node --test tests/score-confirmation.test.cjs tests/score-revisions.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-11-02 | 9 | SCORE-04, SCORE-02 | T-03-CONFIRM, T-03-OWNER, T-03-REV | `node scripts/verify-score-editor.mjs --stage confirmation` | 03-04-01 runner; current task expansion |
+| 03-12-01 | 10 | SCORE-04, SCORE-03 | T-03-TIMELINE, T-03-TRUST, T-03-OWNER | `node --test tests/score-timeline.test.cjs tests/score-confirmation.test.cjs tests/timeline.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-12-02 | 10 | SCORE-04, SCORE-03 | T-03-TIMELINE, T-03-TRUST, T-03-OWNER | `node scripts/verify-score-practice.mjs --stage confirmed-and-guest` | current task; 03-03-02 browser harness |
+| 03-13-01 | 10 | LIB-01, SCORE-02, SCORE-04 | T-03-SESSION, T-03-RETENTION, T-03-CLEANUP | `node --test tests/score-session-ui.test.cjs tests/auth-ui.test.cjs tests/session-security.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-13-02 | 10 | LIB-01, SCORE-02, SCORE-04 | T-03-SESSION, T-03-RETENTION, T-03-CLEANUP | `node --test tests/score-cleanup.test.cjs tests/recognition-jobs.test.cjs tests/score-library.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-14-01 | 11 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-TRUST, T-03-RIGHTS, T-03-SOURCE | `node --test tests/score-corpus.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-14-02 | 11 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-TRUST, T-03-RIGHTS, T-03-SOURCE | `node scripts/evaluate-score-corpus.mjs --verify-gold` | 03-14-01 evaluator |
+| 03-14-03 | 11 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-TRUST, T-03-RIGHTS, T-03-SOURCE | `node scripts/evaluate-score-corpus.mjs --verify-completed-report` | 03-14-01 evaluator |
+| 03-15-01 | 12 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-ACCEPT, T-03-CLOUD, T-03-DEP | `node scripts/verify-score-cloud.mjs --stage complete` | 03-03-02 runner; current task expansion |
+| 03-15-02 | 12 | LIB-01, SCORE-01, SCORE-02, SCORE-03, SCORE-04 | T-03-ACCEPT, T-03-CLOUD, T-03-DEP | `node --test tests/score-phase-gates.test.cjs` | current task test targets; 03-03-02 harness where used |
+
+At each wave run `npm.cmd test` once. Reuse existing focused auth/ownership commands where applicable: `node --test tests/harness.test.cjs`, `node --test tests/auth-flow.test.cjs`, `node --test tests/ownership.test.cjs tests/session-security.test.cjs`, `node --test tests/auth-ui.test.cjs`. No product tests/builds ran during planning.
+
+Portable checks use Node's existing runner. Host-dependent editor/native/cloud/corpus checks remain outside npm test and record measured duration, exact hashes and sanitized evidence. Native/corpus batches use approved time/resource ceilings; missing actual evidence blocks acceptance.
+
+Final actual gates: `node scripts/verify-score-editor.mjs --stage complete`; `node scripts/verify-score-recognition.mjs --stage tracer`; `node scripts/verify-score-cloud.mjs --stage complete`; `node scripts/verify-score-practice.mjs --stage confirmed-and-guest`; `node scripts/evaluate-score-corpus.mjs --verify-completed-report`; `node C:/Users/casti/.codex/gsd-core/bin/gsd-tools.cjs check api-coverage.verify-pre .planning/phases/03-corrected-pdf-score`.
+
+All SQLite schema writers (03-06-02/03-07-01/03-10-01/03-11-01) must run actual empty/prior-schema migrations, inspect live FK/index/records, restart and round-trip writes. No ORM/type/build-only check closes this gate.
+
+Spec-less accounting: 7 explicit edges, 2 flagged unclassified assumptions and 2 descriptor-less flagged-unverified prohibitions; see 03-PLANNING-AUDIT.md. ASVS L1; unresolved high/critical findings block.
 
 ## Wave 0 Requirements
 

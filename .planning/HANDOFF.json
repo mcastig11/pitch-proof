@@ -1,45 +1,51 @@
 {
   "version": "1.0",
-  "timestamp": "2026-10-15T23:59:58.650Z",
+  "timestamp": "2026-10-16T01:20:09.316Z",
   "phase": "03",
   "phase_name": "Corrected PDF Score",
   "phase_dir": ".planning/phases/03-corrected-pdf-score",
   "plan": null,
-  "task": 1,
+  "task": 4,
   "total_tasks": 5,
   "status": "paused",
+  "plan_count": 15,
+  "implementation_task_count": 34,
+  "wave_count": 12,
   "completed_tasks": [
     {
       "id": 1,
-      "name": "Research Phase 3 before planning",
+      "name": "Phase 3 research",
+      "status": "done",
+      "commit": "f2b2068"
+    },
+    {
+      "id": 2,
+      "name": "Validation strategy and planning preflight",
+      "status": "done",
+      "progress": "Draft strategy plus task-specific map written; actual checks pending execution."
+    },
+    {
+      "id": 3,
+      "name": "Pattern mapping and draft plan creation",
+      "status": "done",
+      "progress": "15 plans/34 tasks/12 waves plus COVERAGE and PLANNING-AUDIT; no implementation or final plan approval."
+    },
+    {
+      "id": 4,
+      "name": "Independent plan checking",
       "status": "in_progress",
-      "progress": "Research-first choice answered; typed researcher stopped at explicit user pause. Preliminary official-source and current-code findings preserved in .continue-here.md. No canonical research document or plans written."
+      "progress": "Semantic review and probe inspection done; concrete missing index.html ownership warning; formal aggregation/report unfinished at user pause."
     }
   ],
   "remaining_tasks": [
     {
-      "id": 1,
-      "name": "Complete research and write 03-RESEARCH.md with Validation Architecture",
+      "id": 4,
+      "name": "Revise invitation ownership and research-status clarity, complete independent checking and final gates",
       "status": "in_progress"
     },
     {
-      "id": 2,
-      "name": "Create validation strategy and dispatch planning security/UI pre-hooks",
-      "status": "not_started"
-    },
-    {
-      "id": 3,
-      "name": "Map patterns and author tracer-first Phase 3 plans",
-      "status": "not_started"
-    },
-    {
-      "id": 4,
-      "name": "Independent plan check, bounded revisions and mandatory gates",
-      "status": "not_started"
-    },
-    {
       "id": 5,
-      "name": "Record planned state, commit scoped documents and push",
+      "name": "Record planned state/roadmap through GSD handlers only after pass, commit/push; execution remains separate",
       "status": "not_started"
     }
   ],
@@ -48,44 +54,98 @@
   "human_actions_pending": [],
   "decisions": [
     {
-      "decision": "Research first",
-      "rationale": "User selected option 1 before planning; do not ask again.",
+      "decision": "Research first already answered",
+      "rationale": "User chose option 1; research now complete, do not repeat it.",
       "phase": "03"
     },
     {
-      "decision": "All D-01 through D-12 remain locked in 03-CONTEXT.md",
-      "rationale": "User completed correction/review/confirmation discussion and requested saving it; committed 3fddaec and pushed.",
+      "decision": "D-01 through D-12 remain locked",
+      "rationale": "Saved discussion/context, no later override.",
       "phase": "03"
     },
     {
-      "decision": "Pause now",
-      "rationale": "Explicit $gsd-pause-work during research; no further research or execution until resumed.",
+      "decision": "Pause independent review now",
+      "rationale": "User explicitly invoked $gsd-pause-work; all agents stopped.",
       "phase": "03"
     },
     {
-      "decision": "Keep current branch and publication authorization",
-      "rationale": "plan-phase forbids branch switches; prior noon/8 PM Central push authorization persists.",
+      "decision": "No automatic execution",
+      "rationale": "Planning verification incomplete and auto_advance=false.",
       "phase": "03"
     }
   ],
+  "review_findings": [
+    {
+      "severity": "warning",
+      "required_property": "Every context-mandated invitation change is owned by an executable plan and file declaration.",
+      "description": "index.html lines78/121 still say own scores coming next; no plan owns index.html although context requires invitation update when upload becomes real.",
+      "status": "open"
+    },
+    {
+      "severity": "pending_assessment",
+      "required_property": "Research clearly distinguishes planning decisions assigned to executable gates from unverified integration evidence.",
+      "description": "A1-A11 still under Open Questions with no planning-resolution markers; do not fabricate completed experiments.",
+      "status": "open"
+    },
+    {
+      "severity": "pending_assessment",
+      "required_property": "Plan scopes are justified or split for bounded execution.",
+      "description": "Plans03/04/07/08/13 have10 files and06 has11; <=5/task,2-3tasks, estimates18-46k/100k, not established as delivery blocker.",
+      "status": "open"
+    }
+  ],
+  "verification_snapshot": {
+    "decisionCoverage": "12/12",
+    "commandPathProbe": {
+      "commands": 34,
+      "blockers": 0,
+      "warnings": 0,
+      "readError": null
+    },
+    "failureDirectionProbe": {
+      "commands": 34,
+      "blockers": 0,
+      "warnings": 0,
+      "readError": null
+    },
+    "independentPlanCheck": "incomplete",
+    "productTestsRun": false
+  },
   "uncommitted_files": [
     " M .gsd/dispatch-isolation-sentinel.json",
+    " M .planning/HANDOFF.json",
     " M .planning/STATE.md",
-    "?? .planning/HANDOFF.json",
-    "?? .planning/phases/03-corrected-pdf-score/.continue-here.md"
+    " M .planning/phases/03-corrected-pdf-score/.continue-here.md",
+    " M .planning/phases/03-corrected-pdf-score/03-VALIDATION.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-01-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-02-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-03-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-04-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-05-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-06-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-07-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-08-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-09-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-10-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-11-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-12-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-13-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-14-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-15-PLAN.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-PATTERNS.md",
+    "?? .planning/phases/03-corrected-pdf-score/03-PLANNING-AUDIT.md",
+    "?? .planning/phases/03-corrected-pdf-score/COVERAGE.md"
   ],
   "background_processes": [
     {
       "origin": "https://localhost:31318",
-      "pid": 35848,
-      "observedListening": true
+      "probe": "No listening entries returned at pause; recheck before relying on fixture."
     },
     {
       "origin": "http://localhost:31317",
-      "pid": 39556,
-      "observedListening": true
+      "probe": "No listening entries returned at pause; recheck before relying on fixture."
     }
   ],
-  "next_action": "Resume Phase 3 research from .planning/phases/03-corrected-pdf-score/.continue-here.md and 03-CONTEXT.md. Research first is already answered. No canonical RESEARCH.md or PLAN.md exists; do not execute.",
-  "context_notes": "Phase 2 remains complete. Current branch gsd/phase-02-private-practice-access, pre-pause HEAD b6293df. Research agent returned an incomplete checkpoint and is stopped. Primary URLs and exact remaining research questions are in the markdown handoff. No tool installed, corpus gathered, app edited or test run during this planning session. OMR license/source mapping, rational rhythm timeline adapter and explicit draft-save interaction with workspace refresh need research. compact_content=true, standard granularity, MVP=true, tracer-first=true, Nyquist and independent checker enabled, auto_advance=false. UI gate last returned frontend=true, hasUiSpec=false, hasFrontendEvidence=false, block=false. Default shell helper can fail; escalated scoped retry worked. Preserve unrelated dirty dispatch sentinel."
+  "next_action": "Resume from phase handoff. Fix the index.html plan ownership omission and clarify research statuses, then finish independent plan checking/gates. Do not redo research/discussion or execute plans.",
+  "context_notes": "Branch gsd/phase-02-private-practice-access. Phase2 complete. Pre-pause HEAD f2b2068. Research/patterns/plans complete; verification NOT passed and no final checker report exists. Fifteen PLAN-without-SUMMARY files are unexecuted drafts, not started execution. Use existing actual artifacts and named findings. All agents stopped. No source changes, installation, deployment, cloud/native job or product tests this planning session. User publication authorization and noon/8 PM Central scheduled task persist; preserve unrelated dirty dispatch sentinel. See markdown for exact runtime commands, known shell-helper workaround, pending scope/doc-status assessments, probe paths and future license/cloud/corpus/UI/provenance gates."
 }
