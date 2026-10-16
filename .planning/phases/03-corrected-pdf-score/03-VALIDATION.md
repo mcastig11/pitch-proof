@@ -31,7 +31,7 @@ This is the final planned validation contract, not executed evidence. Research a
 
 ## Planned Verification Map
 
-Final planned IDs/waves match the 15 plans. All entries are pending execution. Every automated element is followed by an observable fails_when. Host checks fail as blocked when setup is absent; they never green-skip.
+Final planned IDs/waves match 15 plans, 35 tasks and 12 waves. All entries are pending execution. Every automated element is followed by an observable fails_when. Host checks fail as blocked when setup is absent; they never green-skip. The model checkpoint moved intact from former 03-06-01 to 03-05-03 after concrete native/source evidence and before 03-06 persistence; 03-06-01/02 now own the private tracer/UI and 03-06-03 owns invitation plus existing auth-assertion updates.
 
 | Task | Wave | Requirements | Threats | Automated command | Authoring dependency |
 | --- | --- | --- | --- | --- | --- |
@@ -45,11 +45,12 @@ Final planned IDs/waves match the 15 plans. All entries are pending execution. E
 | 03-03-02 | 2 | LIB-01, SCORE-01, SCORE-02, SCORE-03 | T-03-SC, T-03-XML, T-03-HARNESS | `node --test tests/score-harness.test.cjs tests/score-gates.test.cjs` | current task test targets; 03-03-02 harness where used |
 | 03-04-01 | 3 | SCORE-02, SCORE-03, SCORE-04 | T-03-CMD, T-03-BROWSER | `node scripts/verify-score-editor.mjs --stage editing` | 03-04-01 runner; current task expansion |
 | 03-04-02 | 3 | SCORE-02, SCORE-03, SCORE-04 | T-03-CMD, T-03-BROWSER | `node --test tests/score-model.test.cjs tests/score-commands.test.cjs tests/score-editor-ui.test.cjs` | current task test targets; 03-03-02 harness where used |
-| 03-05-01 | 4 | SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE | `node scripts/verify-score-recognition.mjs --stage tracer` | current task; 03-03-02 host harness |
-| 03-05-02 | 4 | SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE | `node --test tests/recognition-import.test.cjs tests/score-source-map.test.cjs tests/recognition-worker.test.cjs tests/recognition-security.test.cjs` | current task test targets; 03-03-02 harness where used |
-| 03-06-01 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node scripts/check-score-prerequisites.mjs --stage model` | 03-01-01 checker; model contract 03-04-02 for model gate |
-| 03-06-02 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node --test tests/score-library.test.cjs` | current task test targets; 03-03-02 harness where used |
-| 03-06-03 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node scripts/verify-score-cloud.mjs --stage upload` | 03-03-02 runner; current task expansion |
+| 03-05-01 | 4 | LIB-01, SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE, T-03-MODEL | `node scripts/verify-score-recognition.mjs --stage tracer` | current task; 03-03-02 host harness |
+| 03-05-02 | 4 | LIB-01, SCORE-01, SCORE-02 | T-03-WORKER, T-03-XML, T-03-SOURCE, T-03-MODEL | `node --test tests/recognition-import.test.cjs tests/score-source-map.test.cjs tests/recognition-worker.test.cjs tests/recognition-security.test.cjs` | current task test targets; 03-03-02 harness where used |
+| 03-05-03 | 4 | LIB-01, SCORE-01, SCORE-02 | T-03-MODEL | `node scripts/check-score-prerequisites.mjs --stage model` | 03-01-01 checker; 03-04-02 concrete model/editor evidence and 03-05-01/02 actual native/source evidence before approval |
+| 03-06-01 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node --test tests/score-library.test.cjs` | current task test targets; 03-03-02 harness; blocking 03-05-03 current model approval |
+| 03-06-02 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-UPLOAD, T-03-DB, T-03-CLOUD | `node scripts/verify-score-cloud.mjs --stage upload` | 03-03-02 runner; current task expansion after 03-06-01 |
+| 03-06-03 | 5 | LIB-01, SCORE-01, SCORE-02 | T-03-OWNER, T-03-CLOUD | `node --test tests/auth-ui.test.cjs` | existing test target; current task updates invitation/workspace assertions only after 03-06-01/02 implements the real private flow |
 | 03-07-01 | 6 | LIB-01, SCORE-01, SCORE-02 | T-03-JOB, T-03-WORKER, T-03-OWNER | `node --test tests/recognition-jobs.test.cjs` | current task test targets; 03-03-02 harness where used |
 | 03-07-02 | 6 | LIB-01, SCORE-01, SCORE-02 | T-03-JOB, T-03-WORKER, T-03-OWNER | `node --test tests/score-library-ui.test.cjs tests/recognition-jobs.test.cjs` | current task test targets; 03-03-02 harness where used |
 | 03-08-01 | 6 | SCORE-01, SCORE-02, SCORE-03 | T-03-SOURCE, T-03-BROWSER, T-03-XML | `node --test tests/recognition-import.test.cjs tests/score-source-map.test.cjs tests/score-model.test.cjs` | current task test targets; 03-03-02 harness where used |
@@ -76,7 +77,7 @@ Portable checks use Node's existing runner. Host-dependent editor/native/cloud/c
 
 Final actual gates: `node scripts/verify-score-editor.mjs --stage complete`; `node scripts/verify-score-recognition.mjs --stage tracer`; `node scripts/verify-score-cloud.mjs --stage complete`; `node scripts/verify-score-practice.mjs --stage confirmed-and-guest`; `node scripts/evaluate-score-corpus.mjs --verify-completed-report`; `node C:/Users/casti/.codex/gsd-core/bin/gsd-tools.cjs check api-coverage.verify-pre .planning/phases/03-corrected-pdf-score`.
 
-All SQLite schema writers (03-06-02/03-07-01/03-10-01/03-11-01) must run actual empty/prior-schema migrations, inspect live FK/index/records, restart and round-trip writes. No ORM/type/build-only check closes this gate.
+All SQLite schema writers (03-06-01/03-07-01/03-10-01/03-11-01) must run actual empty/prior-schema migrations, inspect live FK/index/records, restart and round-trip writes. No ORM/type/build-only check closes this gate. Initial persistence also requires the blocking 03-05-03 approval of already-produced editor/native/model evidence.
 
 Spec-less accounting: 7 explicit edges, 2 flagged unclassified assumptions and 2 descriptor-less flagged-unverified prohibitions; see 03-PLANNING-AUDIT.md. ASVS L1; unresolved high/critical findings block.
 
@@ -98,6 +99,7 @@ Spec-less accounting: 7 explicit edges, 2 flagged unclassified assumptions and 2
 | Private cloud storage | LIB-01 | Approved real private bucket/role, two-account metadata and byte denial, server-only credentials, resource limits, failed upload/orphan cleanup and late-job rejection; fake storage is insufficient |
 | License/corpus/support | All Phase 3 requirements | Deployment/license disposition before release; permissioned digital/scan strata and independent gold annotations; raw recognition, correction completeness AND effort, source precision/coverage, failures/abstentions, and published measured subset |
 | Timeline replay | SCORE-04 | Confirmed section/part/range/version replays rational rhythms with exact expected timing; unreviewed/unsupported/stale/foreign input is denied; prior guest fixture still works |
+| Invitation/workspace integration | LIB-01, CONTEXT Integration Points | 03-06-03 updates index.html and existing auth-ui assertions in the upload wave after the real private flow; 03-15-01 verifies actual signup/My space/private-upload navigation, retained guest access, quiet once-after-attempt visibility and signed-in account behavior |
 
 Before corpus evaluation, agree a correction-effort budget and record proposed thresholds. Confirmed fields must match gold completely, trust-gate bypasses must be zero, and all confirmed measures need verified source correspondence. Raw recognition and effort must be reported per stratum, including failed pages, without a fabricated universal accuracy promise. Eligible scan support requires representative measured scans, not rasterized originals alone.
 

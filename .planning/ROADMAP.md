@@ -106,6 +106,57 @@ Plans:
 
 **Exit gate:** Establish a permissioned corpus of representative printed digital PDFs and eligible scans, publish the supported-notation contract, and measure raw recognition, correction completeness and effort, and source-to-score correspondence against gold annotations. Replay confirmed revisions through the Phase 1 timeline. Resolve the selected OMR tool's deployment license before release. PDFs outside the measured subset receive clear unsupported behavior.
 **Plans:** TBD
+**Wave 1**
+
+- [ ] 03-01-PLAN.md
+- [ ] 03-02-PLAN.md
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-03-PLAN.md
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 03-04-PLAN.md
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 03-05-PLAN.md
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 03-06-PLAN.md
+
+**Wave 6** *(blocked on Wave 5 completion)*
+
+- [ ] 03-07-PLAN.md
+- [ ] 03-08-PLAN.md
+
+**Wave 7** *(blocked on Wave 6 completion)*
+
+- [ ] 03-09-PLAN.md
+
+**Wave 8** *(blocked on Wave 7 completion)*
+
+- [ ] 03-10-PLAN.md
+
+**Wave 9** *(blocked on Wave 8 completion)*
+
+- [ ] 03-11-PLAN.md
+
+**Wave 10** *(blocked on Wave 9 completion)*
+
+- [ ] 03-12-PLAN.md
+- [ ] 03-13-PLAN.md
+
+**Wave 11** *(blocked on Wave 10 completion)*
+
+- [ ] 03-14-PLAN.md
+
+**Wave 12** *(blocked on Wave 11 completion)*
+
+- [ ] 03-15-PLAN.md
+
 **UI hint**: yes
 
 ### Phase 4: Trustworthy Live Feedback
@@ -165,7 +216,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Verified Example Practice | 3/3 | Complete    | 2026-09-27 |
 | 2. Private Practice Access | 8/8 | Complete    | 2026-10-15 |
-| 3. Corrected PDF Score | 0/TBD | Not started | - |
+| 3. Corrected PDF Score | 0/15 | Planned    |  |
 | 4. Trustworthy Live Feedback | 0/TBD | Not started | - |
 | 5. Comparable Practice History | 0/TBD | Not started | - |
 | 6. Recording Choice and Data Control | 0/TBD | Not started | - |

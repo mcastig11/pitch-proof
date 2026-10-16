@@ -2,6 +2,8 @@
 
 This is a coverage/dependency contract, not executed acceptance. No requirement is complete. Package/cloud/license/corpus/UI decisions are concrete execution gates.
 
+Revised plan set: 15 plans, 35 tasks, 12 waves. Every plan has two or three tasks and every task declares at most five modified paths. The additional task owns the public invitation and updates existing auth assertions in the same wave as the implemented private upload.
+
 ## Phase goal
 
 Original ROADMAP goal: A singer can upload a supported printed PDF, review the recognized single vocal part against the original, correct it, and confirm a trustworthy score version for practice.
@@ -35,6 +37,7 @@ Derived framing of that existing goal: **As a** singer, **I want to** upload, re
 | CONTEXT | D-10 | Per-measure original-PDF review | 10/11/14/15 | COVERED |
 | CONTEXT | D-11 | New draft preserves immutable prior confirmation | 10/11/13/15 | COVERED |
 | CONTEXT | D-12 | Every affected/ripple measure invalidated; unaffected preserved | 04/09/10/11/15 | COVERED |
+| CONTEXT | Integration Points | Update both public scores-coming invitations only after personal upload works; retain guest example, quiet once-after-attempt invitation and account navigation; update existing workspace/copy assertions | 06-03 production/assertions; 15-01 actual final acceptance | COVERED |
 | RESEARCH | A1-A3 | Reviewed exact candidate stack/native provenance and XML replacement | 01/03 | COVERED |
 | RESEARCH | A4 | Canonical rational IDs/context/commands/reflow/undo, no dual truth | 04/09 | COVERED |
 | RESEARCH | A5 | Server review fingerprints/CAS/immutable snapshots | 10/11 | COVERED |
@@ -59,8 +62,8 @@ Exclusions are later singing measurement, history, optional recordings, expanded
 | 1 | 03-01, 03-02 | source artifacts -> Versioned provenance and deployment decisions plus a fail-closed prerequisite checker.; source artifacts -> Design contract, corpus protocol, original fixture generator and rights/gold manifests. |
 | 2 | 03-03 | 03-01+03-02 -> Exact dependency locks, reviewed browser bundle, secure test fixture and host-dependent gate runners. |
 | 3 | 03-04 | 03-03 -> App-owned canonical commands, Smoosic adapter and reusable review shell with real browser evidence. |
-| 4 | 03-05 | 03-04 -> Bounded native worker, secure MusicXML import and source-map proof with actual native artifacts. |
-| 5 | 03-06 | 03-04+03-05 -> Owner-scoped score persistence/upload/bytes, reachable private library and actual-cloud tracer evidence. |
+| 4 | 03-05 | 03-04 -> Bounded native worker, secure MusicXML import and source-map proof with actual native artifacts; then blocking 03-05-03 model/schema approval against that evidence. |
+| 5 | 03-06 | 03-04+03-05 -> Owner-scoped score persistence/upload/bytes, reachable private library and actual-cloud tracer evidence; then invitation plus existing auth-assertion updates. |
 | 6 | 03-07, 03-08 | 03-06 -> Fenced SQLite job queue, bounded worker lifecycle and accurate status/error/cancel UI.; 03-06 -> Complete supported MusicXML normalization, PDF.js source viewer, union overlays and source repair controls. |
 | 7 | 03-09 | 03-07+03-08 -> Complete app command/reflow/affected-set behavior and staff/keyboard correction controls. |
 | 8 | 03-10 | 03-09 -> CAS draft/review repository and explicit Save draft/review UI with unsaved warning. |
@@ -69,15 +72,19 @@ Exclusions are later singing measurement, history, optional recordings, expanded
 | 11 | 03-14 | 03-12+03-13 -> Reproducible corpus evaluator, independently approved gold and measured score-support report. |
 | 12 | 03-15 | 03-14 -> Actual acceptance evidence and deployment/support documentation ready for phase verification. |
 
-Same-wave plans have no modified-file overlap. The native importer consumes the canonical model, so 03-05 deliberately follows 03-04. UI/rights/provenance/containment/provider approvals precede their consumers. The first production editor tracer is 03-04-01; genuine OMR/source tracer 03-05-01 and complete private-cloud PDF tracer 03-06-02/03 follow before expansion. All retained production code and paths are real; prerequisites are not labeled completed user features.
+Same-wave plans have no modified-file overlap. The native importer consumes the canonical model, so 03-05 deliberately follows 03-04. UI/rights/provenance/containment/provider approvals precede their consumers. The first production editor tracer is 03-04-01; genuine OMR/source tracer 03-05-01 and complete private-cloud PDF tracer 03-06-01/02 follow before expansion. All retained production code and paths are real; prerequisites are not labeled completed user features.
+
+The former 03-06-01 model checkpoint is now 03-05-03, after 03-04's model/editor contract and 03-05-01/02's actual native/source evidence, with unchanged approval/failure semantics. 03-06 still depends on 03-05 and its first persistence task explicitly asserts the approved current contract. Renumbered 03-06-01/02 retain the API/UI work; 03-06-03 owns index.html plus tests/auth-ui.test.cjs. Its existing workspace-expiry expectation and exact invitation assertion change before the upload wave's full regression. No later-wave task is relied upon to repair that regression. The gate move preserves prerequisite order without adding a plan or exceeding three tasks.
+
+Revision mechanical check: frontmatter and structure are valid for changed plans 03-04/05/06/15. The per-file structure checker reports one warning for 03-06's retained one-way rating because its blocking decision now resides in prerequisite 03-05 rather than the same file. The actual preceding gate is 03-05-03, protected by 03-06's existing depends_on plus 03-06-01's explicit approval precondition. The rating and required approval are preserved; the warning is surfaced for independent review, not silently waived. No product test, install or experiment ran.
 
 ## Assumption-delta decision
 
-The deterministic detector returned detected=true (pluralization/chosen). Promote the canonical versioned score section as primary identity: score/version/part/range plus event/source IDs and exact rational time. The public fixture remains its original validated variant through an explicit adapter; renderer indexes/MusicXML/printed labels never become competing truths. 03-04, 03-06-01 and 03-12 encode this choice and its invariant tests.
+The deterministic detector returned detected=true (pluralization/chosen). Promote the canonical versioned score section as primary identity: score/version/part/range plus event/source IDs and exact rational time. The public fixture remains its original validated variant through an explicit adapter; renderer indexes/MusicXML/printed labels never become competing truths. 03-04, blocking 03-05-03, 03-06-01 and 03-12 encode this choice and its invariant tests.
 
 ## Schema gate
 
-No Payload/Prisma/Drizzle/Supabase/TypeORM paths or new ORM are planned, so the ORM-specific push injector does not apply. SQLite schema changes still have BLOCKING actual empty/prior-schema migration, FK/index/record, restart and read/write checks in 03-06-02, 03-07-01, 03-10-01 and 03-11-01.
+No Payload/Prisma/Drizzle/Supabase/TypeORM paths or new ORM are planned, so the ORM-specific push injector does not apply. SQLite schema changes still have BLOCKING actual empty/prior-schema migration, FK/index/record, restart and read/write checks in 03-06-01, 03-07-01, 03-10-01 and 03-11-01, after the initial 03-05-03 model approval.
 
 ## Spec-less edge coverage
 
@@ -113,6 +120,24 @@ No-silent-drop equality: 2 kept = 2 projected + 0 dropped. Final human judgment/
 Discovery uses the completed 03-RESEARCH/PATTERNS artifacts; no additional library selection is hidden. Existing analogs are tracked server/app.mjs, server/index.mjs, server/db.mjs, server/owner-resources.mjs, client/workspace.js, practice-fixture.js, practice-audio.js and existing test/harness scripts. New paths are explicitly named in plan task/frontmatter ownership. All new runnable targets are authored in the same or an earlier task; portable acceptance never uses TODO-only tests.
 
 estimate-calibration returned factor=1, sample_count=0, confidence=low; emitted raw_tokens=tokens and confidence=low inherit those values. Estimates target bounded slices, not confidence claims. Planning ran schema/structure/coverage probes only, with no product tests/builds or installations.
+
+## Plan-specific file-count boundedness
+
+These plan file totals exceed the file-count heuristic because each total includes focused tests/evidence as well as retained production files. They do not authorize undeclared task edits or relax the five-path task limit. No same-wave ownership collision is introduced. The checkpoint move adds one approval document to 03-05 and the invitation task makes 03-06 twelve paths; all plans remain within two or three tasks. These are planning estimates with zero calibration samples and low confidence; actual execution may require a split if context use proves higher.
+
+| Plan | Paths / tasks / estimate | Bounded concern and why the existing slice is retained |
+| --- | --- | --- |
+| 03-03 | 10 / 2 / 26k | Five reviewed install/build/patch/test paths, then five fixture/runner/self-test paths; one approved integration harness concern, with no product UI or domain expansion. |
+| 03-04 | 10 / 2 / 42k | Five canonical/editor/browser tracer paths prove one multi-part exercise end to end; five independent test/evidence/contract paths lock that same slice before consumers. |
+| 03-05 | 10 / 3 / 46k | Five native/import/source tracer paths, four hostile-input/evidence paths, then one already-produced model-contract approval; the added checkpoint reviews evidence and precedes persistence. |
+| 03-06 | 12 / 3 / 46k | Five owner API/storage/runtime-test paths, five reachable workspace/runtime/UI-test paths, then two invitation/existing-auth-test paths. The last task closes the same upload integration and its wave regression, with no additional library subsystem. |
+| 03-07 | 10 / 2 / 34k | Five durable queue/worker/race-test paths followed by five status/retry/cancel/UI/evidence paths over that single job lifecycle. |
+| 03-08 | 10 / 2 / 38k | Five importer/source/model/fixture paths extend the proven representation; five PDF/editor/browser-test paths expose and verify the same correspondence/repair workflow. |
+| 03-13 | 10 / 2 / 29k | Five session/editor clearing/regression paths, then five cleanup/outbox/retention paths; each bounded lifecycle task reuses existing ownership and approved policy instead of introducing a provider or revision model. |
+
+## Research assumption planning dispositions
+
+03-RESEARCH.md now gives A1 through A11 separate RESOLVED FOR PLANNING dispositions, each naming concrete tasks/checkpoints before its dependent consumers. This resolves assignment and ordering only. Every row remains UNVERIFIED FOR EXECUTION: experiments, exact-artifact approval, licensing, provider provisioning/privacy, corpus rights/gold/effort and measured support are still pending. The original research findings, candidate recommendations and user choices are unchanged. The model approval owner in those dispositions is 03-05-03, before any 03-06 persistence.
 
 ## Gates still pending execution
 
