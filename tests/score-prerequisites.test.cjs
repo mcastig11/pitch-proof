@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const { resolve } = require('node:path');
-const { mkdtemp, mkdir, writeFile, rm } = require('node:fs/promises');
+const { mkdtemp, mkdir, writeFile, copyFile, rm } = require('node:fs/promises');
 const { tmpdir } = require('node:os');
 
 // Independent fixtures deliberately contain no production artifact data.
@@ -104,9 +104,27 @@ test('unknown stages and malformed packets fail closed without input echo', asyn
     assert.equal(result.ok, false); assert.doesNotMatch(JSON.stringify(result), /secret-packet-value/);
   }
 });
-test('CLI fails closed on real pending approvals and never prints environment secrets', () => {
-  const result = spawnSync(process.execPath, [resolve('scripts/check-score-prerequisites.mjs'), '--stage', 'packages'], { encoding: 'utf8', env: { ...process.env, AWS_SECRET_ACCESS_KEY: 'do-not-print-this-secret' } });
+test('CLI fails closed on an independent pending approval and never prints environment secrets', async (t) => {
+  const projectRoot = await mkdtemp(resolve(tmpdir(), 'score-pending-approval-test-'));
+  t.after(() => rm(projectRoot, { recursive: true, force: true }));
+  await mkdir(resolve(projectRoot, 'scripts')); await mkdir(resolve(projectRoot, 'docs'));
+  const cliPath = resolve(projectRoot, 'scripts/check-score-prerequisites.mjs');
+  await copyFile(resolve('scripts/check-score-prerequisites.mjs'), cliPath);
+  const { packages } = fixtures();
+  const prose = '# Independent pending approval fixture';
+  const inventory = '{"independent":"pending-review"}\n';
+  const inventorySha256 = createHash('sha256').update(inventory).digest('hex');
+  packages.evidence.files = [{ path: 'inventory.json', sha256: inventorySha256 }];
+  packages.evidence.packetTextSha256 = createHash('sha256').update(prose).digest('hex');
+  for (const artifact of packages.evidence.artifacts) {
+    artifact.inventoryPath = 'inventory.json'; artifact.inventorySha256 = inventorySha256;
+  }
+  packages.approval = { status: 'pending', by: null, at: null, evidenceSha256: null };
+  await writeFile(resolve(projectRoot, 'inventory.json'), inventory);
+  await writeFile(resolve(projectRoot, 'docs/score-dependency-review.md'), `${prose}\n\n<!-- score-prerequisites:start -->\n\`\`\`json\n${JSON.stringify(packages)}\n\`\`\`\n<!-- score-prerequisites:end -->\n`);
+  const result = spawnSync(process.execPath, [cliPath, '--stage', 'packages'], { encoding: 'utf8', env: { ...process.env, AWS_SECRET_ACCESS_KEY: 'do-not-print-this-secret' } });
   assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Package evidence needs current human approval\./);
   assert.doesNotMatch(result.stdout + result.stderr, /do-not-print-this-secret/);
 });
 

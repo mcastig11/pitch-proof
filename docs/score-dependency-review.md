@@ -287,11 +287,25 @@ The checker reads the single marked JSON block. To record an actual human decisi
     }
   },
   "approval": {
-    "status": "pending",
-    "by": null,
-    "at": null,
-    "evidenceSha256": null
+    "status": "approved",
+    "by": "Project user via explicit Codex user reply at checkpoint 03-01-02",
+    "at": "2026-10-17T20:30:12.516Z",
+    "evidenceSha256": "1dc082498c8d797e562208f1c9255df2e81c9349102bde7885fe30f280bdf868"
   }
 }
 ```
 <!-- score-prerequisites:end -->
+
+## Actual approval record — 03-01-02
+
+**Decision:** Approved by the project user through an explicit Codex user reply. Recorded at **2026-10-17T20:30:12.516Z** UTC; this is the recording time, not an inferred response timestamp.
+
+**Question presented:** “Approve the six exact artifact hashes and XML patch/build approach in the dependency packet? Review docs/score-dependency-review.md, including unsigned Audiveris, commit-based Smoosic provenance, and the remaining deployment holds. This approves these dependency inputs and the reviewed patch approach; deployment/cloud spending is a separate decision.”
+
+**Exact user response:** “Approve the exact artifacts and XML approach”.
+
+**Approved evidence digest:** `1dc082498c8d797e562208f1c9255df2e81c9349102bde7885fe30f280bdf868` (`SHA256(JSON.stringify(evidence))`). The digest matches the packet presented to the user. The six exact artifact versions, hashes, source refs, retained inventories, XML patch proposal and bound narrative prefix are unchanged from commit `34d419c93d82a4d3c2e1a7a3904aea8c2a3f1bbf`. This approval includes the disclosed unsigned Audiveris MSI and commit-based Smoosic provenance caveats. The preparation-time “approval pending” statements above remain as historical bound evidence; this appended record and the machine approval supersede that status without changing the approved evidence.
+
+Approval covers these dependency inputs and the reviewed XML/privacy source patch/build approach. It does not establish a completed patched build or approve native installation, source publication scope, cloud account/bucket/roles, worker host, credentials, spending, retention or deployment. Those choices and the remaining native notice/security, containment and real-cloud evidence gates remain open. Installation remains task 03-03 work and requires the prescribed fresh inert artifact rehash and later build/dependency checks. No package install, provisioning, native execution or deployment ran while recording this decision.
+
+Verification: `node scripts/check-score-prerequisites.mjs --stage packages` passed; all 12 prerequisite tests and all 109 full regression tests passed, with no failures, skips or TODOs. Deployment stage remained blocked on its independent decisions and actual setup. [Rule 1 - Bug] The CLI regression assumed the live package packet would remain pending forever; recording approval exposed that assumption. It now exercises an independent temporary pending packet, checks the missing-human-approval diagnostic, and retains the secret-output assertion without depending on real approval state.
