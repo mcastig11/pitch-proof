@@ -2,13 +2,13 @@
 gsd_state_version: "1.0"
 current_phase: 03
 current_phase_name: Corrected PDF Score
-current_plan: Not started
+current_plan: 1
 status: executing
-stopped_at: "Phase 03 planning complete; independent check has 0 blockers and 0 warnings; next action: $gsd-execute-phase 3"
-last_updated: "2026-10-16T23:34:13.462Z"
-last_activity: 2026-10-16
-last_activity_desc: "Phase 03 planned: 15 plans, 35 tasks, 12 waves; independent check has no blockers or warnings; ready for execution"
-state_head: bf290f20ecd9a35ba942a1c60e337998da6c07a9
+stopped_at: "Wave 1 checkpoints: 03-01 task 03 deployment decision/setup; 03-02 task 02 corpus rights/reviewer/scans/budget. Package approval recorded; continue from checkpoint table."
+last_updated: "2026-10-17T20:39:58.263Z"
+last_activity: 2026-10-17
+last_activity_desc: "Phase 03 Wave 1 at human gates: package artifacts approved; deployment and corpus decisions pending; 109 regression tests pass"
+state_head: 232bd4a9010088bc0c2c33fbef3c6b1660d622b7
 progress:
   total_phases: 6
   completed_phases: 2
@@ -24,15 +24,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-15)
 
 **Core value:** A singer can immediately see exactly which written notes they sang sharp or flat and where they were early or late.
-**Current focus:** Phase 3 - Corrected PDF Score
+**Current focus:** Phase 03 — Corrected PDF Score
 
 ## Current Position
 
-Phase: 03 (Corrected PDF Score) — READY TO EXECUTE
-Current Plan: Not started
+Phase: 03 (Corrected PDF Score) — EXECUTING
+Current Plan: 1
 Total Plans in Phase: 15
-Status: Ready to execute
-Last activity: 2026-10-16 - Phase 03 planned: 15 plans, 35 tasks, 12 waves; independent check has no blockers or warnings; ready for execution
+Status: Executing Phase 03
+Last activity: 2026-10-17 - Phase 03 Wave 1 at human gates: package artifacts approved; deployment and corpus decisions pending; 109 regression tests pass
 
 Progress: [███░░░░░░░] 33%
 
@@ -128,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-16T23:32:11.970Z
-Stopped at: Phase 03 planning complete; independent check has 0 blockers and 0 warnings; next action: $gsd-execute-phase 3
-Resume file: None
+Last session: 2026-10-17T20:39:58.059Z
+Stopped at: Wave 1 checkpoints: 03-01 task 03 deployment decision/setup; 03-02 task 02 corpus rights/reviewer/scans/budget. Package approval recorded; continue from checkpoint table.
+Resume file: .planning/phases/03-corrected-pdf-score/03-EXECUTION-CHECKPOINT.md
