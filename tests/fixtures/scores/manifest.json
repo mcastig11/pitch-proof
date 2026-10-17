@@ -1,0 +1,1536 @@
+{
+  "schemaVersion": 1,
+  "authorship": {
+    "author": "Pitch Proof original fixture authored with Codex, 2026-10-17",
+    "origin": "newly-composed-no-external-source",
+    "goldFileSha256": "b82f16c433e65dfa197d016261a6f0ea1c01fdc7f70ec49b33df29addb1ee56f",
+    "textHashEncoding": "UTF-8 with CRLF normalized to LF; PDF hashes are exact bytes",
+    "scope": "12 related original studies/transpositions, not independent edition diversity",
+    "rightsApprovalClaimed": false,
+    "independentReviewClaimed": false
+  },
+  "protocolApproval": {
+    "status": "pending",
+    "approvedBy": null,
+    "approvedOn": null,
+    "evidence": null
+  },
+  "designApproval": {
+    "status": "pending",
+    "approvedBy": null,
+    "approvedOn": null,
+    "evidence": null
+  },
+  "effortBudget": {
+    "status": "pending",
+    "selectedOption": null,
+    "approvedBy": null,
+    "approvedOn": null,
+    "evidence": null,
+    "proposals": [
+      {
+        "id": "A",
+        "medianActiveSecondsPerMeasure": 30,
+        "p95ActiveSecondsPerMeasure": 90,
+        "medianGesturesPerMeasure": 8,
+        "p95GesturesPerMeasure": 24,
+        "maxAbandonmentRate": 0.05
+      },
+      {
+        "id": "B",
+        "medianActiveSecondsPerMeasure": 60,
+        "p95ActiveSecondsPerMeasure": 180,
+        "medianGesturesPerMeasure": 16,
+        "p95GesturesPerMeasure": 48,
+        "maxAbandonmentRate": 0.1
+      },
+      {
+        "id": "C",
+        "medianActiveSecondsPerMeasure": 15,
+        "p95ActiveSecondsPerMeasure": 45,
+        "medianGesturesPerMeasure": 4,
+        "p95GesturesPerMeasure": 12,
+        "maxAbandonmentRate": 0.02
+      }
+    ]
+  },
+  "qualityTargets": {
+    "status": "proposed-unapproved",
+    "confirmedFieldAgreement": 1,
+    "confirmedMeasureSourceCoverage": 1,
+    "maxFalseTrustEligibility": 0,
+    "maxFalseSourceClaims": 0
+  },
+  "acquisitionPlan": {
+    "status": "pending",
+    "physicalOriginalScans": 4,
+    "externalDigitalEditions": 2,
+    "externalPhysicalEditions": 2,
+    "independentReviewer": null,
+    "requiresAssetLevelPermissionBeforeAcquisition": true
+  },
+  "assets": [
+    {
+      "id": "pp-01-digital",
+      "sha256": "749608a32ecd2a0739bb1f4d8cc7121ec44828d1064f25fcceb0a0cfeb8f5b30",
+      "bytes": 106296,
+      "pages": 2,
+      "exerciseId": "pp-01",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-01-rasterized",
+      "sha256": "72ec72c4cc1f955e32bc7a95901f664a883b805d3de151d91695cb3fde554fc7",
+      "bytes": 49205,
+      "pages": 2,
+      "exerciseId": "pp-01",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-01-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-02-digital",
+      "sha256": "d4e55b6fc97fc7e6a24a3439c56cece2a9ddabd6993f6a06369b5ee595961ffb",
+      "bytes": 105250,
+      "pages": 2,
+      "exerciseId": "pp-02",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-02-rasterized",
+      "sha256": "d41bfde05e78ec0fa49543829d3911579b2aeedf8cb1484182409f7458202eff",
+      "bytes": 20238,
+      "pages": 2,
+      "exerciseId": "pp-02",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-02-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-03-digital",
+      "sha256": "44363036e8c632c4f1c8ab6d5450b563436910187b73f02f46c311e5a1ef8bec",
+      "bytes": 104902,
+      "pages": 2,
+      "exerciseId": "pp-03",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-03-rasterized",
+      "sha256": "7e10356426d4f8450d01b637f095685247ffe6116e6cca807f8ad9e6b4c8918e",
+      "bytes": 46858,
+      "pages": 2,
+      "exerciseId": "pp-03",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-03-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-04-digital",
+      "sha256": "8db75d273f1f2959e7679449c7d9b0928ab33d066cd3aab012a5be4c7916afc9",
+      "bytes": 105660,
+      "pages": 2,
+      "exerciseId": "pp-04",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-04-rasterized",
+      "sha256": "287d7131c2ffa12225ad7efe617387347b30f06f1d4f69092ee00568b4e90043",
+      "bytes": 20749,
+      "pages": 2,
+      "exerciseId": "pp-04",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-04-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-05-digital",
+      "sha256": "d5458439de5e99f0258b763ec873d44987c9bb07729f39187132a818801226fc",
+      "bytes": 106380,
+      "pages": 2,
+      "exerciseId": "pp-05",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-05-rasterized",
+      "sha256": "80579ef74a56ef34a4f65a5e4349a16baa075007967f03b1371ee56f19a06873",
+      "bytes": 48709,
+      "pages": 2,
+      "exerciseId": "pp-05",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-05-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-06-digital",
+      "sha256": "6e4cbf29e3b65d65753e3c5e4168eeb001de12e577fd3ec48d6d50cea2ebc693",
+      "bytes": 103848,
+      "pages": 2,
+      "exerciseId": "pp-06",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-06-rasterized",
+      "sha256": "0a8df530c0ddd68c37c4ad258b96179dd5b8061707b81161caa868c0f209b3f0",
+      "bytes": 20117,
+      "pages": 2,
+      "exerciseId": "pp-06",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-06-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-07-digital",
+      "sha256": "996cd2137814cd22c5baa8c461e88cccae6817842bfedc45e15dfa34d14b6ef0",
+      "bytes": 106016,
+      "pages": 2,
+      "exerciseId": "pp-07",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-07-rasterized",
+      "sha256": "6999e07388d58b0a38da38c9b0abe7ec227e6d8f29f1b456c9f123b0037d4275",
+      "bytes": 47968,
+      "pages": 2,
+      "exerciseId": "pp-07",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-07-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-08-digital",
+      "sha256": "f74c8c7880496a2dc4b020aa294dcc2bd6fd9f655c18d3a77f5f52cfb6903790",
+      "bytes": 102524,
+      "pages": 2,
+      "exerciseId": "pp-08",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-08-rasterized",
+      "sha256": "2eb7f3a3b82d26f01a87cda678111880db758e38ef58260f7e3e60c80ccb4077",
+      "bytes": 18575,
+      "pages": 2,
+      "exerciseId": "pp-08",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-08-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-09-digital",
+      "sha256": "b2be06649d930a38a4420fcb392474a8e339d840fd581b6ad540f2503b6199b6",
+      "bytes": 106640,
+      "pages": 2,
+      "exerciseId": "pp-09",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-09-rasterized",
+      "sha256": "71e63093cd7e3d49031d2ed6bbbb1fb2278d7106249416ba20ebb40b009816fc",
+      "bytes": 48829,
+      "pages": 2,
+      "exerciseId": "pp-09",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-09-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-10-digital",
+      "sha256": "471a08a3568e34dc79397c59c4c8abdb3b948d12efe24ef103b6f1c261e4e6ac",
+      "bytes": 104110,
+      "pages": 2,
+      "exerciseId": "pp-10",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-10-rasterized",
+      "sha256": "531dbd5eece91d848d6ba86b48870e0b362087e5c2eaf75d6fec51a10144a41c",
+      "bytes": 19577,
+      "pages": 2,
+      "exerciseId": "pp-10",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-10-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-11-digital",
+      "sha256": "76473ffe833646b8e21c81030b16ec288e51a2476aa5e9f832bbbc5f026c882b",
+      "bytes": 107530,
+      "pages": 2,
+      "exerciseId": "pp-11",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-11-rasterized",
+      "sha256": "bc78b72cf37815ef481cfb8a5a7e1d05bd01a5703012f8d642228839a408d2ab",
+      "bytes": 51270,
+      "pages": 2,
+      "exerciseId": "pp-11",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-11-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 300,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": []
+    },
+    {
+      "id": "pp-12-digital",
+      "sha256": "8c8a069c9ca3da4019d2f6e601865c6ebefa09a9e25bd91832a6a4d70a6c766e",
+      "bytes": 109366,
+      "pages": 2,
+      "exerciseId": "pp-12",
+      "stratum": "digital",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": null,
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "pages": 2,
+        "systemsPerPage": 2,
+        "parts": [
+          "upper-treble",
+          "lower-bass"
+        ],
+        "kind": "vector",
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": [
+        "upper:m6:missing",
+        "lower:m7:corrupt"
+      ]
+    },
+    {
+      "id": "pp-12-rasterized",
+      "sha256": "cf819c0398f52ba6dbdb2b0084175bc463e63139b22b6db741db5f23419447a5",
+      "bytes": 20096,
+      "pages": 2,
+      "exerciseId": "pp-12",
+      "stratum": "rasterized",
+      "status": "available",
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "Original bounded Node geometric engraver, 2026-10-17",
+      "parentId": "pp-12-digital",
+      "settings": {
+        "mediaBoxPoints": [
+          612,
+          792
+        ],
+        "dpi": 144,
+        "grayscaleBits": 8,
+        "threshold": "binary geometry on white",
+        "physicalImaging": false,
+        "skewDegrees": 0,
+        "rotation": 0
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": true,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      },
+      "damage": [
+        "upper:m6:missing",
+        "lower:m7:corrupt"
+      ]
+    },
+    {
+      "id": "pp-03-physical-300",
+      "exerciseId": "pp-03",
+      "stratum": "physical-scan",
+      "status": "pending-acquisition",
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "original fixture; physical print and scan operator pending",
+      "parentId": "pp-03-digital",
+      "settings": {
+        "plannedDpi": 300,
+        "scanner": null,
+        "printer": null,
+        "physicalImaging": true
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "pp-03-physical-400",
+      "exerciseId": "pp-03",
+      "stratum": "physical-scan",
+      "status": "pending-acquisition",
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "original fixture; physical print and scan operator pending",
+      "parentId": "pp-03-digital",
+      "settings": {
+        "plannedDpi": 400,
+        "scanner": null,
+        "printer": null,
+        "physicalImaging": true
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "pp-09-physical-300",
+      "exerciseId": "pp-09",
+      "stratum": "physical-scan",
+      "status": "pending-acquisition",
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "original fixture; physical print and scan operator pending",
+      "parentId": "pp-09-digital",
+      "settings": {
+        "plannedDpi": 300,
+        "scanner": null,
+        "printer": null,
+        "physicalImaging": true
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "pp-09-physical-400",
+      "exerciseId": "pp-09",
+      "stratum": "physical-scan",
+      "status": "pending-acquisition",
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": "pp-original-codex-20261017",
+      "author": "Original Pitch Proof study authored with Codex",
+      "engraver": "original fixture; physical print and scan operator pending",
+      "parentId": "pp-09-digital",
+      "settings": {
+        "plannedDpi": 400,
+        "scanner": null,
+        "printer": null,
+        "physicalImaging": true
+      },
+      "rights": {
+        "status": "pending-user-confirmation",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": "pending-designation",
+        "license": "no-third-party-material; user permission confirmation pending",
+        "evidence": "new original source in scripts/create-score-fixtures.mjs and authored gold; authorized local fixture creation only",
+        "approvedBy": null,
+        "approvedOn": null,
+        "restrictions": "No external material copied; no support/release/rights approval inferred."
+      },
+      "goldFile": "tests/fixtures/scores/tracer-gold.json",
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "external-digital-01",
+      "stratum": "digital",
+      "status": "pending-selection-and-permission",
+      "description": "Select actual licensed conventional single-voice-per-staff vocal edition",
+      "title": null,
+      "publisher": null,
+      "edition": null,
+      "source": null,
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": null,
+      "author": null,
+      "engraver": null,
+      "settings": null,
+      "rights": {
+        "status": "unknown-excluded",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": false,
+        "evidence": null,
+        "approvedBy": null,
+        "approvedOn": null
+      },
+      "goldFile": null,
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "external-digital-02",
+      "stratum": "digital",
+      "status": "pending-selection-and-permission",
+      "description": "Select actual independently engraved multi-part choir edition",
+      "title": null,
+      "publisher": null,
+      "edition": null,
+      "source": null,
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": null,
+      "author": null,
+      "engraver": null,
+      "settings": null,
+      "rights": {
+        "status": "unknown-excluded",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": false,
+        "evidence": null,
+        "approvedBy": null,
+        "approvedOn": null
+      },
+      "goldFile": null,
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "external-physical-01",
+      "stratum": "physical-scan",
+      "status": "pending-selection-and-permission",
+      "description": "Select first actual licensed printed vocal edition and acquire real flatbed scan",
+      "title": null,
+      "publisher": null,
+      "edition": null,
+      "source": null,
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": null,
+      "author": null,
+      "engraver": null,
+      "settings": null,
+      "rights": {
+        "status": "unknown-excluded",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": false,
+        "evidence": null,
+        "approvedBy": null,
+        "approvedOn": null
+      },
+      "goldFile": null,
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    },
+    {
+      "id": "external-physical-02",
+      "stratum": "physical-scan",
+      "status": "pending-selection-and-permission",
+      "description": "Select second distinct licensed edition with moderate real skew/shadow for eligibility adjudication",
+      "title": null,
+      "publisher": null,
+      "edition": null,
+      "source": null,
+      "sha256": null,
+      "bytes": null,
+      "pages": null,
+      "authorId": null,
+      "author": null,
+      "engraver": null,
+      "settings": null,
+      "rights": {
+        "status": "unknown-excluded",
+        "localProcessing": false,
+        "cloudUpload": false,
+        "redistribution": false,
+        "reviewerAccess": false,
+        "evidence": null,
+        "approvedBy": null,
+        "approvedOn": null
+      },
+      "goldFile": null,
+      "goldReview": {
+        "status": "pending",
+        "reviewerId": null,
+        "reviewedOn": null,
+        "approvedBy": null,
+        "approvedOn": null,
+        "evidence": null
+      }
+    }
+  ]
+}

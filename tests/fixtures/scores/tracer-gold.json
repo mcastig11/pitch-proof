@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "authorship": {
+    "author": "Pitch Proof original fixture authored with Codex, 2026-10-17",
+    "origin": "newly-composed-no-external-source",
+    "semanticMethod": "Authored musical expectations in this file, not OMR output, not an export of the engraver. Repeated exercises use explicit transposition bases and the authored rhythmic tables below.",
+    "regionMethod": "Authored page/measure/staff rectangles in original unrotated PDF points, top-left origin; not inferred from recognized boxes. These are candidate gold awaiting independent human comparison with decoded PDF pages.",
+    "rightsCaveat": "Generated original authorship records provenance only. User permission confirmation and independent human review are pending. No external edition, image, melody or font file was copied."
+  },
+  "independentReview": { "status": "pending", "reviewerId": null, "reviewedOn": null, "evidence": null },
+  "units": {
+    "time": "reduced rational quarter-note beats, onset relative to measure",
+    "pitch": "concert MIDI with each written accidental explicit; null means rest",
+    "patternColumns": ["onset", "duration", "semitonesFromPartBase", "tie"],
+    "eventId": "{partId}-m{measure}-e{oneBasedEventIndex}",
+    "rectangle": "x,y,width,height in unrotated PDF points, top-left origin",
+    "page": { "width": 612, "height": 792, "rotation": 0 },
+    "meter": { "numerator": 4, "denominator": 4 },
+    "parts": [{ "id": "upper", "label": "UPPER", "clef": "treble" }, { "id": "lower", "label": "LOWER", "clef": "bass" }],
+    "durationInterpretation": "3/4 dotted eighth; 1/4 sixteenth; 1/2 eighth; 1/1 quarter; 3/2 dotted quarter; 2/1 half; 3/1 dotted half; 4/1 whole. Ties join m3-e2 to m4-e1 in each part without retrigger."
+  },
+  "rhythmicGold": {
+    "pickup": [["0/1", "1/1", 0, null]],
+    "opening": [["0/1", "1/1", 0, null], ["1/1", "1/1", 2, null], ["2/1", "1/1", 4, null], ["3/1", "1/1", 2, null]],
+    "m2": [["0/1", "3/4", 0, null], ["3/4", "1/4", 2, null], ["1/1", "1/2", 4, null], ["3/2", "1/2", null, null], ["2/1", "2/1", 5, null]],
+    "m3": [["0/1", "3/1", 4, null], ["3/1", "1/1", 4, "start"]],
+    "m4": [["0/1", "1/1", 4, "stop"], ["1/1", "1/1", 2, null], ["2/1", "2/1", 0, null]],
+    "m5": [["0/1", "1/2", 0, null], ["1/2", "1/2", 2, null], ["1/1", "1/1", 4, null], ["2/1", "1/1", null, null], ["3/1", "1/1", 2, null]],
+    "m6": [["0/1", "3/2", -1, null], ["3/2", "1/2", 0, null], ["2/1", "2/1", 2, null]],
+    "m7": [["0/1", "4/1", 0, null]],
+    "m8": [["0/1", "2/1", null, null], ["2/1", "2/1", 0, null]]
+  },
+  "exercises": [
+    { "id": "pp-01", "title": "First ascent", "tempoQuarterBpm": 72, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 70, "lower": 46 } },
+    { "id": "pp-02", "title": "Quiet return", "tempoQuarterBpm": 76, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 71, "lower": 47 } },
+    { "id": "pp-03", "title": "Clear step", "tempoQuarterBpm": 80, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 72, "lower": 48 } },
+    { "id": "pp-04", "title": "Bright turn", "tempoQuarterBpm": 84, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 73, "lower": 49 } },
+    { "id": "pp-05", "title": "Even breath", "tempoQuarterBpm": 88, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 74, "lower": 50 } },
+    { "id": "pp-06", "title": "Open arc", "tempoQuarterBpm": 92, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 75, "lower": 51 } },
+    { "id": "pp-07", "title": "Low light", "tempoQuarterBpm": 96, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 69, "lower": 45 } },
+    { "id": "pp-08", "title": "Steady line", "tempoQuarterBpm": 100, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 72, "lower": 48 } },
+    { "id": "pp-09", "title": "Small leap", "tempoQuarterBpm": 104, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 74, "lower": 50 } },
+    { "id": "pp-10", "title": "Warm descent", "tempoQuarterBpm": 108, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 70, "lower": 46 } },
+    { "id": "pp-11", "title": "Held cadence", "tempoQuarterBpm": 112, "pickupQuarterBeats": "1/1", "partBaseMidi": { "upper": 73, "lower": 49 } },
+    { "id": "pp-12", "title": "Broken page", "tempoQuarterBpm": 116, "pickupQuarterBeats": null, "partBaseMidi": { "upper": 71, "lower": 47 } }
+  ],
+  "regionGold": [
+    { "partId": "upper", "measure": 1, "page": 1, "system": 1, "rect": [150, 110, 190, 110] },
+    { "partId": "upper", "measure": 2, "page": 1, "system": 1, "rect": [340, 110, 190, 110] },
+    { "partId": "lower", "measure": 1, "page": 1, "system": 1, "rect": [150, 220, 190, 100] },
+    { "partId": "lower", "measure": 2, "page": 1, "system": 1, "rect": [340, 220, 190, 100] },
+    { "partId": "upper", "measure": 3, "page": 1, "system": 2, "rect": [150, 400, 190, 110] },
+    { "partId": "upper", "measure": 4, "page": 1, "system": 2, "rect": [340, 400, 190, 110] },
+    { "partId": "lower", "measure": 3, "page": 1, "system": 2, "rect": [150, 510, 190, 100] },
+    { "partId": "lower", "measure": 4, "page": 1, "system": 2, "rect": [340, 510, 190, 100] },
+    { "partId": "upper", "measure": 5, "page": 2, "system": 1, "rect": [150, 110, 190, 110] },
+    { "partId": "upper", "measure": 6, "page": 2, "system": 1, "rect": [340, 110, 190, 110] },
+    { "partId": "lower", "measure": 5, "page": 2, "system": 1, "rect": [150, 220, 190, 100] },
+    { "partId": "lower", "measure": 6, "page": 2, "system": 1, "rect": [340, 220, 190, 100] },
+    { "partId": "upper", "measure": 7, "page": 2, "system": 2, "rect": [150, 400, 190, 110] },
+    { "partId": "upper", "measure": 8, "page": 2, "system": 2, "rect": [340, 400, 190, 110] },
+    { "partId": "lower", "measure": 7, "page": 2, "system": 2, "rect": [150, 510, 190, 100] },
+    { "partId": "lower", "measure": 8, "page": 2, "system": 2, "rect": [340, 510, 190, 100] }
+  ],
+  "damageGold": [
+    { "exerciseId": "pp-12", "partId": "upper", "measure": 6, "state": "missing", "reviewEligible": false },
+    { "exerciseId": "pp-12", "partId": "lower", "measure": 7, "state": "corrupt", "reviewEligible": false }
+  ],
+  "sourceAssertions": {
+    "scope": "Measure/staff rectangles only, not precise symbol boxes. Damage overrides nominal layout rectangles. Moved notes use original provenance unions, inserted notes have no fabricated symbol position.",
+    "pageBreak": [4, 5], "systemBreaks": [[2, 3], [6, 7]],
+    "humanReviewRequired": "Independently decode all pages, check every event and region, resolve discrepancies without consulting OMR, date and hash approved gold before any measured run."
+  }
+}
