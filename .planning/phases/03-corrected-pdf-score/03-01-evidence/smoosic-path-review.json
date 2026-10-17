@@ -1,0 +1,588 @@
+[
+  {
+    "path": "package/build/smoosic.js",
+    "sha256": "c17e8ac030356aa24471dc10d5af496489f270b33b167f6118335903fb0150b0",
+    "matches": [
+      {
+        "line": 5,
+        "text": " * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)"
+      },
+      {
+        "line": 7,
+        "text": " * If you are looking for production-ready output files, see mode: \"production\" (https://webpack.js.org/configuration/mode/)."
+      },
+      {
+        "line": 40,
+        "text": "ndler config in order to get better tree-shaking in the production bundle.\\n\\nFor more details, see https://link.vuejs.org/feature-flags.`\\n    );\\n  }\\n}\\n\\nconst queuePostRenderEffect = queueEffectWithSuspense ;\\nfunction createRenderer(options) {\\n  return baseCreateRenderer(options);\\n}\\nfunction createHydrationRenderer(options) {\\n  "
+      },
+      {
+        "line": 51,
+        "text": "nst unsafeToTrustedHTML = policy ? (val) => policy.createHTML(val) : (val) => val;\\nconst svgNS = \\\"http://www.w3.org/2000/svg\\\";\\nconst mathmlNS = \\\"http://www.w3.org/1998/Math/MathML\\\";\\nconst doc = typeof document !== \\\"undefined\\\" ? document : null;\\nconst templateContainer = doc && /* @__PURE__ */ doc.createElement(\\\"template\\\");\\nco"
+      },
+      {
+        "line": 51,
+        "text": ".createHTML(val) : (val) => val;\\nconst svgNS = \\\"http://www.w3.org/2000/svg\\\";\\nconst mathmlNS = \\\"http://www.w3.org/1998/Math/MathML\\\";\\nconst doc = typeof document !== \\\"undefined\\\" ? document : null;\\nconst templateContainer = doc && /* @__PURE__ */ doc.createElement(\\\"template\\\");\\nconst nodeOps = {\\n  insert: (child, parent, anchor)"
+      },
+      {
+        "line": 51,
+        "text": "runtime_core__WEBPACK_IMPORTED_MODULE_2__.isString)(next) && prev === next;\\n}\\n\\nconst xlinkNS = \\\"http://www.w3.org/1999/xlink\\\";\\nfunction patchAttr(el, key, value, isSVG, instance, isBoolean = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__.isSpecialBooleanAttr)(key)) {\\n  if (isSVG && key.startsWith(\\\"xlink:\\\")) {\\n    if (value =="
+      },
+      {
+        "line": 51,
+        "text": "- For vue-loader: pass it via vue-loader's \\\\`compilerOptions\\\\` loader option.\\n- For vue-cli: see https://cli.vuejs.org/guide/webpack.html#modifying-options-of-a-loader\\n- For vite: pass it via @vitejs/plugin-vue options. See https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#example-for-passing-options-to-vuecompil"
+      },
+      {
+        "line": 51,
+        "text": "webpack.html#modifying-options-of-a-loader\\n- For vite: pass it via @vitejs/plugin-vue options. See https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#example-for-passing-options-to-vuecompiler-sfc`;\\n    Object.defineProperty(app.config, \\\"compilerOptions\\\", {\\n      get() {\\n        (0,_vue_runtime_core__WEBPACK_IMP"
+      },
+      {
+        "line": 73,
+        "text": "n    /**\\n     * Returns the correct MIDI number for the specified pitch.\\n     * Uses Tonal Midi - https://github.com/danigb/tonal/tree/master/packages/midi\\n     * @param {(string|number)} pitch - 'C#4' or midi note code\\n     * @param {string} middleC\\n     * @return {number}\\n     */\\n    Utils.getPitch = function (pitch, middleC) {\\n"
+      },
+      {
+        "line": 73,
+        "text": "ss time,\\n     * take a good look at the spec before ever touching this function.\\n     * Thanks to https://github.com/sergi/jsmidi\\n     *\\n     * @param {number} ticks - Number of ticks to be translated\\n     * @return {array} - Bytes that form the MIDI time value\\n     */\\n    Utils.numberToVariableLength = function (ticks) {\\n        "
+      },
+      {
+        "line": 1635,
+        "text": "[\\n                            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)(\\\"<a href=\\\\\\\"https://github.com/Smoosic/smoosic\\\\\\\" aria-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\"
+      },
+      {
+        "line": 1635,
+        "text": "ia-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" aria-label=\\\\\\\"applicat"
+      },
+      {
+        "line": 1635,
+        "text": "-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" aria-label=\\\\\\\"application link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">application</a><button class=\\\\\\\"close-header\\\\\\\" aria-label=\\\\\\\"Close\\\\\\\"><span class=\\\\\\\"icon ico"
+      },
+      {
+        "line": 1668,
+        "text": "><div>Welcome to Smoosic - the web-based music notation editor</div><div class=\\\\\\\"\\\\\\\"><a href=\\\\\\\"https://github.com/Smoosic/smoosic\\\\\\\" aria-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\"
+      },
+      {
+        "line": 1668,
+        "text": "ia-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" target=\\\\\\\"_blank\\\\\\\" a"
+      },
+      {
+        "line": 1668,
+        "text": "-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"application link\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">application</a></div><div><strong> Copyright (c) 2021 Aaron David Newman</strong></div><div> Contri"
+      },
+      {
+        "line": 1668,
+        "text": "<strong> Copyright (c) 2021 Aaron David Newman</strong></div><div> Contributors include <a href=\\\\\\\"https://github.com/AaronDavidNewman\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Maintainer&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Aaron David Newman</a> , <a href=\\\\\\\"https://github.com/strangarnenad\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Contr"
+      },
+      {
+        "line": 1668,
+        "text": " aria-label=\\\\\\\"Maintainer&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Aaron David Newman</a> , <a href=\\\\\\\"https://github.com/strangarnenad\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Contributor&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Strangar Nenad</a> and others. </div></div>\\\", 1))\\n                ])\\n            ])\\n        ])\\n    ], 2 /* CLASS "
+      },
+      {
+        "line": 1690,
+        "text": "urn null;\\n                }\\n            }\\n            else {\\n                const localScore = localStorage.getItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_0__.smoSerialize.localScore);\\n                if (localScore) {\\n                    this.score = this.tryParse(localScore);\\n                }\\n                els"
+      },
+      {
+        "line": 1690,
+        "text": "Json) {\\n        try {\\n            if (scoreJson[0] === '<') {\\n                const parser = new DOMParser();\\n                const xml = parser.parseFromString(scoreJson, 'text/xml');\\n                return _smo_mxml_xmlToSmo__WEBPACK_IMPORTED_MODULE_5__.XmlToSmo.convert(xml);\\n            }\\n            return _smo_data_score__WEBP"
+      },
+      {
+        "line": 1712,
+        "text": "\\n            topControls: 'controls-top',\\n            domContainer: '',\\n            libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\\n            demonPollTime: 50, // how often we poll the score to see if it changed\\n            idleRedrawTime: 1000, // maximum time between score modification and render\\n      "
+      },
+      {
+        "line": 1756,
+        "text": "n\\n\\nconst filesToRender = {\\n    'PreciousLord': {\\n        title: 'PreciousLord',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/hymns/Precious Lord.json',\\n        pages: [0]\\n    }, 'BachWTC': {\\n        title: 'BachWTC',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachW"
+      },
+      {
+        "line": 1756,
+        "text": "ous Lord.json',\\n        pages: [0]\\n    }, 'BachWTC': {\\n        title: 'BachWTC',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachWTC-3.json',\\n        pages: [0, 1, 2]\\n    }, 'BachInvention': {\\n        title: 'BachInv1',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/pi"
+      },
+      {
+        "line": 1756,
+        "text": "',\\n        pages: [0, 1, 2]\\n    }, 'BachInvention': {\\n        title: 'BachInv1',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachInvention.json',\\n        pages: [1]\\n    }, 'Gnossienne3': {\\n        title: 'Gnossienne3',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/pia"
+      },
+      {
+        "line": 1756,
+        "text": ".json',\\n        pages: [1]\\n    }, 'Gnossienne3': {\\n        title: 'Gnossienne3',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Gnossienne3-3.json',\\n        pages: [0, 1]\\n    }, 'GFWMessiah-I-2': {\\n        title: 'GFWMessiah-I-2',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/li"
+      },
+      {
+        "line": 1756,
+        "text": "        pages: [0, 1]\\n    }, 'GFWMessiah-I-2': {\\n        title: 'GFWMessiah-I-2',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/messiah/Messiah-I-2.json',\\n        pages: [0, 1]\\n    }, 'Joplin': {\\n        title: 'Joplin',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Jopl"
+      },
+      {
+        "line": 1756,
+        "text": "iah-I-2.json',\\n        pages: [0, 1]\\n    }, 'Joplin': {\\n        title: 'Joplin',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Joplin-Entertainer.json',\\n        pages: [0, 1, 2]\\n    }, 'Plena': {\\n        title: 'Plena',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigb"
+      },
+      {
+        "line": 1756,
+        "text": "tainer.json',\\n        pages: [0, 1, 2]\\n    }, 'Plena': {\\n        title: 'Plena',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Plena.json',\\n        pages: [2]\\n    }, 'Postillionlied': {\\n        title: 'Postillion Lied',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/so"
+      },
+      {
+        "line": 1756,
+        "text": "\\n        pages: [2]\\n    }, 'Postillionlied': {\\n        title: 'Postillion Lied',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Postillionlied.json',\\n        pages: [0, 1, 2]\\n    }, 'Solovey': {\\n        title: 'Solovey',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/so"
+      },
+      {
+        "line": 1756,
+        "text": "ed.json',\\n        pages: [0, 1, 2]\\n    }, 'Solovey': {\\n        title: 'Solovey',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Solovey.json',\\n        pages: [0, 1]\\n    }, 'Bilongo': {\\n        title: 'Bilongo',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Bilo"
+      },
+      {
+        "line": 1756,
+        "text": "lovey.json',\\n        pages: [0, 1]\\n    }, 'Bilongo': {\\n        title: 'Bilongo',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Bilongo-Mandinga.json',\\n        pages: [7]\\n    }, 'Yama': {\\n        title: 'Yama',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/Yama2.json',"
+      },
+      {
+        "line": 1756,
+        "text": "longo-Mandinga.json',\\n        pages: [7]\\n    }, 'Yama': {\\n        title: 'Yama',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/Yama2.json',\\n        pages: [1]\\n    }\\n};\\nconst addFileLink = (filename, txt, parent, mimeType = 'application/octet-stream') => {\\n    var anchor = $('<a></a>');\\n    var url = U"
+      },
+      {
+        "line": 1789,
+        "text": "rt */ });\\n// MIDI parsing code credit to:\\n// Copyright (c) 2010, Matt Westcott & Ben Firshman\\n// https://github.com/NHQ/midi-file-parser/\\nfunction parseMidi(data) {\\n    var p = new Parser(data);\\n    var headerChunk = p.readChunk();\\n    if (headerChunk.id != 'MThd')\\n        throw \\\"Bad MIDI file.  Expected 'MHdr', got: '\\\" + header"
+      },
+      {
+        "line": 1811,
+        "text": "n        return '_smoosicScore';\\n    }\\n    static loadRemoteFile(path) {\\n        const req = new XMLHttpRequest();\\n        req.addEventListener('load', () => {\\n            callback(req.responseText);\\n        });\\n        req.open('GET', path);\\n        req.send();\\n    }\\n    // This is the token map we use to reduce the size of\\n  "
+      },
+      {
+        "line": 1811,
+        "text": "erseMap(smoSerialize.tokenMap);\\n    }\\n    static prettifyXml(xmlDoc) {\\n        var xsltDoc = new DOMParser().parseFromString([\\n            // describes how we want to modify the XML - indent everything\\n            '<xsl:stylesheet xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\">',\\n            '  <xsl:strip-space elements=\\\"*\\\"/>'"
+      },
+      {
+        "line": 1811,
+        "text": "scribes how we want to modify the XML - indent everything\\n            '<xsl:stylesheet xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\">',\\n            '  <xsl:strip-space elements=\\\"*\\\"/>',\\n            '  <xsl:template match=\\\"para[content-style][not(text())]\\\">', // change to just text() to strip space in text nodes\\n            '  "
+      },
+      {
+        "line": 1822,
+        "text": "ORTED_MODULE_0__ = __webpack_require__(/*! ../common/vex */ \\\"./src/common/vex.ts\\\");\\n// [VexFlow](https://vexflow.com) - Copyright (c) Mohit Muthanna 2010.\\n// MIT License\\n\\nconst VF = _common_vex__WEBPACK_IMPORTED_MODULE_0__.VexFlow;\\n/**\\n * Text widths are stored in a cache, so we don't have to recompute widths\\n * for the same font"
+      },
+      {
+        "line": 1855,
+        "text": "ect() {\\n        this.output.disconnect();\\n        this.input.disconnect();\\n    }\\n    // credit: https://github.com/nick-thompson\\n    _buildImpulse() {\\n        let n = 0;\\n        let i = 0;\\n        if (SuiReverb.impulse) {\\n            this.input.buffer = SuiReverb.impulse;\\n            return;\\n        }\\n        const rate = this"
+      },
+      {
+        "line": 1877,
+        "text": "obj = {};\\n                if (key === 'percussion') {\\n                    obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\\n                }\\n                else {\\n                    obj['instrument'] = sampler;\\n                }\\n                const instrument = new smplr__WEBPACK_IMPORTED"
+      },
+      {
+        "line": 1888,
+        "text": "const color = this._getVoiceCursorRectangleColor();\\n        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');\\n        rect.setAttribute('x', x.toString());\\n        rect.setAttribute('y', y.toString());\\n        rect.setAttribute('width', width.toString());\\n        rect.setAttribute('height', height.toString("
+      }
+    ]
+  },
+  {
+    "path": "package/release/smoosic.js",
+    "sha256": "ef2ca287cc35a050ff5961ead2b93ed9fad5d7a5472b27d4f2bd795fffa40227",
+    "matches": [
+      {
+        "line": 5,
+        "text": " * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)"
+      },
+      {
+        "line": 7,
+        "text": " * If you are looking for production-ready output files, see mode: \"production\" (https://webpack.js.org/configuration/mode/)."
+      },
+      {
+        "line": 40,
+        "text": "ndler config in order to get better tree-shaking in the production bundle.\\n\\nFor more details, see https://link.vuejs.org/feature-flags.`\\n    );\\n  }\\n}\\n\\nconst queuePostRenderEffect = queueEffectWithSuspense ;\\nfunction createRenderer(options) {\\n  return baseCreateRenderer(options);\\n}\\nfunction createHydrationRenderer(options) {\\n  "
+      },
+      {
+        "line": 51,
+        "text": "nst unsafeToTrustedHTML = policy ? (val) => policy.createHTML(val) : (val) => val;\\nconst svgNS = \\\"http://www.w3.org/2000/svg\\\";\\nconst mathmlNS = \\\"http://www.w3.org/1998/Math/MathML\\\";\\nconst doc = typeof document !== \\\"undefined\\\" ? document : null;\\nconst templateContainer = doc && /* @__PURE__ */ doc.createElement(\\\"template\\\");\\nco"
+      },
+      {
+        "line": 51,
+        "text": ".createHTML(val) : (val) => val;\\nconst svgNS = \\\"http://www.w3.org/2000/svg\\\";\\nconst mathmlNS = \\\"http://www.w3.org/1998/Math/MathML\\\";\\nconst doc = typeof document !== \\\"undefined\\\" ? document : null;\\nconst templateContainer = doc && /* @__PURE__ */ doc.createElement(\\\"template\\\");\\nconst nodeOps = {\\n  insert: (child, parent, anchor)"
+      },
+      {
+        "line": 51,
+        "text": "runtime_core__WEBPACK_IMPORTED_MODULE_2__.isString)(next) && prev === next;\\n}\\n\\nconst xlinkNS = \\\"http://www.w3.org/1999/xlink\\\";\\nfunction patchAttr(el, key, value, isSVG, instance, isBoolean = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_2__.isSpecialBooleanAttr)(key)) {\\n  if (isSVG && key.startsWith(\\\"xlink:\\\")) {\\n    if (value =="
+      },
+      {
+        "line": 51,
+        "text": "- For vue-loader: pass it via vue-loader's \\\\`compilerOptions\\\\` loader option.\\n- For vue-cli: see https://cli.vuejs.org/guide/webpack.html#modifying-options-of-a-loader\\n- For vite: pass it via @vitejs/plugin-vue options. See https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#example-for-passing-options-to-vuecompil"
+      },
+      {
+        "line": 51,
+        "text": "webpack.html#modifying-options-of-a-loader\\n- For vite: pass it via @vitejs/plugin-vue options. See https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue#example-for-passing-options-to-vuecompiler-sfc`;\\n    Object.defineProperty(app.config, \\\"compilerOptions\\\", {\\n      get() {\\n        (0,_vue_runtime_core__WEBPACK_IMP"
+      },
+      {
+        "line": 73,
+        "text": "n    /**\\n     * Returns the correct MIDI number for the specified pitch.\\n     * Uses Tonal Midi - https://github.com/danigb/tonal/tree/master/packages/midi\\n     * @param {(string|number)} pitch - 'C#4' or midi note code\\n     * @param {string} middleC\\n     * @return {number}\\n     */\\n    Utils.getPitch = function (pitch, middleC) {\\n"
+      },
+      {
+        "line": 73,
+        "text": "ss time,\\n     * take a good look at the spec before ever touching this function.\\n     * Thanks to https://github.com/sergi/jsmidi\\n     *\\n     * @param {number} ticks - Number of ticks to be translated\\n     * @return {array} - Bytes that form the MIDI time value\\n     */\\n    Utils.numberToVariableLength = function (ticks) {\\n        "
+      },
+      {
+        "line": 1635,
+        "text": "[\\n                            (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)(\\\"<a href=\\\\\\\"https://github.com/Smoosic/smoosic\\\\\\\" aria-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\"
+      },
+      {
+        "line": 1635,
+        "text": "ia-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" aria-label=\\\\\\\"applicat"
+      },
+      {
+        "line": 1635,
+        "text": "-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" aria-label=\\\\\\\"application link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">application</a><button class=\\\\\\\"close-header\\\\\\\" aria-label=\\\\\\\"Close\\\\\\\"><span class=\\\\\\\"icon ico"
+      },
+      {
+        "line": 1668,
+        "text": "><div>Welcome to Smoosic - the web-based music notation editor</div><div class=\\\\\\\"\\\\\\\"><a href=\\\\\\\"https://github.com/Smoosic/smoosic\\\\\\\" aria-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\"
+      },
+      {
+        "line": 1668,
+        "text": "ia-label=\\\\\\\"Github link\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Github site</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/changes.md\\\\\\\" aria-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" target=\\\\\\\"_blank\\\\\\\" a"
+      },
+      {
+        "line": 1668,
+        "text": "-label=\\\\\\\"Change notes\\\\\\\" target=\\\\\\\"_blank\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">change notes</a> | <a href=\\\\\\\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"application link\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">application</a></div><div><strong> Copyright (c) 2021 Aaron David Newman</strong></div><div> Contri"
+      },
+      {
+        "line": 1668,
+        "text": "<strong> Copyright (c) 2021 Aaron David Newman</strong></div><div> Contributors include <a href=\\\\\\\"https://github.com/AaronDavidNewman\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Maintainer&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Aaron David Newman</a> , <a href=\\\\\\\"https://github.com/strangarnenad\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Contr"
+      },
+      {
+        "line": 1668,
+        "text": " aria-label=\\\\\\\"Maintainer&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Aaron David Newman</a> , <a href=\\\\\\\"https://github.com/strangarnenad\\\\\\\" target=\\\\\\\"_blank\\\\\\\" aria-label=\\\\\\\"Contributor&#39;s Github\\\\\\\" tabindex=\\\\\\\"0\\\\\\\">Strangar Nenad</a> and others. </div></div>\\\", 1))\\n                ])\\n            ])\\n        ])\\n    ], 2 /* CLASS "
+      },
+      {
+        "line": 1690,
+        "text": "urn null;\\n                }\\n            }\\n            else {\\n                const localScore = localStorage.getItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_0__.smoSerialize.localScore);\\n                if (localScore) {\\n                    this.score = this.tryParse(localScore);\\n                }\\n                els"
+      },
+      {
+        "line": 1690,
+        "text": "Json) {\\n        try {\\n            if (scoreJson[0] === '<') {\\n                const parser = new DOMParser();\\n                const xml = parser.parseFromString(scoreJson, 'text/xml');\\n                return _smo_mxml_xmlToSmo__WEBPACK_IMPORTED_MODULE_5__.XmlToSmo.convert(xml);\\n            }\\n            return _smo_data_score__WEBP"
+      },
+      {
+        "line": 1712,
+        "text": "\\n            topControls: 'controls-top',\\n            domContainer: '',\\n            libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\\n            demonPollTime: 50, // how often we poll the score to see if it changed\\n            idleRedrawTime: 1000, // maximum time between score modification and render\\n      "
+      },
+      {
+        "line": 1756,
+        "text": "n\\n\\nconst filesToRender = {\\n    'PreciousLord': {\\n        title: 'PreciousLord',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/hymns/Precious Lord.json',\\n        pages: [0]\\n    }, 'BachWTC': {\\n        title: 'BachWTC',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachW"
+      },
+      {
+        "line": 1756,
+        "text": "ous Lord.json',\\n        pages: [0]\\n    }, 'BachWTC': {\\n        title: 'BachWTC',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachWTC-3.json',\\n        pages: [0, 1, 2]\\n    }, 'BachInvention': {\\n        title: 'BachInv1',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/pi"
+      },
+      {
+        "line": 1756,
+        "text": "',\\n        pages: [0, 1, 2]\\n    }, 'BachInvention': {\\n        title: 'BachInv1',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachInvention.json',\\n        pages: [1]\\n    }, 'Gnossienne3': {\\n        title: 'Gnossienne3',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/pia"
+      },
+      {
+        "line": 1756,
+        "text": ".json',\\n        pages: [1]\\n    }, 'Gnossienne3': {\\n        title: 'Gnossienne3',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Gnossienne3-3.json',\\n        pages: [0, 1]\\n    }, 'GFWMessiah-I-2': {\\n        title: 'GFWMessiah-I-2',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/li"
+      },
+      {
+        "line": 1756,
+        "text": "        pages: [0, 1]\\n    }, 'GFWMessiah-I-2': {\\n        title: 'GFWMessiah-I-2',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/messiah/Messiah-I-2.json',\\n        pages: [0, 1]\\n    }, 'Joplin': {\\n        title: 'Joplin',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Jopl"
+      },
+      {
+        "line": 1756,
+        "text": "iah-I-2.json',\\n        pages: [0, 1]\\n    }, 'Joplin': {\\n        title: 'Joplin',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Joplin-Entertainer.json',\\n        pages: [0, 1, 2]\\n    }, 'Plena': {\\n        title: 'Plena',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigb"
+      },
+      {
+        "line": 1756,
+        "text": "tainer.json',\\n        pages: [0, 1, 2]\\n    }, 'Plena': {\\n        title: 'Plena',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Plena.json',\\n        pages: [2]\\n    }, 'Postillionlied': {\\n        title: 'Postillion Lied',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/so"
+      },
+      {
+        "line": 1756,
+        "text": "\\n        pages: [2]\\n    }, 'Postillionlied': {\\n        title: 'Postillion Lied',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Postillionlied.json',\\n        pages: [0, 1, 2]\\n    }, 'Solovey': {\\n        title: 'Solovey',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/so"
+      },
+      {
+        "line": 1756,
+        "text": "ed.json',\\n        pages: [0, 1, 2]\\n    }, 'Solovey': {\\n        title: 'Solovey',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Solovey.json',\\n        pages: [0, 1]\\n    }, 'Bilongo': {\\n        title: 'Bilongo',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Bilo"
+      },
+      {
+        "line": 1756,
+        "text": "lovey.json',\\n        pages: [0, 1]\\n    }, 'Bilongo': {\\n        title: 'Bilongo',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Bilongo-Mandinga.json',\\n        pages: [7]\\n    }, 'Yama': {\\n        title: 'Yama',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/Yama2.json',"
+      },
+      {
+        "line": 1756,
+        "text": "longo-Mandinga.json',\\n        pages: [7]\\n    }, 'Yama': {\\n        title: 'Yama',\\n        path: 'https://aarondavidnewman.github.io/Smoosic/release/library/Yama2.json',\\n        pages: [1]\\n    }\\n};\\nconst addFileLink = (filename, txt, parent, mimeType = 'application/octet-stream') => {\\n    var anchor = $('<a></a>');\\n    var url = U"
+      },
+      {
+        "line": 1789,
+        "text": "rt */ });\\n// MIDI parsing code credit to:\\n// Copyright (c) 2010, Matt Westcott & Ben Firshman\\n// https://github.com/NHQ/midi-file-parser/\\nfunction parseMidi(data) {\\n    var p = new Parser(data);\\n    var headerChunk = p.readChunk();\\n    if (headerChunk.id != 'MThd')\\n        throw \\\"Bad MIDI file.  Expected 'MHdr', got: '\\\" + header"
+      },
+      {
+        "line": 1811,
+        "text": "n        return '_smoosicScore';\\n    }\\n    static loadRemoteFile(path) {\\n        const req = new XMLHttpRequest();\\n        req.addEventListener('load', () => {\\n            callback(req.responseText);\\n        });\\n        req.open('GET', path);\\n        req.send();\\n    }\\n    // This is the token map we use to reduce the size of\\n  "
+      },
+      {
+        "line": 1811,
+        "text": "erseMap(smoSerialize.tokenMap);\\n    }\\n    static prettifyXml(xmlDoc) {\\n        var xsltDoc = new DOMParser().parseFromString([\\n            // describes how we want to modify the XML - indent everything\\n            '<xsl:stylesheet xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\">',\\n            '  <xsl:strip-space elements=\\\"*\\\"/>'"
+      },
+      {
+        "line": 1811,
+        "text": "scribes how we want to modify the XML - indent everything\\n            '<xsl:stylesheet xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\">',\\n            '  <xsl:strip-space elements=\\\"*\\\"/>',\\n            '  <xsl:template match=\\\"para[content-style][not(text())]\\\">', // change to just text() to strip space in text nodes\\n            '  "
+      },
+      {
+        "line": 1822,
+        "text": "ORTED_MODULE_0__ = __webpack_require__(/*! ../common/vex */ \\\"./src/common/vex.ts\\\");\\n// [VexFlow](https://vexflow.com) - Copyright (c) Mohit Muthanna 2010.\\n// MIT License\\n\\nconst VF = _common_vex__WEBPACK_IMPORTED_MODULE_0__.VexFlow;\\n/**\\n * Text widths are stored in a cache, so we don't have to recompute widths\\n * for the same font"
+      },
+      {
+        "line": 1855,
+        "text": "ect() {\\n        this.output.disconnect();\\n        this.input.disconnect();\\n    }\\n    // credit: https://github.com/nick-thompson\\n    _buildImpulse() {\\n        let n = 0;\\n        let i = 0;\\n        if (SuiReverb.impulse) {\\n            this.input.buffer = SuiReverb.impulse;\\n            return;\\n        }\\n        const rate = this"
+      },
+      {
+        "line": 1877,
+        "text": "obj = {};\\n                if (key === 'percussion') {\\n                    obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\\n                }\\n                else {\\n                    obj['instrument'] = sampler;\\n                }\\n                const instrument = new smplr__WEBPACK_IMPORTED"
+      },
+      {
+        "line": 1888,
+        "text": "const color = this._getVoiceCursorRectangleColor();\\n        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');\\n        rect.setAttribute('x', x.toString());\\n        rect.setAttribute('y', y.toString());\\n        rect.setAttribute('width', width.toString());\\n        rect.setAttribute('height', height.toString("
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/application.ts",
+    "sha256": "1c8df0db7dbfc5072c4a43554be31de9b3c7564cc192ef563cd167c54f63b0d7",
+    "matches": [
+      {
+        "line": 252,
+        "text": "      const localScore = localStorage.getItem(smoSerialize.localScore);\r"
+      },
+      {
+        "line": 265,
+        "text": "        const parser = new DOMParser();\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/configuration.ts",
+    "sha256": "3d8cb4e8131ef0175c6152867cb123a9f2dc80bd09b03b11214c0f618ab8f7d8",
+    "matches": [
+      {
+        "line": 97,
+        "text": "      libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/dialogs/fileDialogs.ts",
+    "sha256": "6dd3b02289bc9348d30e2d380bd13e96edbf6c6d82ca9ee1b85e8c90b2ed1da8",
+    "matches": [
+      {
+        "line": 55,
+        "text": "      const parser = new DOMParser();\r"
+      },
+      {
+        "line": 114,
+        "text": "    const ser = new XMLSerializer();\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/generateVexTests.ts",
+    "sha256": "c80c16f8ea015c3052e50d03f74c6f4744ba06697a0fcb03fe5c78c8312aeb0f",
+    "matches": [
+      {
+        "line": 15,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/hymns/Precious Lord.json',\r"
+      },
+      {
+        "line": 19,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachWTC-3.json',\r"
+      },
+      {
+        "line": 23,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/BachInvention.json',\r"
+      },
+      {
+        "line": 27,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Gnossienne3-3.json',\r"
+      },
+      {
+        "line": 31,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/messiah/Messiah-I-2.json',\r"
+      },
+      {
+        "line": 35,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/piano/Joplin-Entertainer.json',\r"
+      },
+      {
+        "line": 39,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Plena.json',\r"
+      },
+      {
+        "line": 43,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Postillionlied.json',\r"
+      },
+      {
+        "line": 47,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/soprano/Solovey.json',\r"
+      },
+      {
+        "line": 51,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/bigband/Bilongo-Mandinga.json',\r"
+      },
+      {
+        "line": 55,
+        "text": "    path: 'https://aarondavidnewman.github.io/Smoosic/release/library/Yama2.json',\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/smo/data/music.ts",
+    "sha256": "4f0e08c84410136a5f00b426cd24c3475f979cf5cd634d97adde113ffd9b93d6",
+    "matches": [
+      {
+        "line": 905,
+        "text": "   * // https://github.com/grimmdude/MidiWriterJS\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/navigation.ts",
+    "sha256": "3191887260337bac09b9349bb71d6189388a396280499b25e76af48af3c6572f",
+    "matches": [
+      {
+        "line": 17,
+        "text": "  crashUrl = 'https://github.com/Smoosic/Smoosic/issues';\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/sui/NoteEntryCaret.ts",
+    "sha256": "cc4744e144b0bbaa61848073f81e8112d1949390b5de479558a51d31ad2c75bf",
+    "matches": [
+      {
+        "line": 336,
+        "text": "\t\tconst rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');\r"
+      },
+      {
+        "line": 531,
+        "text": "\t\tconst preview = document.createElementNS('http://www.w3.org/2000/svg', 'text');\r"
+      },
+      {
+        "line": 609,
+        "text": "\t\tconst line = document.createElementNS('http://www.w3.org/2000/svg', 'line');\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/audio/oscillator.ts",
+    "sha256": "c1a956549a21016fd7009d1bd085587ed318cc7199a02315faedb14b98ea30ca",
+    "matches": [
+      {
+        "line": 41,
+        "text": "  // credit: https://github.com/nick-thompson\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/sui/piano.ts",
+    "sha256": "c95064badcbbd544a5de24a97e3885d85ae43df376759f447711d2f4e8f255a8",
+    "matches": [
+      {
+        "line": 270,
+        "text": "    // https://www.mathpages.com/home/kmath043.htm\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/audio/samples.ts",
+    "sha256": "fc48142fbbe712153f5c39a527fffbfe2fe024194058a808b194eb82b3bdd183",
+    "matches": [
+      {
+        "line": 106,
+        "text": "        obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/sui/scoreViewOperations.ts",
+    "sha256": "a133739f08aa1dcdf2f6450dc9c920b5ac8f91b7288ddd7f1e4882a1f833571b",
+    "matches": [
+      {
+        "line": 202,
+        "text": "    const parser = new DOMParser();\r"
+      },
+      {
+        "line": 2132,
+        "text": "    localStorage.setItem(smoSerialize.localScore, scoreStr);\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/sui/svgHelpers.ts",
+    "sha256": "3e81ec604d024e6ec4f001e50fee6e75b4c5d567e56fe05e42d67fa50103ec23",
+    "matches": [
+      {
+        "line": 165,
+        "text": "    return \"http://www.w3.org/2000/svg\";\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/common/textformatter.ts",
+    "sha256": "b40a7d8f68447c297c01585303d5c6436afd4da3825301169c13fa907e9d3881",
+    "matches": [
+      {
+        "line": 1,
+        "text": "// [VexFlow](https://vexflow.com) - Copyright (c) Mohit Muthanna 2010.\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/fileio/xhrLoader.ts",
+    "sha256": "43b837644d78ce8d580a6f89433e9e69e883caed9d527ae897f31b638d983b95",
+    "matches": [
+      {
+        "line": 39,
+        "text": "    const req = new XMLHttpRequest();\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/smo/mxml/xmlHelpers.ts",
+    "sha256": "f1fd5bcadf74e052870f7f6e2ab75f9efd9301c765471133af4db9539791322d",
+    "matches": [
+      {
+        "line": 154,
+        "text": "  // https://bugzilla.mozilla.org/show_bug.cgi?id=318086\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/components/mainDom.vue",
+    "sha256": "df130a08d391342a127cc3fd6c63f5f24d40b937c02a0e673c0eeba49f5a0260",
+    "matches": [
+      {
+        "line": 75,
+        "text": "        <sub class=\"col-1 hide\" :id=\"getId('link-hdr')\"><a href=\"https://github.com/Smoosic/smoosic\" aria-label=\"Github link\" \r"
+      },
+      {
+        "line": 78,
+        "text": "          <a href=\"https://smoosic.github.io/Smoosic/changes.md\" aria-label=\"Change notes\" target=\"_blank\" tabindex=\"0\">change notes</a>\r"
+      },
+      {
+        "line": 80,
+        "text": "          <a href=\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\" aria-label=\"application link\"\r"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/components/modalSplash.vue",
+    "sha256": "0c53ebf9e6c920ab262f9ae5ab2d66f4a16bb4dc6ef598e6e9e8d12396df4a7e",
+    "matches": [
+      {
+        "line": 32,
+        "text": "            <div class=\"\"><a href=\"https://github.com/Smoosic/smoosic\" aria-label=\"Github link\" target=\"_blank\"\r"
+      },
+      {
+        "line": 35,
+        "text": "              <a href=\"https://smoosic.github.io/Smoosic/changes.md\" aria-label=\"Change notes\" target=\"_blank\"\r"
+      },
+      {
+        "line": 39,
+        "text": "              <a href=\"https://smoosic.github.io/Smoosic/release/html/smoosic.html\" target=\"_blank\"\r"
+      },
+      {
+        "line": 47,
+        "text": "              <a href=\"https://github.com/AaronDavidNewman\" target=\"_blank\" aria-label=\"Maintainer's Github\"\r"
+      },
+      {
+        "line": 49,
+        "text": "              , <a href=\"https://github.com/strangarnenad\" target=\"_blank\" aria-label=\"Contributor's Github\"\r"
+      }
+    ]
+  }
+]

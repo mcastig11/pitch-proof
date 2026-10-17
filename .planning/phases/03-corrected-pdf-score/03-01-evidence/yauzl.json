@@ -1,0 +1,49 @@
+{
+  "name": "yauzl",
+  "version": "3.4.0",
+  "registry": "https://registry.npmjs.org/yauzl/3.4.0",
+  "repository": {
+    "url": "git+https://github.com/thejoshwolfe/yauzl.git",
+    "type": "git"
+  },
+  "gitHead": "f5798e15204ffbb9a428b00217e4659684a41b0f",
+  "dist": {
+    "shasum": "88b2a21455f37ca7dccf2eeb33bacb4392322719",
+    "tarball": "https://registry.npmjs.org/yauzl/-/yauzl-3.4.0.tgz",
+    "fileCount": 6,
+    "integrity": "sha512-jIH9yLR9wqr0wOS0TpBvo/g/2UgZH5qePVbjgRliiF0BYvOZyaBknKsF+x9Iht0O6sqgnB93rCICdOZFecJuDw==",
+    "signatures": [
+      {
+        "sig": "MEQCIAryCA/YldNOUaI+uMPErdGkEtaa0WT8/jNaEdG/79Y0AiAsqjFoWFD/xiEZcaSUb8EwPqTtEYwi7NMaqbtdVMiI/Q==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "unpackedSize": 109901
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "pend": "~1.2.0"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "bytes": 31577,
+  "sha256": "ec962fa3205d4be5849f0fc3bebd0492b0abe8acf402656fd80490531fa8ba88",
+  "observedIntegrity": "sha512-jIH9yLR9wqr0wOS0TpBvo/g/2UgZH5qePVbjgRliiF0BYvOZyaBknKsF+x9Iht0O6sqgnB93rCICdOZFecJuDw==",
+  "integrityMatches": true,
+  "files": [
+    "package/LICENSE",
+    "package/crc32.js",
+    "package/fd-slicer.js",
+    "package/index.js",
+    "package/package.json",
+    "package/README.md"
+  ],
+  "licenseTexts": {
+    "package/LICENSE": "The MIT License (MIT)\n\nCopyright (c) 2014 Josh Wolfe\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

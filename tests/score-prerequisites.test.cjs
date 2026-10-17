@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const { resolve } = require('node:path');
+const { mkdtemp, mkdir, writeFile, rm } = require('node:fs/promises');
+const { tmpdir } = require('node:os');
 
 // Independent fixtures deliberately contain no production artifact data.
 const digest = (value) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -10,6 +12,7 @@ const approved = (evidence) => ({ status: 'approved', by: 'fixture-human', at: '
 function fixtures() {
   const pins = [['smoosic', '2.0.2'], ['pdfjs-dist', '6.4.299'], ['@aws-sdk/client-s3', '3.1152.0'], ['@xmldom/xmldom', '0.9.12'], ['yauzl', '3.4.0'], ['Audiveris', '5.11.0']];
   const packages = { schemaVersion: 1, evidence: {
+    files: [{ path: 'source-review.json', sha256: 'a'.repeat(64) }],
     artifacts: pins.map(([name, version]) => ({ name, version, url: 'https://example.org/artifact', repository: 'https://github.com/example/project', sourceRef: 'a'.repeat(40), sha256: 'a'.repeat(64), observedSha256: 'a'.repeat(64), integrity: name === 'Audiveris' ? null : 'sha512-' + Buffer.alloc(64, 1).toString('base64'), observedIntegrity: name === 'Audiveris' ? null : 'sha512-' + Buffer.alloc(64, 1).toString('base64'), inventorySha256: 'b'.repeat(64), fileCount: 3, scriptsReviewed: true, licensesReviewed: true, provenanceStatus: 'verified' })),
     xml: { strategy: 'reviewed-source-patch', parser: '@xmldom/xmldom@0.9.12', requireWellFormed: true, rejectDtd: true, originalBundleAllowed: false, paths: ['src/import.ts', 'build/bundle.js'], unresolvedPaths: [], patchPlanSha256: 'c'.repeat(64) },
     privacy: { disableRemoteLoading: true, disableHiddenPersistence: true, paths: ['src/application.ts'] },
@@ -20,14 +23,14 @@ function fixtures() {
     license: { disposition: 'agpl-compliant-source-offer', sourceUrl: 'https://example.org/source', noticePath: 'LICENSES/Audiveris', modifiedArtifacts: ['wrapper'], unmodifiedArtifacts: ['Audiveris-5.11.0'], combinedWorkReview: 'Publish corresponding covered sources with build scripts; retain notices.' },
     storage: { publicAccessBlocked: true, authenticatedReadsOnly: true, ownerAuthorizationBeforeBytes: true, encryption: 'SSE-S3', roleOnly: true, lifecycleVerified: true },
     retention: { scratchHours: 24, orphanHours: 24, backupsDays: 7, explicitSavesOnly: true, savedRetention: 'until-owner-deletion', deletionPolicy: 'Revoke immediately; purge within 24 hours; expire backups in 7 days.' },
-    limits: { uploadBytes: 20971520, pages: 20, pagePixels: 20000000, totalPixels: 200000000, archiveExpandedBytes: 268435456, archiveEntries: 2000, events: 100000, queue: 20, ownerJobs: 1, ownerBytes: 1073741824, workerSeconds: 300, workerMemoryMiB: 2048, workerCpus: 2, monthlyUsd: 25 },
+    limits: { uploadBytes: 20971520, pages: 20, pagePixels: 20000000, totalPixels: 200000000, archiveExpandedBytes: 268435456, archiveEntries: 2000, archiveExpansionRatio: 100, xmlBytes: 33554432, xmlDepth: 128, xmlNodes: 500000, events: 100000, queue: 20, ownerJobs: 1, ownerBytes: 1073741824, ownerScores: 50, workerSeconds: 300, workerMemoryMiB: 2048, workerCpus: 2, workerConcurrency: 1, attempts: 2, leaseSeconds: 60, heartbeatSeconds: 15, monthlyUsd: 25 },
     cost: { enforceAdmissionCap: true, alertThresholdUsd: 15, operator: 'fixture-operator' },
     configuration: { regionEnv: 'SCORE_S3_REGION', bucketEnv: 'SCORE_S3_BUCKET', roleEnv: 'SCORE_S3_ROLE_ARN', credentials: 'workload-role' },
   } };
   deployment.approval = approved(deployment.evidence);
   const model = { schemaVersion: 1, evidence: { schemaPath: 'score-model.js', schemaSha256: 'd'.repeat(64), observedSchemaSha256: 'd'.repeat(64), contractVersion: '1', editorEvidenceSha256: 'e'.repeat(64), recognitionEvidenceSha256: 'f'.repeat(64), decisions: ['stable-ids', 'rational-time', 'source-unions', 'review-hashes', 'expected-revision-cas', 'immutable-confirmation'] } };
   model.approval = approved(model.evidence);
-  return { packages, deployment, model, env: { SCORE_S3_REGION: 'us-east-2', SCORE_S3_BUCKET: 'fixture-private-scores', SCORE_S3_ROLE_ARN: deployment.evidence.roleArn } };
+  return { packages, deployment, model, env: { SCORE_S3_REGION: 'us-east-2', SCORE_S3_BUCKET: 'fixture-private-scores', SCORE_S3_ROLE_ARN: deployment.evidence.roleArn, AWS_ROLE_ARN: deployment.evidence.roleArn, AWS_WEB_IDENTITY_TOKEN_FILE: '/fixture/identity-token' } };
 }
 async function checker() {
   try { return (await import('../scripts/check-score-prerequisites.mjs')).validatePrerequisites; }
@@ -105,4 +108,52 @@ test('CLI fails closed on real pending approvals and never prints environment se
   const result = spawnSync(process.execPath, [resolve('scripts/check-score-prerequisites.mjs'), '--stage', 'packages'], { encoding: 'utf8', env: { ...process.env, AWS_SECRET_ACCESS_KEY: 'do-not-print-this-secret' } });
   assert.notEqual(result.status, 0);
   assert.doesNotMatch(result.stdout + result.stderr, /do-not-print-this-secret/);
+});
+
+test('evidence parser rejects missing, malformed and duplicate machine sections', async () => {
+  const { parseEvidence } = await import('../scripts/check-score-prerequisites.mjs');
+  const section = '<!-- score-prerequisites:start -->\n```json\n{"schemaVersion":1}\n```\n<!-- score-prerequisites:end -->';
+  assert.deepEqual(parseEvidence(section), { schemaVersion: 1 });
+  for (const markdown of ['', section + section, section.replace('{"schemaVersion":1}', '{secret-invalid-json')]) assert.throws(() => parseEvidence(markdown));
+});
+
+test('disk checker rehashes inventory, prose and freshly downloaded bytes', async (t) => {
+  const { checkPrerequisites, evidenceDigest } = await import('../scripts/check-score-prerequisites.mjs');
+  const projectRoot = await mkdtemp(resolve(tmpdir(), 'score-prerequisite-test-'));
+  t.after(() => rm(projectRoot, { recursive: true, force: true }));
+  await mkdir(resolve(projectRoot, 'docs')); await mkdir(resolve(projectRoot, 'inert-artifacts'));
+  const bytesHash = (s) => createHash('sha256').update(s).digest('hex');
+  const input = fixtures();
+  const inventory = '{"independent":"inventory"}\n';
+  await writeFile(resolve(projectRoot, 'inventory.json'), inventory);
+  input.packages.evidence.files = [{ path: 'inventory.json', sha256: bytesHash(inventory) }];
+  for (const [index, artifact] of input.packages.evidence.artifacts.entries()) {
+    artifact.inventoryPath = 'inventory.json'; artifact.inventorySha256 = bytesHash(inventory);
+    artifact.fileName = `artifact-${index}`; artifact.sha256 = bytesHash('original inert archive'); artifact.observedSha256 = artifact.sha256;
+    await writeFile(resolve(projectRoot, 'inert-artifacts', artifact.fileName), 'original inert archive');
+  }
+  const prose = '# Independent review fixture';
+  input.packages.evidence.packetTextSha256 = bytesHash(prose);
+  input.packages.approval = approved(input.packages.evidence);
+  const markdown = () => `${prose}\n\n<!-- score-prerequisites:start -->\n\`\`\`json\n${JSON.stringify(input.packages)}\n\`\`\`\n<!-- score-prerequisites:end -->\n`;
+  const packetPath = resolve(projectRoot, 'docs/score-dependency-review.md');
+  await writeFile(packetPath, markdown());
+  const options = { stage: 'packages', projectRoot, artifactDir: resolve(projectRoot, 'inert-artifacts'), env: {} };
+  assert.equal((await checkPrerequisites(options)).ok, true);
+  for (const index of [0, 5]) {
+    const archivePath = resolve(projectRoot, 'inert-artifacts', `artifact-${index}`);
+    await writeFile(archivePath, 'changed inert archive');
+    assert.equal((await checkPrerequisites(options)).ok, false);
+    await writeFile(archivePath, 'original inert archive');
+  }
+  await writeFile(packetPath, markdown().replace(prose, '# Changed review fixture'));
+  assert.equal((await checkPrerequisites(options)).ok, false);
+  await writeFile(packetPath, markdown());
+  await writeFile(resolve(projectRoot, 'inventory.json'), 'changed inventory');
+  assert.equal((await checkPrerequisites(options)).ok, false);
+  await writeFile(resolve(projectRoot, 'inventory.json'), inventory);
+  input.packages.evidence.artifacts[0].inventoryPath = '../outside-review-root';
+  input.packages.approval.evidenceSha256 = evidenceDigest(input.packages.evidence);
+  await writeFile(packetPath, markdown());
+  assert.equal((await checkPrerequisites(options)).ok, false);
 });

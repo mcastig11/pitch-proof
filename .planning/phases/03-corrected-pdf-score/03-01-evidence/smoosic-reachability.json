@@ -1,0 +1,380 @@
+[
+  {
+    "path": "package/tools/parseSoundXml.js",
+    "sha256": "91e8546dde2211db32cea745009a29b25969f3d51c8a0d282a128ebc75d37f77",
+    "matches": [
+      {
+        "term": "xmldom",
+        "line": 3,
+        "context": "\r\nconst fs = require('fs');\r\nconst { DOMParser } = require('xmldom');\r\n\r\nlet xmlString = fs.readFileSync(\"sounds.xml\", \"utf8\");\r\nconst doc = new DOMParser().parseFromString(xmlString);\r\n\r\nconst soundar = doc.documentElement.childNodes;\r\nfor (var i = 0;i < soundar.length; ++i) {\r\n"
+      }
+    ]
+  },
+  {
+    "path": "package/build/smoosic.js",
+    "sha256": "c17e8ac030356aa24471dc10d5af496489f270b33b167f6118335903fb0150b0",
+    "matches": [
+      {
+        "term": "localStorage",
+        "line": 1690,
+        "context": "urn null;\\n                }\\n            }\\n            else {\\n                const localScore = localStorage.getItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_0__.smoSerialize.localScore);\\n                if (localScore) {\\n                    this.score = this.tryParse(localScore);\\n                }\\"
+      },
+      {
+        "term": "localStorage",
+        "line": 2000,
+        "context": "\\n    quickSave() {\\n        const scoreStr = JSON.stringify(this.storeScore.serialize());\\n        localStorage.setItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_13__.smoSerialize.localScore, scoreStr);\\n    }\\n    updateRepeatCount(count) {\\n        const measureSelections = this.undoTrackerMeasureSelecti"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "./src/render/audio/musicCursor.ts\\\");\\n\\n\\n\\n\\nvar ConfigurationStringOptions = [\\n    'language', 'libraryUrl', 'remoteScore'\\n];\\nvar ConfigurationNumberOptions = ['demonPollTime', 'idleRedrawTime'];\\n/**\\n * Configures smoosic library or application. It is a union of UI, rendering and application configuration param"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "ntrols - the location of the horizontal button control, applies if mode is 'application'\\n * @param libraryUrl - loader URL for Smo libraries, applies if application mode\\n * @param demonPollTime - how often we poll the score to see if it's changed\\n * @param idleRedrawTime - how often the entire score re-renders\\n * @"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "ntrols-left',\\n            topControls: 'controls-top',\\n            domContainer: '',\\n            libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\\n            demonPollTime: 50, // how often we poll the score to see if it changed\\n            idleRedrawTime: 1000, // maximum time between scor"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 3047,
+        "context": "       this.topLib = new _fileio_library__WEBPACK_IMPORTED_MODULE_0__.SmoLibrary({ url: this.config.libraryUrl });\\n        this.libHash = {};\\n        this.selectedLib = null;\\n    }\\n    loadPromise() {\\n    }\\n    initialize() {\\n        const self = this;\\n        return new Promise((resolve) => {\\n            self"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 3058,
+        "context": "RTED_MODULE_0__.reactive)(new _fileio_library__WEBPACK_IMPORTED_MODULE_2__.SmoLibrary({ url: config.libraryUrl }));\\n    yield topLib.load();\\n    const commitCb = () => __awaiter(void 0, void 0, void 0, function* () { });\\n    const cancelCb = () => __awaiter(void 0, void 0, void 0, function* () { });\\n    const appPa"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 1877,
+        "context": "             const obj = {};\\n                if (key === 'percussion') {\\n                    obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\\n                }\\n                else {\\n                    obj['instrument'] = sampler;\\n                }\\n                const i"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "\\n    __privateSet(this, _hasLoops, false);\\n    const loader = soundfontLoader(\\n      this.config.instrumentUrl,\\n      this.config.loopDataUrl,\\n      this.player.buffers,\\n      this.group\\n    );\\n    this.load = loader(context, this.config.storage).then((hasLoops) => {\\n      __privateSet(this, _hasLoops, hasLoop"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "ion getSoundfontConfig(options) {\\n  var _a, _b, _c, _d, _e;\\n  if (!options.instrument && !options.instrumentUrl) {\\n    throw Error(\\\"Soundfont: instrument or instrumentUrl is required\\\");\\n  }\\n  const config = {\\n    kit: (_a = options.kit) != null ? _a : DEFAULT_SOUNDFONT_KIT,\\n    instrument: options.instrument,\\"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "n  if (!options.instrument && !options.instrumentUrl) {\\n    throw Error(\\\"Soundfont: instrument or instrumentUrl is required\\\");\\n  }\\n  const config = {\\n    kit: (_a = options.kit) != null ? _a : DEFAULT_SOUNDFONT_KIT,\\n    instrument: options.instrument,\\n    storage: (_b = options.storage) != null ? _b : HttpStora"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "Data: (_d = options.loadLoopData) != null ? _d : false,\\n    loopDataUrl: options.loopDataUrl,\\n    instrumentUrl: (_e = options.instrumentUrl) != null ? _e : \\\"\\\"\\n  };\\n  if (config.instrument && config.instrument.startsWith(\\\"http\\\")) {\\n    console.warn(\\n      \\\"Use 'instrumentUrl' instead of 'instrument' to load "
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "ata) != null ? _d : false,\\n    loopDataUrl: options.loopDataUrl,\\n    instrumentUrl: (_e = options.instrumentUrl) != null ? _e : \\\"\\\"\\n  };\\n  if (config.instrument && config.instrument.startsWith(\\\"http\\\")) {\\n    console.warn(\\n      \\\"Use 'instrumentUrl' instead of 'instrument' to load from a URL\\\"\\n    );\\n    con"
+      }
+    ]
+  },
+  {
+    "path": "package/release/smoosic.js",
+    "sha256": "ef2ca287cc35a050ff5961ead2b93ed9fad5d7a5472b27d4f2bd795fffa40227",
+    "matches": [
+      {
+        "term": "localStorage",
+        "line": 1690,
+        "context": "urn null;\\n                }\\n            }\\n            else {\\n                const localScore = localStorage.getItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_0__.smoSerialize.localScore);\\n                if (localScore) {\\n                    this.score = this.tryParse(localScore);\\n                }\\"
+      },
+      {
+        "term": "localStorage",
+        "line": 2000,
+        "context": "\\n    quickSave() {\\n        const scoreStr = JSON.stringify(this.storeScore.serialize());\\n        localStorage.setItem(_common_serializationHelpers__WEBPACK_IMPORTED_MODULE_13__.smoSerialize.localScore, scoreStr);\\n    }\\n    updateRepeatCount(count) {\\n        const measureSelections = this.undoTrackerMeasureSelecti"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "./src/render/audio/musicCursor.ts\\\");\\n\\n\\n\\n\\nvar ConfigurationStringOptions = [\\n    'language', 'libraryUrl', 'remoteScore'\\n];\\nvar ConfigurationNumberOptions = ['demonPollTime', 'idleRedrawTime'];\\n/**\\n * Configures smoosic library or application. It is a union of UI, rendering and application configuration param"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "ntrols - the location of the horizontal button control, applies if mode is 'application'\\n * @param libraryUrl - loader URL for Smo libraries, applies if application mode\\n * @param demonPollTime - how often we poll the score to see if it's changed\\n * @param idleRedrawTime - how often the entire score re-renders\\n * @"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 1712,
+        "context": "ntrols-left',\\n            topControls: 'controls-top',\\n            domContainer: '',\\n            libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\\n            demonPollTime: 50, // how often we poll the score to see if it changed\\n            idleRedrawTime: 1000, // maximum time between scor"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 3047,
+        "context": "       this.topLib = new _fileio_library__WEBPACK_IMPORTED_MODULE_0__.SmoLibrary({ url: this.config.libraryUrl });\\n        this.libHash = {};\\n        this.selectedLib = null;\\n    }\\n    loadPromise() {\\n    }\\n    initialize() {\\n        const self = this;\\n        return new Promise((resolve) => {\\n            self"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 3058,
+        "context": "RTED_MODULE_0__.reactive)(new _fileio_library__WEBPACK_IMPORTED_MODULE_2__.SmoLibrary({ url: config.libraryUrl }));\\n    yield topLib.load();\\n    const commitCb = () => __awaiter(void 0, void 0, void 0, function* () { });\\n    const cancelCb = () => __awaiter(void 0, void 0, void 0, function* () { });\\n    const appPa"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 1877,
+        "context": "             const obj = {};\\n                if (key === 'percussion') {\\n                    obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\\n                }\\n                else {\\n                    obj['instrument'] = sampler;\\n                }\\n                const i"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "\\n    __privateSet(this, _hasLoops, false);\\n    const loader = soundfontLoader(\\n      this.config.instrumentUrl,\\n      this.config.loopDataUrl,\\n      this.player.buffers,\\n      this.group\\n    );\\n    this.load = loader(context, this.config.storage).then((hasLoops) => {\\n      __privateSet(this, _hasLoops, hasLoop"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "ion getSoundfontConfig(options) {\\n  var _a, _b, _c, _d, _e;\\n  if (!options.instrument && !options.instrumentUrl) {\\n    throw Error(\\\"Soundfont: instrument or instrumentUrl is required\\\");\\n  }\\n  const config = {\\n    kit: (_a = options.kit) != null ? _a : DEFAULT_SOUNDFONT_KIT,\\n    instrument: options.instrument,\\"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "n  if (!options.instrument && !options.instrumentUrl) {\\n    throw Error(\\\"Soundfont: instrument or instrumentUrl is required\\\");\\n  }\\n  const config = {\\n    kit: (_a = options.kit) != null ? _a : DEFAULT_SOUNDFONT_KIT,\\n    instrument: options.instrument,\\n    storage: (_b = options.storage) != null ? _b : HttpStora"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "Data: (_d = options.loadLoopData) != null ? _d : false,\\n    loopDataUrl: options.loopDataUrl,\\n    instrumentUrl: (_e = options.instrumentUrl) != null ? _e : \\\"\\\"\\n  };\\n  if (config.instrument && config.instrument.startsWith(\\\"http\\\")) {\\n    console.warn(\\n      \\\"Use 'instrumentUrl' instead of 'instrument' to load "
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 7096,
+        "context": "ata) != null ? _d : false,\\n    loopDataUrl: options.loopDataUrl,\\n    instrumentUrl: (_e = options.instrumentUrl) != null ? _e : \\\"\\\"\\n  };\\n  if (config.instrument && config.instrument.startsWith(\\\"http\\\")) {\\n    console.warn(\\n      \\\"Use 'instrumentUrl' instead of 'instrument' to load from a URL\\\"\\n    );\\n    con"
+      }
+    ]
+  },
+  {
+    "path": "package/package.json",
+    "sha256": "d8e8bd0893d70cd73925dbc37aee0dd42dc4b71a392d6e3527f4bb173cce56b1",
+    "matches": [
+      {
+        "term": "xmldom",
+        "line": 33,
+        "context": ".9.3\",\r\n    \"vexflow_smoosic\": \"4.2.17\",\r\n    \"vue\": \"^3.5.25\",\r\n    \"vue-loader\": \"^17.4.2\",\r\n    \"xmldom\": \"^0.6.0\"\r\n  },\r\n  \"main\": \"build/smoosic.js\",\r\n  \"description\": \"<sub>[Github site](https://github.com/Smoosic/smoosic) | [source documentation](https://smoosic.github.io/Smoosic/release/docs/modules.html) | [ch"
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/application.ts",
+    "sha256": "1c8df0db7dbfc5072c4a43554be31de9b3c7564cc192ef563cd167c54f63b0d7",
+    "matches": [
+      {
+        "term": "localStorage",
+        "line": 252,
+        "context": " = this.config.initialScore;\r\n        return null;\r\n      }\r\n    } else {\r\n      const localScore = localStorage.getItem(smoSerialize.localScore);\r\n      if (localScore) {\r\n        this.score = this.tryParse(localScore);\r\n      } else {\r\n        this.score = SmoScore.getDefaultScore(SmoScore.defaults, null);\r\n        t"
+      },
+      {
+        "term": "new SuiXhrLoader",
+        "line": 239,
+        "context": "urn PromiseHelpers.emptyPromise();\r\n    }\r\n    if (this.config.remoteScore) {\r\n      const loader = new SuiXhrLoader(this.config.remoteScore);\r\n      const file = await loader.loadAsync();\r\n      this.score = this.tryParse(file as string);\r\n      return this.score;\r\n    } else if (this.config.initialScore) {\r\n      if "
+      }
+    ]
+  },
+  {
+    "path": "package/types/src/application/configuration.d.ts",
+    "sha256": "f2c9a7654999a6bdf49a204a3288b3d62e86695973828e1a5d38fcf27594f23c",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 8,
+        "context": "de = 'library' | 'application' | 'translate';\nexport type ConfigurationStringOption = 'language' | 'libraryUrl' | 'remoteScore';\nexport type ConfigurationNumberOption = 'demonPollTime' | 'idleRedrawTime';\nexport declare var ConfigurationStringOptions: ConfigurationStringOption[];\nexport declare var ConfigurationNumberO"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 33,
+        "context": "| HTMLElement;\n    leftControls?: string | HTMLElement;\n    topControls?: string | HTMLElement;\n    libraryUrl?: string;\n    demonPollTime: number;\n    idleRedrawTime: number;\n    ribbonLayout?: RibbonLayout;\n    buttonDefinition?: ButtonDefinition[];\n    audioAnimation: SuiAudioAnimationParams;\n}\n/**\n * Configures smo"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 51,
+        "context": "ontrols - the location of the horizontal button control, applies if mode is 'application'\n * @param libraryUrl - loader URL for Smo libraries, applies if application mode\n * @param demonPollTime - how often we poll the score to see if it's changed\n * @param idleRedrawTime - how often the entire score re-renders\n * @cat"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 64,
+        "context": "core?: string;\n    leftControls?: string | HTMLElement;\n    topControls?: string | HTMLElement;\n    libraryUrl?: string;\n    demonPollTime: number;\n    idleRedrawTime: number;\n    keys?: KeyBindingConfiguration;\n    eventHandler?: ModalEventHandler;\n    ribbonLayout: RibbonLayout;\n    audioAnimation: SuiAudioAnimationP"
+      }
+    ]
+  },
+  {
+    "path": "package/types/src/ui/configuration.d.ts",
+    "sha256": "ad507ce1987d3f182a40df2e3c9acc92d4c121f892d12020aca1cad1c042b113",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 24,
+        "context": "ategory SuiUiBase\n */\nexport interface SmoUiConfiguration {\n    keys?: KeyBindingConfiguration;\n    libraryUrl?: string;\n    language: string;\n    demonPollTime: number;\n    idleRedrawTime: number;\n    leftControls?: HTMLElement | string;\n    topControls?: HTMLElement | string;\n}\n"
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/configuration.ts",
+    "sha256": "3d8cb4e8131ef0175c6152867cb123a9f2dc80bd09b03b11214c0f618ab8f7d8",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 19,
+        "context": "e = 'library' | 'application' | 'translate';\r\nexport type ConfigurationStringOption = 'language' | 'libraryUrl' | 'remoteScore';\r\n\r\nexport type ConfigurationNumberOption = 'demonPollTime' | 'idleRedrawTime';\r\n\r\nexport var ConfigurationStringOptions: ConfigurationStringOption[] = [\r\n  'language', 'libraryUrl', 'remoteSc"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 24,
+        "context": "rawTime';\r\n\r\nexport var ConfigurationStringOptions: ConfigurationStringOption[] = [\r\n  'language', 'libraryUrl', 'remoteScore'];\r\n\r\nexport var ConfigurationNumberOptions: ConfigurationNumberOption[] = ['demonPollTime', 'idleRedrawTime'];\r\n\r\n/**\r\n * Application configuration parameters, can be referenced by the running "
+      },
+      {
+        "term": "libraryUrl",
+        "line": 49,
+        "context": "ng | HTMLElement;\r\n  leftControls?: string | HTMLElement;\r\n  topControls?: string | HTMLElement;\r\n  libraryUrl?: string;\r\n  demonPollTime: number; // how often we poll the score to see if it changed\r\n  idleRedrawTime: number;\r\n  ribbonLayout?: RibbonLayout;\r\n  buttonDefinition?: ButtonDefinition[];\r\n  audioAnimation: S"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 68,
+        "context": "ntrols - the location of the horizontal button control, applies if mode is 'application'\r\n * @param libraryUrl - loader URL for Smo libraries, applies if application mode\r\n * @param demonPollTime - how often we poll the score to see if it's changed\r\n * @param idleRedrawTime - how often the entire score re-renders\r\n * @"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 81,
+        "context": "teScore?: string;\r\n  leftControls?: string | HTMLElement;\r\n  topControls?: string | HTMLElement;\r\n  libraryUrl?: string;\r\n  demonPollTime: number = 0; // how often we poll the score to see if it changed\r\n  idleRedrawTime: number = 0;\r\n  keys?: KeyBindingConfiguration;\r\n  eventHandler?: ModalEventHandler;\r\n  ribbonLayou"
+      },
+      {
+        "term": "libraryUrl",
+        "line": 97,
+        "context": " leftControls: 'controls-left',\r\n      topControls: 'controls-top',\r\n      domContainer: '',\r\n      libraryUrl: 'https://smoosic.github.io/SmoScores/links/smoLibrary.json',\r\n      demonPollTime: 50, // how often we poll the score to see if it changed\r\n      idleRedrawTime: 1000, // maximum time between score modificati"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/configuration.ts",
+    "sha256": "a79a3a4b8e6175c4c15bcde118755440eb13854611af7a651e8ce54f349eb4e4",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 25,
+        "context": "ategory SuiUiBase\r\n */\r\nexport interface SmoUiConfiguration {\r\n  keys?: KeyBindingConfiguration,\r\n  libraryUrl?: string,\r\n  language: string,\r\n  demonPollTime: number,\r\n  idleRedrawTime: number,\r\n  leftControls?: HTMLElement | string;\r\n  topControls?: HTMLElement | string;\r\n}"
+      }
+    ]
+  },
+  {
+    "path": "package/src/application/generateVexTests.ts",
+    "sha256": "c80c16f8ea015c3052e50d03f74c6f4744ba06697a0fcb03fe5c78c8312aeb0f",
+    "matches": [
+      {
+        "term": "new SuiXhrLoader",
+        "line": 82,
+        "context": "  const fileInfo = filesToRender[fileKeys[i]];\r\n    const path = fileInfo.path;\r\n    const loader = new SuiXhrLoader(path);\r\n    const scoreJson = await loader.loadAsync();\r\n    const score = SmoScore.deserialize(scoreJson as string);  \r\n    await view.changeScore(score);\r\n    fileInfo.pages.forEach((page) => {\r\n      "
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/dialogs/library.ts",
+    "sha256": "fc9b8be6ed670dd0412d0d2f3eabf4ffac8327c0e1aee9130fc39edc30d61ae4",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 58,
+        "context": "{\r\n    super(view);\r\n    this.config = config;\r\n    this.topLib = new SmoLibrary({ url: this.config.libraryUrl });\r\n    this.libHash = {};\r\n    this.selectedLib = null;\r\n  }\r\n  loadPromise() {\r\n\r\n  }\r\n  initialize(): Promise<void> {\r\n    const self = this;\r\n    return new Promise<void>((resolve) => {\r\n      self.topLib"
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/fileio/library.ts",
+    "sha256": "b89e32eb97da9fcb6157387ef6a487423c3a5309980fa316d7b3b5390959f3f4",
+    "matches": [
+      {
+        "term": "new SuiXhrLoader",
+        "line": 89,
+        "context": "is;\r\n    if (this.loaded) {\r\n      return PromiseHelpers.emptyPromise();\r\n    }\r\n    const loader = new SuiXhrLoader(this.url!);\r\n    return new Promise<void>((resolve) => {\r\n      loader.loadAsync().then(() => {\r\n        const jsonObj = JSON.parse(loader.value);\r\n        self.initialize(jsonObj);\r\n        self.loaded "
+      }
+    ]
+  },
+  {
+    "path": "package/src/ui/dialogs/libraryVue.ts",
+    "sha256": "20df0f69352d675ed5a323d6755e468cfd25aa9426ed7e6f8e69a6fdf782c6f4",
+    "matches": [
+      {
+        "term": "libraryUrl",
+        "line": 27,
+        "context": "placeVueRoot(modalContainerId);\r\n  const topLib: SmoLibrary = reactive(new SmoLibrary({ url: config.libraryUrl }));\r\n  await topLib.load();\r\n\r\n  const commitCb = async () => {};\r\n  const cancelCb = async () => {};\r\n\r\n  const appParams = {\r\n    domId: rootId,\r\n    label: 'Music Library',\r\n    view: parameters.view,\r\n   "
+      }
+    ]
+  },
+  {
+    "path": "package/types/src/render/audio/oscillator.d.ts",
+    "sha256": "218d76a8dc580dcb53c93701b67897964e89fa02b467113700e07839185365a0",
+    "matches": [
+      {
+        "term": "from 'smplr'",
+        "line": 6,
+        "context": "mo/data/score';\nimport { SmoInstrument } from '../../smo/data/staffModifiers';\nimport { Soundfont } from 'smplr';\n/**\n * Create audio reverb node.\n * @category SuiAudio\n */\nexport declare class SuiReverb {\n    static get defaults(): {\n        length: number;\n        decay: number;\n    };\n    static impulse: AudioBuffer"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/audio/oscillator.ts",
+    "sha256": "c1a956549a21016fd7009d1bd085587ed318cc7199a02315faedb14b98ea30ca",
+    "matches": [
+      {
+        "term": "from 'smplr'",
+        "line": 19,
+        "context": "./sui/layoutDebug';\r\nimport {\r\n  getSoundfontKits,\r\n  Soundfont,\r\n  getSoundfontNames,\r\n  Reverb\r\n} from 'smplr';\r\n\r\n\r\n/**\r\n * Create audio reverb node.\r\n * @category SuiAudio\r\n */\r\nexport class SuiReverb {\r\n  static get defaults() {\r\n    return { length: 0.2, decay: 2 };\r\n  }\r\n  static impulse: AudioBuffer | null;\r\n\r\n"
+      }
+    ]
+  },
+  {
+    "path": "package/types/src/render/audio/samples.d.ts",
+    "sha256": "57d73d1e44ceb2ff7149f84d62f1150e55479e2644db64bbfb02631f33055a41",
+    "matches": [
+      {
+        "term": "from 'smplr'",
+        "line": 2,
+        "context": "import { SmoOscillatorInfo } from '../../smo/data/staffModifiers';\nimport { Soundfont } from 'smplr';\nexport declare const instrumentSampleMap: Record<string, string>;\nexport declare const loadedSoundfonts: Record<string, Soundfont>;\n/**\n * A set of parameters from the instrument interface used to create au"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/audio/samples.ts",
+    "sha256": "fc48142fbbe712153f5c39a527fffbfe2fe024194058a808b194eb82b3bdd183",
+    "matches": [
+      {
+        "term": "from 'smplr'",
+        "line": 15,
+        "context": "port {\r\n  getSoundfontKits,\r\n  Soundfont,\r\n  getSoundfontNames,\r\n  Reverb,\r\n  Soundfont2Sampler,\r\n} from 'smplr';\r\n\r\nexport const instrumentSampleMap: Record<string, string> = {\r\n  'piano':'acoustic_grand_piano',\r\n  'accordion': 'accordion',\r\n  'electricPiano':'electric_piano_1',\r\n  'bass':'acoustic_bass',\r\n  'jazzBass"
+      },
+      {
+        "term": "instrumentUrl",
+        "line": 106,
+        "context": "trumentSampleMap[key];\r\n      const obj: any = {};\r\n      if (key === 'percussion') {\r\n        obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';\r\n      } else {\r\n        obj['instrument'] = sampler;\r\n      }\r\n      const instrument = new Soundfont(context, obj);\r\n      // instrume"
+      }
+    ]
+  },
+  {
+    "path": "package/src/render/sui/scoreViewOperations.ts",
+    "sha256": "a133739f08aa1dcdf2f6450dc9c920b5ac8f91b7288ddd7f1e4882a1f833571b",
+    "matches": [
+      {
+        "term": "localStorage",
+        "line": 2132,
+        "context": "ge.\r\n   */\r\n  quickSave() {\r\n    const scoreStr = JSON.stringify(this.storeScore.serialize());\r\n    localStorage.setItem(smoSerialize.localScore, scoreStr);\r\n  }\r\n  updateRepeatCount(count: number) {\r\n    const measureSelections = this.undoTrackerMeasureSelections('repeat bar');\r\n    const symbol = count > 0 ? true : f"
+      },
+      {
+        "term": "new SuiXhrLoader",
+        "line": 198,
+        "context": "ml file\r\n   * @returns \r\n   */\r\n  async loadRemoteXml(url: string): Promise<any> {\r\n    const req = new SuiXhrLoader(url);\r\n    const self = this;\r\n    // Shouldn't we return promise of actually displaying the score?\r\n    await req.loadAsync();\r\n    const parser = new DOMParser();\r\n    const xml = parser.parseFromStrin"
+      },
+      {
+        "term": "new SuiXhrLoader",
+        "line": 214,
+        "context": "score\r\n   * @returns \r\n   */\r\n  async loadRemoteJson(url: string) : Promise<any> {\r\n    const req = new SuiXhrLoader(url);\r\n    await req.loadAsync();\r\n    const score = SmoScore.deserialize(req.value);\r\n    await this.changeScore(score);\r\n  }\r\n  /**\r\n   * Load a remote score, return promise when it's been loaded\r\n   *"
+      }
+    ]
+  }
+]
