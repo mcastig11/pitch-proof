@@ -4,7 +4,7 @@ status: awaiting_decisions
 wave: 1
 completed_plans: 0
 total_plans: 15
-recorded: 2026-10-17
+recorded: 2026-10-19
 ---
 
 # Phase 03 execution checkpoint
@@ -17,6 +17,7 @@ Execution has started. This is a partial-task checkpoint, not a plan SUMMARY, ph
 | --- | --- | --- |
 | 03-01-01 | Actual inert artifact inspection, dependency/deployment packets and tested prerequisite checker | 837ebcb RED; 34d419c GREEN |
 | 03-01-02 | User explicitly approved the exact six artifacts and XML patch/build approach; approval bound to unchanged evidence | 232bd4a |
+| 03-01-03, partial | User chose option 1: corresponding-source publication policy, private Ohio S3/isolated Windows worker, stated retention and USD 25 allowance/USD 15 alert; actual setup remains pending | 065c803 |
 | 03-02-01 | Original fixture generator, candidate semantic/source gold, asset manifest, corpus protocol and D-01 through D-12 design contract | 1d5ac52 |
 
 The exact user response to the package question was **"Approve the exact artifacts and XML approach"**. Approved evidence digest: `1dc082498c8d797e562208f1c9255df2e81c9349102bde7885fe30f280bdf868`. The [appended approval record](../../../docs/score-dependency-review.md) retains attribution, actual UTC recording time, scope and the unsigned MSI / missing Smoosic tag caveats. The package stage passes. This approval is not source-publication, cloud, retention, spend, host, installation-on-this-machine or deployment approval.
@@ -27,9 +28,11 @@ Validation at the latest task commits: 12 prerequisite tests and all 109 regress
 
 ### 03-01-03 — deployment decision and actual setup
 
-Plan 03-01 is **2/3 tasks complete**. Review [score-deployment-decision.md](../../../docs/score-deployment-decision.md). User choice A/B is pending as of this record. A proposes a conservative corresponding-source publication policy, private Ohio S3 and isolated Windows worker, explicit saves until deletion, 24-hour scratch/orphan/deletion cleanup, seven-day backups/logs, documented resource limits, USD 25 monthly admission allowance and USD 15 alert. The allowance is **not a guaranteed billing hard cap**. B revises the policy/tool/provider before use.
+Plan 03-01 is **2/3 tasks complete**, with task 03's policy subdecision now recorded. Review [score-deployment-decision.md](../../../docs/score-deployment-decision.md), including its appended approval record. On 2026-10-19 the user replied **1** to approve the presented corresponding-source publication policy, private Ohio S3 and isolated Windows worker, saves retained until deletion, scratch purged within 24 hours, seven-day backups/logs, USD 25 monthly admission allowance and USD 15 alert. The allowance is **not a guaranteed billing hard cap**. Do not ask for this same policy approval again. Detailed resource-limit values omitted from that question remain proposals; the policy choice does not establish actual provider or host setup.
 
 Actual source-publication authority/URL, account/bucket, API and worker roles, host/containment, backup/versioning choice, operator and workload identity remain unset. No values or credentials may be invented. Native notice/security dispositions and real privacy/lifecycle checks remain open. A policy choice alone cannot pass a checker requiring actual setup.
+
+Immediate next question, already presented asynchronously: does the user have an existing AWS account to use, or need guidance creating one? Do not request passwords, keys or tokens in chat. AWS CLI and GitHub CLI were not found on this computer; console guidance remains available. Package stage still passes. Deployment stage remains blocked on missing full approval/configuration/lifecycle evidence. Full deployment machine approval remains pending; `lifecycleVerified=false`. No provisioning has occurred.
 
 ### 03-02-02 — rights, independent review, scans and effort budget
 

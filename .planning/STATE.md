@@ -4,11 +4,11 @@ current_phase: 03
 current_phase_name: Corrected PDF Score
 current_plan: 1
 status: executing
-stopped_at: "Wave 1 checkpoints: 03-01 task 03 deployment decision/setup; 03-02 task 02 corpus rights/reviewer/scans/budget. Package approval recorded; continue from checkpoint table."
-last_updated: "2026-10-17T20:39:58.263Z"
-last_activity: 2026-10-17
-last_activity_desc: "Phase 03 Wave 1 at human gates: package artifacts approved; deployment and corpus decisions pending; 109 regression tests pass"
-state_head: 232bd4a9010088bc0c2c33fbef3c6b1660d622b7
+stopped_at: 03-01 task 03 policy approved; awaiting existing/new AWS account choice for actual setup. 03-02 task 02 still awaits corpus rights, reviewer, scans and budget.
+last_updated: "2026-10-19T06:46:56.447Z"
+last_activity: 2026-10-19
+last_activity_desc: Phase 03 deployment policy approved; actual AWS account/host setup and corpus gates pending; package checker passes
+state_head: 065c80342e2840fd6d47b41ca47701803cd2de87
 progress:
   total_phases: 6
   completed_phases: 2
@@ -32,7 +32,7 @@ Phase: 03 (Corrected PDF Score) — EXECUTING
 Current Plan: 1
 Total Plans in Phase: 15
 Status: Executing Phase 03
-Last activity: 2026-10-17 - Phase 03 Wave 1 at human gates: package artifacts approved; deployment and corpus decisions pending; 109 regression tests pass
+Last activity: 2026-10-19 - Phase 03 deployment policy approved; actual AWS account/host setup and corpus gates pending; package checker passes
 
 Progress: [███░░░░░░░] 33%
 
@@ -128,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-17T20:39:58.059Z
-Stopped at: Wave 1 checkpoints: 03-01 task 03 deployment decision/setup; 03-02 task 02 corpus rights/reviewer/scans/budget. Package approval recorded; continue from checkpoint table.
+Last session: 2026-10-19T06:46:56.184Z
+Stopped at: 03-01 task 03 policy approved; awaiting existing/new AWS account choice for actual setup. 03-02 task 02 still awaits corpus rights, reviewer, scans and budget.
 Resume file: .planning/phases/03-corrected-pdf-score/03-EXECUTION-CHECKPOINT.md
