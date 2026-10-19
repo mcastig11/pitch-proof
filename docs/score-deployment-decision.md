@@ -157,3 +157,25 @@ The deployment checker fails until the human's approval is bound to all populate
 }
 ```
 <!-- score-prerequisites:end -->
+
+## Actual policy approval record — 03-01-03
+
+**Current decision status: policy-approved / setup-pending.** The project user selected option 1 through an explicit Codex user reply. Codex recorded this decision at **2026-10-19T06:45:02.339Z** UTC; this is the recording time, not an inferred response timestamp. Task 03-01-03 remains incomplete.
+
+**Exact user response:** `1`.
+
+**Exact selected option:**
+
+> 1. Approve the proposed policy: publish corresponding app/worker source under an AGPL-compatible policy; use private Ohio S3 and an isolated Windows worker; retain saves until deletion, purge scratch within 24 hours, and keep backups/logs seven days. Proposed spending allowance: $25/month, with a $15 alert—not a guaranteed billing cap. I’ll guide account/host setup next.
+
+The other offered option was: “2. Revise the tool, provider, or policy first.”
+
+**Proposal binding:** This decision refers to the deployment proposal at commit `fb9c7a725c58b38c8c4339a1dce83be3e9a81928`, with evidence digest `103cf33280a077f363cce36257976729a95c3dad69227155e942f2153ce0eed8` (`SHA256(JSON.stringify(evidence))`) and narrative-prefix digest `3a8d654cb5951c7fabecf315b13b2f99d37e480a50f9eedcd5c5e9e18758556f` (UTF-8 with LF normalization, as checked by `reviewFileDigest`). Both the narrative prefix and machine evidence above remain unchanged. The preparation-time proposal/pending statements above describe that original packet; this appended record supersedes only the policy choices explicitly repeated in the selected option.
+
+Approved policy choices are corresponding app/worker source publication under an AGPL-compatible policy; private AWS S3 in Ohio (`us-east-2`); an isolated Windows worker; saved scores retained until deletion; scratch purged within 24 hours; backups and operational logs retained seven days; and a USD 25 monthly spending allowance with a USD 15 alert, expressly without a guaranteed billing cap. This is policy approval, not proof that any of these controls operates. Quantitative resource limits and other details not repeated in the selected option remain proposals; the reply does not approve the entire evidence object or every proposed deletion/orphan/backup mechanism.
+
+**Still required before full deployment approval:** Actual owning account and available private bucket; API and worker role ARNs and effective least-privilege policies; selected Windows worker host and demonstrated containment; actual corresponding-source URL and build correspondence; native third-party source, notice and security dispositions; backup/versioning and restore configuration; named budget operator and notification destination; and server-only workload identity references. No account, bucket, role, host, source URL, credentials, operator, completed patched build or operational test result is inferred from this reply. Account/host setup guidance was promised next and remains outstanding.
+
+Full machine approval remains `pending`, and `storage.lifecycleVerified` remains `false`. Actual identity/provider checks, owner-access denials, cleanup and deletion/restore evidence are still required. No install, provisioning, purchase, deployment or private-score acceptance ran or was authorized by this record. The separate exact package/XML approval remains unchanged and bound to `1dc082498c8d797e562208f1c9255df2e81c9349102bde7885fe30f280bdf868`.
+
+Verification while recording: `node scripts/check-score-prerequisites.mjs --stage packages` passed (exit 0); `node scripts/check-score-prerequisites.mjs --stage deployment` remained blocked (exit 1) on pending full approval, actual provider/license/lifecycle/cost evidence and server workload identity. This is the expected prerequisite-blocked result, not a code failure. `git diff --check` passed. No executable behavior changed, so the existing regression suite was not rerun for this record-only change.
