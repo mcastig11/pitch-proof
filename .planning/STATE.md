@@ -4,11 +4,11 @@ current_phase: 03
 current_phase_name: Corrected PDF Score
 current_plan: 1
 status: executing
-stopped_at: 03-01 task 03 policy approved; awaiting existing/new AWS account choice for actual setup. 03-02 task 02 still awaits corpus rights, reviewer, scans and budget.
-last_updated: "2026-10-19T06:46:56.447Z"
+stopped_at: Deployment policy approved; user needs a new AWS account and is being guided through signup. Await account activation, then actual host/storage setup. Corpus gates remain pending.
+last_updated: "2026-10-19T06:48:31.627Z"
 last_activity: 2026-10-19
 last_activity_desc: Phase 03 deployment policy approved; actual AWS account/host setup and corpus gates pending; package checker passes
-state_head: 065c80342e2840fd6d47b41ca47701803cd2de87
+state_head: 809a70b8363a2ce1ca2c7b665023ae7cb0b6adcf
 progress:
   total_phases: 6
   completed_phases: 2
@@ -128,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-10-19T06:46:56.184Z
-Stopped at: 03-01 task 03 policy approved; awaiting existing/new AWS account choice for actual setup. 03-02 task 02 still awaits corpus rights, reviewer, scans and budget.
+Last session: 2026-10-19T06:48:31.486Z
+Stopped at: Deployment policy approved; user needs a new AWS account and is being guided through signup. Await account activation, then actual host/storage setup. Corpus gates remain pending.
 Resume file: .planning/phases/03-corrected-pdf-score/03-EXECUTION-CHECKPOINT.md
